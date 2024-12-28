@@ -26,7 +26,7 @@ News
 
 ---
 
-Research Focus
+<!-- Research Focus
 ======
 1. Register a GitHub account if you don't have one and confirm your e-mail (required!)
 2. Fork [this template](https://github.com/academicpages/academicpages.github.io) by clicking the "Use this template" button in the top right. 
@@ -38,13 +38,13 @@ Research Focus
 Site-wide configuration
 ------
 The main configuration file for the site is in the base directory in [_config.yml](https://github.com/academicpages/academicpages.github.io/blob/master/_config.yml), which defines the content in the sidebars and other site-wide features. You will need to replace the default variables with ones about yourself and your site's github repository. The configuration file for the top menu is in [_data/navigation.yml](https://github.com/academicpages/academicpages.github.io/blob/master/_data/navigation.yml). For example, if you don't have a portfolio or blog posts, you can remove those items from that navigation.yml file to remove them from the header. 
-
-
+ -->
 
 
 
 Publications
 ======
+_\* Corresponding author, \# Equal contribution_
 <!-- <!DOCTYPE html> -->
 <html lang="en">
 <head>
@@ -60,32 +60,40 @@ Publications
         .project {
             display: flex;
             align-items: flex-start;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         .project img {
-            width: 100px;
-            height: 100px;
-            margin-right: 15px;
+            width: 180px;
+            height: 110px;
+            margin-right: 10px;
             object-fit: cover;
         }
         .project-details {
             flex: 1;
         }
         .project-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 1px;
         }
         .authors {
             font-size: 14px;
             color: #555;
-            margin-bottom: 10px;
+            margin-bottom: 1px;
         }
         .links a {
             font-size: 14px;
             color: #0066cc;
             text-decoration: none;
-            margin-right: 10px;
+            margin-right: 1px;
+        }
+        .conference {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 1px;
+        }
+        .conference b {
+            color: #000;
         }
         .links a:hover {
             text-decoration: underline;
@@ -96,8 +104,22 @@ Publications
     <div class="project">
         <img src="../images/projects/singledream.png" alt="Project Image">
         <div class="project-details">
-            <div class="project-title">EnvGS: Modeling View-Dependent Appearance with Environment Gaussian</div>
-            <div class="authors">Tao Xie*, Xi Chen*, Zhen Xu, Yiman Xie, Yudong Jin, Yujun Shen, <b>Sida Peng</b>, Hujun Bao, Xiaowei Zhou</div>
+            <div class="project-title">SingleDream: Attribute-Driven T2I Customization from a Single Reference Image</div>
+            <div class="authors"><b>Ye Wang</b>, Ruiqi Liu, <a href="https://is.nju.edu.cn/yzl_en/main.htm">Zili Yi*, <a href="https://ruim-jlu.github.io/#about">Rui Ma*</div>
+            <div class="conference">CVM 2025 Accepted. </div>
+            <div class="links">
+                <a href="#">[Paper]</a>
+                <a href="#">[Project Page]</a>
+                <a href="#">[Code]</a>
+            </div>
+        </div>
+    </div>
+    <div class="project">
+        <img src="../images/projects/sigstyle.png" alt="Project Image">
+        <div class="project-details">
+            <div class="project-title">SigStyle: Signature Style Transfer via Personalized Text-to-Image Models</div>
+            <div class="authors">Chenxu Zhou*, Lvchang Fu*, <b>Sida Peng</b>, Yunzhi Yan, Zhanhua Zhang, Yong Chen, Jiazhi Xia, Xiaowei Zhou</div>
+            <div class="conference">AAAI 2025 Accepted. </div>
             <div class="links">
                 <a href="#">[Paper]</a>
                 <a href="#">[Project Page]</a>
@@ -108,10 +130,11 @@ Publications
     <div class="project">
         <img src="../images/projects/mxmclr.png" alt="Project Image">
         <div class="project-details">
-            <div class="project-title">LiDAR-RT: Gaussian-based Ray Tracing for Dynamic LiDAR Re-simulation</div>
-            <div class="authors">Chenxu Zhou*, Lvchang Fu*, <b>Sida Peng</b>, Yunzhi Yan, Zhanhua Zhang, Yong Chen, Jiazhi Xia, Xiaowei Zhou</div>
+            <div class="project-title">MXM-CLR: A Unified Framework for Contrastive Learning of Multifold Cross-Modal Representations</div>
+            <div class="authors"><b>Ye Wang</b>, Bowei Jiang, Changqing Zou, <a href="https://ruim-jlu.github.io/#about">Rui Ma*</div>
+            <div class="conference">Arxiv preprint 2023. </div>
             <div class="links">
-                <a href="#">[Paper]</a>
+                <a href="https://arxiv.org/pdf/2303.10839">[Paper]</a>
                 <a href="#">[Project Page]</a>
                 <a href="#">[Code]</a>
             </div>
@@ -134,7 +157,7 @@ Publications
 
 
 
-Create content & metadata
+<!-- Create content & metadata
 ------
 For site content, there is one markdown file for each type of content, which are stored in directories like _publications, _talks, _posts, _teaching, or _pages. For example, each talk is a markdown file in the [_talks directory](https://github.com/academicpages/academicpages.github.io/tree/master/_talks). At the top of each markdown file is structured data in YAML about the talk, which the theme will parse to do lots of cool stuff. The same structured data about a talk is used to generate the list of talks on the [Talks page](https://academicpages.github.io/talks), each [individual page](https://academicpages.github.io/talks/2012-03-01-talk-1) for specific talks, the talks section for the [CV page](https://academicpages.github.io/cv), and the [map of places you've given a talk](https://academicpages.github.io/talkmap.html) (if you run this [python file](https://github.com/academicpages/academicpages.github.io/blob/master/talkmap.py) or [Jupyter notebook](https://github.com/academicpages/academicpages.github.io/blob/master/talkmap.ipynb), which creates the HTML for the map based on the contents of the _talks directory).
 
@@ -152,4 +175,4 @@ Example: editing a markdown file for a talk
 
 For more info
 ------
-More info about configuring Academic Pages can be found in [the guide](https://academicpages.github.io/markdown/), the [growing wiki](https://github.com/academicpages/academicpages.github.io/wiki), and you can always [ask a question on GitHub](https://github.com/academicpages/academicpages.github.io/discussions). The [guides for the Minimal Mistakes theme](https://mmistakes.github.io/minimal-mistakes/docs/configuration/) (which this theme was forked from) might also be helpful.
+More info about configuring Academic Pages can be found in [the guide](https://academicpages.github.io/markdown/), the [growing wiki](https://github.com/academicpages/academicpages.github.io/wiki), and you can always [ask a question on GitHub](https://github.com/academicpages/academicpages.github.io/discussions). The [guides for the Minimal Mistakes theme](https://mmistakes.github.io/minimal-mistakes/docs/configuration/) (which this theme was forked from) might also be helpful. -->
