@@ -10,7 +10,7 @@ redirect_from:
 I am currently a third-year Ph.D. student in the [ICL group](https://ruim-jlu.github.io/team/) at the School of Artificial Intelligence, Jilin University, conducting research under the esteemed guidance of Associate Professor [Rui Ma](https://ruim-jlu.github.io/#about). In addition, I am privileged to receive mentorship from research scientist [Yilin Wang](https://yilinwang.org/) at Adobe and Associate Professor [Zili Yi](https://is.nju.edu.cn/yzl_en/main.htm) at Nanjing University. \\
 My research interests primarily focus on personalized visual content creation, encompassing areas such as image style transfer, image editing, image customization, video content creation, and 3D vision. I am dedicated to exploring how advanced artificial intelligence techniques can enable more personalized, flexible, and exciting visual content generation to meet the diverse needs and creative expressions of users. \\
 I obtained my Bachelor's degree from Dalian Maritime University and my Master's degree from the School of Computer Science, Jilin University. Furthermore, I have had the privilege of interning at JD.com, Baidu, and Kunlun Tech, where I gained valuable practical experience. \\
-In addition, I am the founder and primary presenter of [PaperABC](https://space.bilibili.com/1127990326?spm_id_from=333.1007.0.0), and our paper explanation videos have received widespread acclaim, accumulating over 12,000 followers to date.\\
+In addition, I am the founder and primary presenter of [PaperABC](https://space.bilibili.com/1127990326?spm_id_from=333.1007.0.0), and our paper explanation videos have received widespread acclaim, accumulating over 12,000 followers to date. 
 
 ---
 
