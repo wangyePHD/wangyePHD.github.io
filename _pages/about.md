@@ -7,6 +7,9 @@ redirect_from:
   - /about.html
 ---
 
+
+---
+
 I am currently a third-year Ph.D. student in the [ICL group](https://ruim-jlu.github.io/team/) at the School of Artificial Intelligence, Jilin University, conducting research under the esteemed guidance of Associate Professor [Rui Ma](https://ruim-jlu.github.io/#about). In addition, I am privileged to receive mentorship from research scientist [Yilin Wang](https://yilinwang.org/) at Adobe and Associate Professor [Zili Yi](https://is.nju.edu.cn/yzl_en/main.htm) at Nanjing University. \\
 My research interests primarily focus on **personalized visual content creation**, encompassing areas such as **image style transfer**, **image editing**, **image customization**, **video content creation**, and **3D vision**. I am dedicated to exploring how advanced artificial intelligence techniques can enable more personalized, flexible, and exciting visual content generation to meet the diverse needs and creative expressions of users. \\
 I obtained my Bachelor's degree from Dalian Maritime University and my Master's degree from the School of Computer Science, Jilin University. Furthermore, I have had the privilege of interning at JD.com, Baidu, and Kunlun Tech, where I gained valuable practical experience. \\
