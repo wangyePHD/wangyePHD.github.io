@@ -8,7 +8,7 @@
 
 # Basic Site Settings
 locale                   : "zn-CN"
-title                    : ""
+title                    : "Homepage of Ye Wang"
 title_separator          : "-"
 name                     : &name "Ye Wang (王冶)"
 description              : &description ""
