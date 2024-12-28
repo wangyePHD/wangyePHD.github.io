@@ -20,10 +20,13 @@ In addition, I am the founder and primary presenter of [PaperABC](https://space.
 
 News
 ======
-* [2024.12.10] Our work on "SigStyle: Signature Style Transfer via Personalized Text-to-Image Models" has been accepted by AAAI 2025.
 * [2024.12.18] Our work on "SingleDream: Attribute-Driven T2I Customization from a Single Reference Image" has been accepted by CVM 2025.
+* [2024.12.10] Our work on "SigStyle: Signature Style Transfer via Personalized Text-to-Image Models" has been accepted by AAAI 2025.
 
-Getting started
+
+---
+
+Research Focus
 ======
 1. Register a GitHub account if you don't have one and confirm your e-mail (required!)
 2. Fork [this template](https://github.com/academicpages/academicpages.github.io) by clicking the "Use this template" button in the top right. 
