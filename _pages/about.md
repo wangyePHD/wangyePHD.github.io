@@ -122,7 +122,7 @@ _\* Corresponding author, \# Equal contribution_
             <div class="conference">AAAI 2025 Accepted. </div>
             <div class="links">
                 <a href="#">[Paper]</a>
-                <a href="#">[Project Page]</a>
+                <a href="https://wangyephd.github.io/projects/sigstyle.html">[Project Page]</a>
                 <a href="#">[Code]</a>
             </div>
         </div>
