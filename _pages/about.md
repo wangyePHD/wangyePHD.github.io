@@ -105,7 +105,7 @@ _\* Corresponding author, \# Equal contribution_
         <img src="../images/projects/singledream.png" alt="Project Image">
         <div class="project-details">
             <div class="project-title">SingleDream: Attribute-Driven T2I Customization from a Single Reference Image</div>
-            <div class="authors"><b>Ye Wang</b>, Ruiqi Liu, <a href="https://is.nju.edu.cn/yzl_en/main.htm">Zili Yi*, <a href="https://ruim-jlu.github.io/#about">Rui Ma*</div>
+            <div class="authors"><b>Ye Wang</b>, Ruiqi Liu, <a href="https://is.nju.edu.cn/yzl_en/main.htm">Zili Yi*</a>, <a href="https://ruim-jlu.github.io/#about">Rui Ma*</a></div>
             <div class="conference">CVM 2025 Accepted. </div>
             <div class="links">
                 <a href="#">[Paper]</a>
@@ -131,7 +131,7 @@ _\* Corresponding author, \# Equal contribution_
         <img src="../images/projects/mxmclr.png" alt="Project Image">
         <div class="project-details">
             <div class="project-title">MXM-CLR: A Unified Framework for Contrastive Learning of Multifold Cross-Modal Representations</div>
-            <div class="authors"><b>Ye Wang</b>, Bowei Jiang, Changqing Zou, <a href="https://ruim-jlu.github.io/#about">Rui Ma*</div>
+            <div class="authors"><b>Ye Wang</b>, Bowei Jiang, Changqing Zou, <a href="https://ruim-jlu.github.io/#about">Rui Ma*</a></div>
             <div class="conference">Arxiv preprint 2023. </div>
             <div class="links">
                 <a href="https://arxiv.org/pdf/2303.10839">[Paper]</a>
