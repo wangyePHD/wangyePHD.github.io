@@ -118,7 +118,7 @@ _\* Corresponding author, \# Equal contribution_
         <img src="../images/projects/sigstyle.png" alt="Project Image">
         <div class="project-details">
             <div class="project-title">SigStyle: Signature Style Transfer via Personalized Text-to-Image Models</div>
-            <div class="authors">Chenxu Zhou*, Lvchang Fu*, <b>Sida Peng</b>, Yunzhi Yan, Zhanhua Zhang, Yong Chen, Jiazhi Xia, Xiaowei Zhou</div>
+            <div class="authors"><b>Ye Wang</b>, Tongyuan Bai, Xuping Xie, <a href="https://is.nju.edu.cn/yzl_en/main.htm">Zili Yi</a>, <a href="https://yilinwang.org/">Yilin Wang*</a>, <a href="https://ruim-jlu.github.io/#about">Rui Ma*</a></div>
             <div class="conference">AAAI 2025 Accepted. </div>
             <div class="links">
                 <a href="#">[Paper]</a>
@@ -143,10 +143,37 @@ _\* Corresponding author, \# Equal contribution_
     <div class="project">
         <img src="../images/projects/shapecell.png" alt="Project Image">
         <div class="project-details">
-            <div class="project-title">Prompting Depth Anything for 4K Resolution Accurate Metric Depth Estimation</div>
-            <div class="authors">Haotong Lin, <b>Sida Peng</b>, Jingxiao Chen, Songyou Peng, Jiaming Sun, Minghuan Liu, Hujun Bao, Jiashi Feng, Xiaowei Zhou, Bingyi Kang</div>
+            <div class="project-title">Shape-Aware Fine-Grained Classification of Erythroid Cells</div>
+            <div class="authors"><b>Ye Wang#</b>, <a href="https://ruim-jlu.github.io/#about">Rui Ma#</a>, Xiaoqing Ma, Honghua Cui, Yubin Xiao, Xuan Wu, <a href="https://ccst.jlu.edu.cn/info/1367/19089.htm">You Zhou*</a></div>
+            <div class="conference">Applied Intelligence accepted. </div>
             <div class="links">
-                <a href="#">[Paper]</a>
+                <a href="https://arxiv.org/pdf/2212.13695">[Paper]</a>
+                <a href="#">[Project Page]</a>
+                <a href="#">[Code]</a>
+            </div>
+        </div>
+    </div>
+    <div class="project">
+        <img src="../images/projects/3dssgan.png" alt="Project Image">
+        <div class="project-details">
+            <div class="project-title">3D-SSGAN: Lifting 2D Semantics for 3D-Aware Compositional Portrait Synthesis</div>
+            <div class="authors">Ruiqi Liu, <a href="https://pengzheng0707.github.io/">Peng Zheng</a>, <b>Ye Wang</b>, <a href="https://ruim-jlu.github.io/#about">Rui Ma*</a></div>
+            <div class="conference">Pacific Graphics 2024 Accepted. </div>
+            <div class="links">
+                <a href="https://arxiv.org/abs/2401.03764">[Paper]</a>
+                <a href="#">[Project Page]</a>
+                <a href="#">[Code]</a>
+            </div>
+        </div>
+    </div>
+    <div class="project">
+        <img src="../images/projects/taylor.png" alt="Project Image">
+        <div class="project-details">
+            <div class="project-title">TaylorGrid: Towards Fast and High-Quality Implicit Field Learning via Direct Taylor-based Grid Optimization</div>
+            <div class="authors">Renyi Mao, Qingshan Xu, <a href="https://pengzheng0707.github.io/">Peng Zheng</a>, <b>Ye Wang</b>, Tieru Wu, <a href="https://ruim-jlu.github.io/#about">Rui Ma*</a></div>
+            <div class="conference">Arxiv preprint 2024. </div>
+            <div class="links">
+                <a href="https://arxiv.org/pdf/2402.14415">[Paper]</a>
                 <a href="#">[Project Page]</a>
                 <a href="#">[Code]</a>
             </div>
