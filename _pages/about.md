@@ -121,9 +121,9 @@ _\* Corresponding author, \# Equal contribution_
             <div class="authors"><b>Ye Wang</b>, Tongyuan Bai, Xuping Xie, <a href="https://is.nju.edu.cn/yzl_en/main.htm">Zili Yi</a>, <a href="https://yilinwang.org/">Yilin Wang*</a>, <a href="https://ruim-jlu.github.io/#about">Rui Ma*</a></div>
             <div class="conference">AAAI 2025 Accepted. </div>
             <div class="links">
-                <a href="#">[Paper]</a>
+                <a href="https://arxiv.org/pdf/2502.13997">[Paper]</a>
                 <a href="https://wangyephd.github.io/projects/sigstyle.html">[Project Page]</a>
-                <a href="#">[Code]</a>
+                <a href="https://github.com/wangyePHD/SigStyle">[Code]</a>
             </div>
         </div>
     </div>
