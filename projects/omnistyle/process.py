@@ -2,7 +2,7 @@ import os
 from PIL import Image, ImageDraw
 
 # 输入和输出文件夹路径
-input_folder = r"tower"
+input_folder = r"farm2"
 output_folder = os.path.join(input_folder, "processed")
 os.makedirs(output_folder, exist_ok=True)
 
