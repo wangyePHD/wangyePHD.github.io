@@ -1,124 +1,212 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>OmniStyle</title>
-<link href="./DreamBooth_files/style.css" rel="stylesheet">
-<script type="text/javascript" src="./DreamBooth_files/jquery.mlens-1.0.min.js"></script> 
-<script type="text/javascript" src="./DreamBooth_files/jquery.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OmniStyle: High-Quality Style Transfer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      color: #111;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 20px 30px;
+    }
+
+    .cvpr-badge {
+      display: inline-block;
+      background-color: #e63946;
+      color: white;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      margin: 0.2em 0;
+    }
+
+    header h2 {
+      font-weight: 400;
+      font-size: 1.3rem;
+      margin: 0.3em 0 1em;
+      color: #444;
+    }
+
+    .authors {
+      font-size: 0.95em;
+      color: #555;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .badges {
+      margin-top: 20px;
+    }
+
+    .badges a {
+      display: inline-block;
+      background: black;
+      color: white;
+      font-size: 0.85em;
+      padding: 8px 12px;
+      margin: 4px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    .badges a:hover {
+      background: #444;
+    }
+
+    .grid {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .grid-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .grid img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      max-height: 1024px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      cursor: zoom-in;
+    }
+
+    .grid img:hover {
+      transform: scale(1.03);
+    }
+
+    .caption {
+      margin-top: 8px;
+      font-size: 0.9em;
+      color: #666;
+      text-align: center;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      cursor: zoom-out;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 10px 20px;
+      font-size: 0.9em;
+      color: #aaa;
+    }
+  </style>
 </head>
-
 <body>
-<div class="content">
-  <h1><strong>OmniStyle: Filtering High Quality Style Transfer Data at Scale</strong></h1>
-  <!-- 新增的嵌入视频（YouTube示例） -->
-  <p id="authors"><span></span><a href="https://wangyephd.github.io/">Ye Wang<sup>1</sup></a> Ruiqi Liu<sup>1</sup> Jiang Lin<sup>2</sup> Fei Liu<sup>3</sup> <a href="https://is.nju.edu.cn/yzl_en/main.htm">Zili Yi<sup>2</sup> </a><a href="https://yilinwang.org/">Yilin Wang<sup>4,*</sup></a><a href="https://ruim-jlu.github.io/#about"> Rui Ma<sup>1,5,*</sup></a><br>
-    <br>
-  <span style="font-size: 20px"><sup>1</sup> School of Artificial Intelligence, Jilin University</span> <br>
-  <span style="font-size: 20px"><sup>2</sup> School of Intelligence Science and Technology, Nanjing University</span> <br>
-  <span style="font-size: 20px"><sup>3</sup>ByteDance</span>
-  <span style="font-size: 20px"><sup>4</sup> Adobe</span> <br>
-  <span style="font-size: 20px"><sup>5</sup> Engineering Research Center of Knowledge-Driven Human-Machine Intelligence, MOE, China</span> <br>
-  <span style="font-size: 20px"><sup>*</sup> Corresponding authors</span>
-  
 
-  <div style="text-align: center; margin: 20px 0;">
-    <iframe width="100%" height="500" src="https://www.bilibili.com/video/BV1Li421Y7Si/?spm_id_from=333.1387.homepage.video_card.click" frameborder="0" allowfullscreen></iframe>
+  <header>
+    <div class="cvpr-badge">📣 Accepted at CVPR 2025</div>
+    <h1><strong>OmniStyle</strong></h1>
+    <h2>Filtering High Quality Style Transfer Data at Scale</h2>
+
+    <div class="authors">
+      <a href="https://wangyephd.github.io/" target="_blank">Ye Wang<sup>1</sup></a>,
+      Ruiqi Liu<sup>1</sup>,
+      Jiang Lin<sup>2</sup>,
+      Fei Liu<sup>3</sup>,
+      <a href="https://is.nju.edu.cn/yzl_en/main.htm" target="_blank">Zili Yi<sup>2</sup></a>,
+      <a href="https://yilinwang.org/" target="_blank">Yilin Wang<sup>4*</sup></a>,
+      <a href="https://ruim-jlu.github.io/#about" target="_blank">Rui Ma<sup>1,5*</sup></a><br/>
+      <sup>1</sup>Jilin University, <sup>2</sup>Nanjing University, <sup>3</sup>ByteDance, <sup>4</sup>Adobe,<br/>
+      <sup>5</sup>Engineering Research Center of Knowledge-Driven Human-Machine Intelligence, MOE, China
+    </div>
+
+    <div class="badges">
+      <a href="https://arxiv.org/abs/your-paper-id">📄 Paper</a>
+      <a href="https://github.com/your-org/omnistyle">📦 Code</a>
+      <a href="https://huggingface.co/your-org/omnistyle-model">🤗 Model</a>
+      <a href="https://your-org.github.io/omnistyle-demo">💡 Demo</a>
+      <a href="https://huggingface.co/datasets/your-org/omnistyle-dataset">🗂️ Dataset</a>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div class="grid-item">
+      <img src="omnistyle/show/tower@2.5D_s0011____1109_01_query_2_img_000085_1683879820929_05194863207239723_gen.jpg_gen.jpg" alt="Example 1" loading="lazy" onclick="openLightbox(this.src)">
+      <div class="caption">Van Gogh Style</div>
+    </div>
+    <div class="grid-item">
+      <img src="omnistyle/show/tower@3D CG rendering_s1060____1011_01_query_2_img_000001_1683845150609_01334408562900462.jpeg_gen.jpg" alt="Example 2" loading="lazy" onclick="openLightbox(this.src)">
+      <div class="caption">Cubism</div>
+    </div>
+    <div class="grid-item">
+      <img src="omnistyle/show/tower@3D_s0023____0911_01_query_1_img_000165_1683953361166_08099796625475683.jpeg_gen.jpg" alt="Example 3" loading="lazy" onclick="openLightbox(this.src)">
+      <div class="caption">Impressionism</div>
+    </div>
+    <div class="grid-item">
+      <img src="assets/showcase4.jpg" alt="Example 4" loading="lazy" onclick="openLightbox(this.src)">
+      <div class="caption">Watercolor</div>
+    </div>
+    <div class="grid-item">
+      <img src="assets/showcase5.jpg" alt="Example 5" loading="lazy" onclick="openLightbox(this.src)">
+      <div class="caption">Oil Painting</div>
+    </div>
+    <div class="grid-item">
+      <img src="assets/showcase6.jpg" alt="Example 6" loading="lazy" onclick="openLightbox(this.src)">
+      <div class="caption">Chinese Ink</div>
+    </div>
   </div>
 
-</p>
-  <br>
-  <img src="./DreamBooth_files/teaser_page-0001.jpg" class="teaser-gif" style="width:100%;"><br>
-  <h3 style="text-align:center"><em>Our method can achieve high-quality global style transfer (a) while keeping the signature style such as distinct and
-    recognizable visual traits like geometric and structural patterns, color palettes and brush strokes etc. Also, our method is flexible
-    and supports local style transfer (b), style-guided text-to-image generation (c), and texture transfer (d).</em></h3>
-    <font size="+2">
-          <p style="text-align: center;">
-            <a href="https://github.com/wangyePHD/SigStyle" target="_blank">[Code]</a> &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="https://arxiv.org/pdf/2502.13997" target="_blank">[Paper]</a> &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="DreamBooth_files/bibtex.txt" target="_blank">[BibTeX]</a>
-          </p>
-    </font>
-</div>
-<div class="content">
-  <h2 style="text-align:center;">Abstract</h2>
-  <p>Style transfer enables the seamless integration of artistic styles from a style image into a content image, resulting in visually striking and aesthetically enriched outputs. 
-    Despite numerous advances in this field, existing methods did not explicitly focus on the signature style, which represents the distinct and recognizable visual traits of the image such as geometric and structural patterns, color palettes and brush strokes etc.
-    In this paper, we introduce SigStyle, a framework that leverages the semantic priors that embedded in a personalized text-to-image diffusion model to capture the signature style representation. This style capture process is powered by a hypernetwork that efficiently fine-tunes the diffusion model for any given single style image. Style transfer then is conceptualized as the reconstruction process of content image through learned style tokens from the personalized diffusion model. Additionally, to ensure the content consistency throughout the style transfer process, we introduce a time-aware attention swapping technique that incorporates content information from the original image into the early denoising steps of target image generation. Beyond enabling high-quality signature style transfer across a wide range of styles, SigStyle supports multiple interesting applications, such as local style transfer, texture transfer, style fusion and style-guided text-to-image generation. Quantitative and qualitative evaluations demonstrate our approach outperforms existing style transfer methods for recognizing and transferring the signature styles..</p>
-</div>
-<div class="content">
-  <h2>Background</h2>
-  <p> Despite the significant progress of the aforementioned methods, signature style transfer remains underexplored. Signature style refers to the unique and recognizable visual traits that define a particular artistic style, such as geometric and structural patterns, color palettes, and brush strokes.
-    For example, as illustrated in the first row of the figure below, the signature style of the image is defined by the structural arrangement and composition of numerous small images that together form the figure of a person. Additionally, the signature style of the image in the second row is characterized by geometric and structural patterns, as well as distinctive color palettes.
-    Although existing methods often succeed in transferring basic color information, they fail to capture and retain the essential artistic style from the reference images, including small image blocks, colorful ribbon-shaped lines, and other intricate characteristics, as shown in the figure.
-    This highlights a critical limitation: current methods struggle to achieve signature style transfer.</p>
-  <br>
-  <img class="summary-img" src="./DreamBooth_files/complex_style1_page-0001.jpg" style="width:100%;"> <br>
-</div>
-<div class="content">
-  <h2>Approach</h2>
-  <p> The SigStyle framework. First, given a style image, we perform hypernetwork-powered style-aware fine-tuning for style inversion and represent the reference style as a special token * (see Figure 1.a). In Figure 1, the upper branch represents the reconstruction process of the content image, while the lower branch represents the generation process of the target image. When generating the target image using a pre-trained model and target text, we first use DDIM Inversion to map the content image into noise latents, which are then copied as the initial noise for generating the target image. Then, we adopt time-aware attention swapping to inject structural and content information during the first k steps of the denoising process (see Figure 1.b). In the subsequent T-k steps, we proceed with the usual denoising process without any swapping. Finally, by decoding with VAE, we obtain the style-transferred image.</p>
-  <br>
-  <figure style="width:90%; text-align: center;">
-    <img class="summary-img" src="./DreamBooth_files/pipeline_page-0001.jpg" style="width:100%;">
-    <figcaption>Figure 1: The framework of SigStyle.</figcaption>
-  </figure>
-  <!-- <img class="summary-img" src="./DreamBooth_files/pipeline_page-0001.jpg" style="width:100%;"> <br> -->
-  <p>Figure 2 illustrates the analysis of style attribute learning preferences for the encoder and decoder of the U-Net. We observe that the decoder of the Diffusion U-Net is more sensitive to style attributes, making it better suited for learning style information. Figure 3 presents the architecture of the hypernetwork.</p>
-  <br>
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <figure style="width:48%; text-align: center;">
-      <img class="summary-img" src="./DreamBooth_files/style_tuning_page-0001.jpg" style="width:100%;">
-      <figcaption>Figure 2: Style learning preferences analysis of UNet’s en-
-        coder and decoder.</figcaption>
-    </figure>
-    <figure style="width:48%; text-align: center;">
-      <img class="summary-img" src="./DreamBooth_files/hypernetwork_page-0001.jpg" style="width:100%;">
-      <figcaption>Figure 3: The architecture of hypernetwork.</figcaption>
-    </figure>
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Full Image">
   </div>
-  <!-- <div style="display: flex; justify-content: space-between; align-items: center;">
-    <img class="summary-img" src="./DreamBooth_files/style_tuning_page-0001.jpg" style="width:48%;"> <br>
-    <figcaption>Figure 1: Caption for the first image</figcaption>
-    <img class="summary-img" src="./DreamBooth_files/hypernetwork_page-0001.jpg" style="width:48%;">
-  </div> --> 
-  <br> 
-</div>
-<div class="content">
-  <h2>Global Style Transfer</h2>
-  <p>Qualitative comparison with various SOTA image style transfer methods for global style transfer. </p>
-<img class="summary-img" src="./DreamBooth_files/compare_page-0001.jpg" style="width:100%;">
-</div>
-<div class="content">
-  <h2>Local Style Transfer</h2>
-  <p>Local style transfer applies style only to regions specified by a user-provided mask. Within the masked areas, we use SigStyle for style transfer, while denoising reconstruction is applied to non-masked areas to maintain consistency. Blending operations then integrate these regions seamlessly, producing a complete image and achieving local style transfer.</p>
-  <br>
-  <img class="summary-img" src="./DreamBooth_files/local_transfer_page-0001.jpg" style="width:100%;"> <br>
-</div>
-<div class="content">
-  <h2>Cross Domain Texture Transfer</h2>
-  <p>Texture, appearance, and style are interrelated concepts best learned by the same module, the UNet decoder. By replacing "style" with "appearance" in prompts while keeping inversion and transfer processes unchanged, a mask constrains the texture transfer region. As shown in the following figure, our method demonstrates high-quality cross-domain texture transfer, preserving the original image's pose, structure, identity, and other content.</p>
-  <br>
-  <img class="summary-img" src="./DreamBooth_files/texture_transfer_page-0001.jpg" style="width:100%;"> <br>
-</div>
-<div class="content">
-  <h2>Style-Guided Text-to-Image Generation</h2>
-  <p>Our fine-tuning mechanism represents style as a special token *, enabling style-guided text-to-image generation. With a single style image, we can generate images guided by that style (see the first row of the following figure ). When using multiple style images, our method fuses them into a new style for more creative outputs (see the second row of following figure).</p>
-  <br>
-  <img class="summary-img" src="./DreamBooth_files/style_personlized_page-0001.jpg" style="width:100%;"> <br>
-</div>
-<!-- <div class="content">
-  <h2>BibTex</h2>
-  <code> @article{ruiz2022dreambooth,<br>
-  &nbsp;&nbsp;title={DreamBooth: Fine Tuning Text-to-image Diffusion Models for Subject-Driven Generation},<br>
-  &nbsp;&nbsp;author={Ruiz, Nataniel and Li, Yuanzhen and Jampani, Varun and Pritch, Yael and Rubinstein, Michael and Aberman, Kfir},<br>
-  &nbsp;&nbsp;booktitle={arXiv preprint arxiv:2208.12242},<br>
-  &nbsp;&nbsp;year={2022}<br>
-  } </code> 
-</div> -->
-<div class="content" id="acknowledgements">
-  <p><strong>Acknowledgements</strong>:
-    This work is supported in part by the National Natural Science Foundation of China (No. 62202199, No. 62406134) and the Science and Technology Development Plan of Jilin Province (No. 20230101071JC).
-  </p>
-</div>
+
+  <footer>
+    © 2025 OmniStyle Authors. Built for the research community.
+  </footer>
+
+  <script>
+    function openLightbox(src) {
+      document.getElementById("lightbox-img").src = src;
+      document.getElementById("lightbox").style.display = "flex";
+    }
+
+    function closeLightbox() {
+      document.getElementById("lightbox").style.display = "none";
+    }
+  </script>
+
 </body>
 </html>
