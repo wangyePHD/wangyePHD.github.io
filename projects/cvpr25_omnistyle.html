@@ -70,12 +70,30 @@
     }
 
     .grid {
-      max-width: 1200px;
+      max-width: 1500px;
       margin: 40px auto;
       padding: 0 20px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(5, 1fr);
       gap: 24px;
+    }
+
+    @media (max-width: 1200px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .grid-item {
@@ -165,27 +183,44 @@
   <div class="grid">
     <div class="grid-item">
       <img src="omnistyle/show/tower@2.5D_s0011____1109_01_query_2_img_000085_1683879820929_05194863207239723_gen.jpg_gen.jpg" alt="Example 1" loading="lazy" onclick="openLightbox(this.src)">
-      <div class="caption">Van Gogh Style</div>
+     
     </div>
     <div class="grid-item">
       <img src="omnistyle/show/tower@3D CG rendering_s1060____1011_01_query_2_img_000001_1683845150609_01334408562900462.jpeg_gen.jpg" alt="Example 2" loading="lazy" onclick="openLightbox(this.src)">
-      <div class="caption">Cubism</div>
+     
     </div>
     <div class="grid-item">
       <img src="omnistyle/show/tower@3D_s0023____0911_01_query_1_img_000165_1683953361166_08099796625475683.jpeg_gen.jpg" alt="Example 3" loading="lazy" onclick="openLightbox(this.src)">
-      <div class="caption">Impressionism</div>
+     
     </div>
     <div class="grid-item">
-      <img src="assets/showcase4.jpg" alt="Example 4" loading="lazy" onclick="openLightbox(this.src)">
-      <div class="caption">Watercolor</div>
+      <img src="omnistyle/show/tower@Abstract Expressionism_s0591____0908_01_query_1_img_000071_1683673253131_026944530950196743.jpeg_gen.jpg" alt="Example 4" loading="lazy" onclick="openLightbox(this.src)">
+     
     </div>
     <div class="grid-item">
-      <img src="assets/showcase5.jpg" alt="Example 5" loading="lazy" onclick="openLightbox(this.src)">
-      <div class="caption">Oil Painting</div>
+      <img src="omnistyle/show/tower@American Comic_s0101____1103_01_query_1_img_000187_1683381942974_05382311884613603.jpeg_gen.jpg" alt="Example 5" loading="lazy" onclick="openLightbox(this.src)">
+     
     </div>
-    <div class="grid-item">
-      <img src="assets/showcase6.jpg" alt="Example 6" loading="lazy" onclick="openLightbox(this.src)">
-      <div class="caption">Chinese Ink</div>
+    
+      <img src="omnistyle/show/tower@Art Nouveau_s0003____1016_01_query_1_img_000001_1683479665848_05354290234882432_gen.jpg_gen.jpg" alt="Example 6" loading="lazy" onclick="openLightbox(this.src)">
+      <div class="grid-item">
+        <img src="omnistyle/show/tower@2.5D_s0011____1109_01_query_2_img_000085_1683879820929_05194863207239723_gen.jpg_gen.jpg" alt="Example 1" loading="lazy" onclick="openLightbox(this.src)">
+      </div>
+      <div class="grid-item">
+        <img src="omnistyle/show/tower@3D CG rendering_s1060____1011_01_query_2_img_000001_1683845150609_01334408562900462.jpeg_gen.jpg" alt="Example 2" loading="lazy" onclick="openLightbox(this.src)">
+      </div>
+      <div class="grid-item">
+        <img src="omnistyle/show/tower@3D_s0023____0911_01_query_1_img_000165_1683953361166_08099796625475683.jpeg_gen.jpg" alt="Example 3" loading="lazy" onclick="openLightbox(this.src)">
+      </div>
+      <div class="grid-item">
+        <img src="omnistyle/show/tower@Abstract Expressionism_s0591____0908_01_query_1_img_000071_1683673253131_026944530950196743.jpeg_gen.jpg" alt="Example 4" loading="lazy" onclick="openLightbox(this.src)">
+      </div>
+      <div class="grid-item">
+        <img src="omnistyle/show/tower@American Comic_s0101____1103_01_query_1_img_000187_1683381942974_05382311884613603.jpeg_gen.jpg" alt="Example 5" loading="lazy" onclick="openLightbox(this.src)">
+      </div>
+      <div class="grid-item">
+        <img src="omnistyle/show/tower@Art Nouveau_s0003____1016_01_query_1_img_000001_1683479665848_05354290234882432_gen.jpg_gen.jpg" alt="Example 6" loading="lazy" onclick="openLightbox(this.src)">
+     
     </div>
   </div>
 
