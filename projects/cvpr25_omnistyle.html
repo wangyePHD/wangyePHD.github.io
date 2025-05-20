@@ -103,19 +103,22 @@
     }
 
     .grid img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      max-height: 1024px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-      object-fit: cover;
-      transition: transform 0.3s ease-in-out; 
-      cursor: zoom-in;
-    }
-
-    .grid img:hover {
-      transform: scale(1.03);
-    }
+      .grid img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        max-height: 1024px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        object-fit: cover;
+        cursor: zoom-in;
+      
+        /* ✅ 放缩动画更自然、更明显 */
+        transition: transform 0.4s cubic-bezier(0.25, 1.5, 0.5, 1);
+      }
+      
+      .grid img:hover {
+        transform: scale(1.08);
+      }
 
     .caption {
       margin-top: 8px;
