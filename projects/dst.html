@@ -433,25 +433,27 @@
       position: relative;
     }
     .showcase-image::after {
-      content: '🔍';
+      content: '🔍 点击放大';
       position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.7);
+      top: 15px;
+      right: 15px;
+      background: rgba(0, 0, 0, 0.8);
       color: white;
-      padding: 5px 8px;
-      border-radius: 50%;
+      padding: 8px 12px;
+      border-radius: 20px;
       font-size: 12px;
       opacity: 0;
       transition: opacity 0.3s ease;
+      white-space: nowrap;
+      font-weight: 500;
     }
     .showcase-image:hover::after {
       opacity: 1;
     }
     .showcase-image:hover {
-      transform: scale(1.02);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-      border-color: rgba(255, 255, 255, 0.5);
+      transform: scale(1.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.7);
     }
     .image-caption {
       margin-top: 15px;
@@ -470,21 +472,23 @@
       display: none;
       position: fixed;
       z-index: 9999;
-      padding-top: 60px;
+      padding-top: 40px;
       left: 0;
       top: 0;
       width: 100%;
       height: 100%;
       overflow: auto;
-      background-color: rgba(0, 0, 0, 0.9);
+      background-color: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(5px);
     }
     .modal-content {
       margin: auto;
       display: block;
-      max-width: 90%;
-      max-height: 85vh;
+      max-width: 95%;
+      max-height: 90vh;
       border-radius: 10px;
-      box-shadow: 0 0 20px black;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+      object-fit: contain;
     }
     .modal-close {
       position: absolute;
