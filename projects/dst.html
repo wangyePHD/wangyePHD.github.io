@@ -258,14 +258,85 @@
       border-radius: 15px;
       border-left: 5px solid #3498db;
     }
+
+    /* === 美化后的数据集展示块样式 === */
     .dataset-stats {
-      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
       padding: 40px;
-      border-radius: 15px;
+      border-radius: 20px;
       color: white;
       text-align: center;
       margin: 30px 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+    .dataset-stats:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    .dataset-stats::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: inherit;
+      z-index: -1;
+      border-radius: 20px;
+    }
+
+    /* 装饰性元素 */
+    .dataset-stats::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    /* 不同的渐变色彩方案 */
+    .dataset-stats.theme-1 {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .dataset-stats.theme-2 {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    .dataset-stats.theme-3 {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    .dataset-stats.theme-4 {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+    .dataset-stats.theme-5 {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+    .dataset-stats.theme-6 {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    }
+    .dataset-stats.theme-7 {
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    }
+    .dataset-stats.theme-8 {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+    }
+    .dataset-stats.theme-9 {
+      background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+    }
+    .dataset-stats.theme-10 {
+      background: linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%);
+    }
+
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -274,16 +345,124 @@
     }
     .stat-item {
       text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease, background 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    .stat-item:hover::before {
+      left: 100%;
+    }
+    .stat-item:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.15);
     }
     .stat-number {
       font-size: 3rem;
       font-weight: bold;
       margin-bottom: 5px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      position: relative;
+      z-index: 1;
     }
     .stat-label {
       font-size: 1rem;
       opacity: 0.9;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
     }
+
+    /* 图像展示样式优化 */
+    .image-showcase {
+      margin-top: 30px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .image-showcase::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+    }
+    .image-container {
+      text-align: center;
+      margin-bottom: 25px;
+      position: relative;
+      z-index: 1;
+    }
+    .image-container:last-child {
+      margin-bottom: 0;
+    }
+    .showcase-image {
+      max-width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      cursor: zoom-in;
+      transition: all 0.3s ease;
+      background: white;
+      padding: 15px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+    }
+    .showcase-image::after {
+      content: '🔍';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 5px 8px;
+      border-radius: 50%;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .showcase-image:hover::after {
+      opacity: 1;
+    }
+    .showcase-image:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    .image-caption {
+      margin-top: 15px;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
     .clickable-image {
       cursor: zoom-in;
     }
@@ -327,6 +506,9 @@
       .carousel-nav { width: 50px; height: 50px; font-size: 20px; }
       .carousel-nav.prev { left: 10px; }
       .carousel-nav.next { right: 10px; }
+      .dataset-stats { padding: 30px 20px; }
+      .stats-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 20px; }
+      .stat-number { font-size: 2.5rem; }
     }
   </style>
 </head>
@@ -363,15 +545,14 @@
         </div>
       </div>
 
-      <div class="stat-image" style="text-align: center; margin-top: 30px;">
-            <img src="dst_figures/teaser.jpeg" 
-                alt="DST-100K Overview" 
-                class="clickable-image"
-                style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-            <p style="margin-top: 10px; font-style: italic; color: #555;">
-            Figure: Overview of DST-100K dataset.
-            </p>
-        </div>
+                  <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/teaser.jpeg" 
+                     alt="DST-100K Overview" 
+                     class="showcase-image">
+                <p class="image-caption">Figure: Overview of DST-100K dataset.</p>
+              </div>
+            </div>
 
       
       <div class="content">
@@ -384,7 +565,7 @@
 
         <div class="section">
           <h2 class="section-title">Dataset Overview</h2>
-          <div class="dataset-stats">
+          <div class="dataset-stats theme-1">
             <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST-100K Dataset Statistics</h3>
             <div class="stats-grid">
               <div class="stat-item"><div class="stat-number">100K</div><div class="stat-label">Image Triplets</div></div>
@@ -393,171 +574,121 @@
               <div class="stat-item"><div class="stat-number">65</div><div class="stat-label">Digital Styles</div></div>
               <div class="stat-item"><div class="stat-number">1K</div><div class="stat-label">Resolution</div></div>
             </div>
-            <div class="stat-image" style="text-align: center; margin-top: 30px;">
-              <img src="dst_figures/dst-dataset.jpeg" 
-                   alt="DST-100K Overview" 
-                   class="clickable-image"
-                   style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-              <p style="margin-top: 10px; font-style: italic; color: #555;">
-                Figure: Overview of DST-100K dataset.
-              </p>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/dst-dataset.jpeg" 
+                     alt="DST-100K Overview" 
+                     class="showcase-image"
+                     style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                <p class="image-caption">Figure: Overview of DST-100K dataset.</p>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="section">
-          <h2 class="section-title">Dataset Overview</h2>
-          <div class="dataset-stats">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST-100K Dataset Statistics</h3>
-            <div class="stats-grid">
-              <div class="stat-item"><div class="stat-number">100K</div><div class="stat-label">Image Triplets</div></div>
-              <div class="stat-item"><div class="stat-number">669</div><div class="stat-label">Artists</div></div>
-              <div class="stat-item"><div class="stat-number">117</div><div class="stat-label">Art Movements</div></div>
-              <div class="stat-item"><div class="stat-number">65</div><div class="stat-label">Digital Styles</div></div>
-              <div class="stat-item"><div class="stat-number">1K</div><div class="stat-label">Resolution</div></div>
+          <h2 class="section-title">Destylization Process</h2>
+          <div class="dataset-stats theme-2">
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Text-Guided Destylization Pipeline</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/desty_data.jpeg" 
+                     alt="Destylization Process" 
+                     class="showcase-image">
+                <p class="image-caption">Figure: Text-guided destylization process demonstration.</p>
+              </div>
             </div>
-            <div class="stat-image" style="text-align: center; margin-top: 30px;">
-              <img src="dst_figures/desty_data.jpeg" 
-                   alt="DST-100K Overview" 
-                   class="clickable-image"
-                   style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-              <p style="margin-top: 10px; font-style: italic; color: #555;">
-                Figure: Overview of DST-100K dataset.
-              </p>
-            </div>
-            <div class="stat-image" style="text-align: center; margin-top: 30px;">
-              <img src="dst_figures/img_pool.jpeg" 
-                   alt="DST-100K Overview" 
-                   class="clickable-image"
-                   style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-              <p style="margin-top: 10px; font-style: italic; color: #555;">
-                Figure: Overview of DST-100K dataset.
-              </p>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/img_pool.jpeg" 
+                     alt="Image Pool" 
+                     class="showcase-image">
+                <p class="image-caption">Figure: Diverse image pool for destylization training.</p>
+              </div>
             </div>
           </div>
         </div>
         
         <div class="section">
-          <h2 class="section-title">Dataset Overview</h2>
-          <div class="dataset-stats">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST-100K Dataset Statistics</h3>
-            <div class="stats-grid">
-              <div class="stat-item"><div class="stat-number">100K</div><div class="stat-label">Image Triplets</div></div>
-              <div class="stat-item"><div class="stat-number">669</div><div class="stat-label">Artists</div></div>
-              <div class="stat-item"><div class="stat-number">117</div><div class="stat-label">Art Movements</div></div>
-              <div class="stat-item"><div class="stat-number">65</div><div class="stat-label">Digital Styles</div></div>
-              <div class="stat-item"><div class="stat-number">1K</div><div class="stat-label">Resolution</div></div>
-            </div>
-            <div class="stat-image" style="text-align: center; margin-top: 30px;">
-              <img src="dst_figures/dst-filter.jpeg" 
-                   alt="DST-100K Overview" 
-                   class="clickable-image"
-                   style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-              <p style="margin-top: 10px; font-style: italic; color: #555;">
-                Figure: Overview of DST-100K dataset.
-              </p>
+          <h2 class="section-title">DST-Filter Quality Control</h2>
+          <div class="dataset-stats theme-3">
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Multi-Stage Evaluation Pipeline</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/dst-filter.jpeg" 
+                     alt="DST-Filter Pipeline" 
+                     class="showcase-image">
+                <p class="image-caption">Figure: DST-Filter quality control pipeline with Chain-of-Thought evaluation.</p>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="section">
-          <h2 class="section-title">Dataset Overview</h2>
-          <div class="dataset-stats">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST-100K Dataset Statistics</h3>
-            <div class="stats-grid">
-              <div class="stat-item"><div class="stat-number">100K</div><div class="stat-label">Image Triplets</div></div>
-              <div class="stat-item"><div class="stat-number">669</div><div class="stat-label">Artists</div></div>
-              <div class="stat-item"><div class="stat-number">117</div><div class="stat-label">Art Movements</div></div>
-              <div class="stat-item"><div class="stat-number">65</div><div class="stat-label">Digital Styles</div></div>
-              <div class="stat-item"><div class="stat-number">1K</div><div class="stat-label">Resolution</div></div>
-            </div>
-            <div class="stat-image" style="text-align: center; margin-top: 30px;">
-              <img src="dst_figures/more_res.jpeg" 
-                   alt="DST-100K Overview" 
-                   class="clickable-image"
-                   style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-              <p style="margin-top: 10px; font-style: italic; color: #555;">
-                Figure: Overview of DST-100K dataset.
-              </p>
+          <h2 class="section-title">More Results</h2>
+          <div class="dataset-stats theme-4">
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Additional Style Transfer Results</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/more_res.jpeg" 
+                     alt="More Results" 
+                     class="showcase-image">
+                <p class="image-caption">Figure: Additional style transfer results showcasing diverse artistic styles.</p>
+              </div>
             </div>
           </div>
         </div>
         
 
         <div class="section">
-          <h2 class="section-title">Dataset Overview</h2>
-          <div class="dataset-stats">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST-100K Dataset Statistics</h3>
-            <div class="stats-grid">
-              <div class="stat-item"><div class="stat-number">100K</div><div class="stat-label">Image Triplets</div></div>
-              <div class="stat-item"><div class="stat-number">669</div><div class="stat-label">Artists</div></div>
-              <div class="stat-item"><div class="stat-number">117</div><div class="stat-label">Art Movements</div></div>
-              <div class="stat-item"><div class="stat-number">65</div><div class="stat-label">Digital Styles</div></div>
-              <div class="stat-item"><div class="stat-number">1K</div><div class="stat-label">Resolution</div></div>
-            </div>
-            <div class="stat-image" style="text-align: center; margin-top: 30px;">
-              <img src="dst_figures/table1.jpeg" 
-                   alt="DST-100K Overview" 
-                   class="clickable-image"
-                   style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-              <p style="margin-top: 10px; font-style: italic; color: #555;">
-                Figure: Overview of DST-100K dataset.
-              </p>
+          <h2 class="section-title">Quantitative Results</h2>
+          <div class="dataset-stats theme-5">
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Performance Comparison Table</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/table1.jpeg" 
+                     alt="Quantitative Results" 
+                     class="showcase-image">
+                <p class="image-caption">Figure: Quantitative comparison with state-of-the-art methods.</p>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="section">
-          <h2 class="section-title">Dataset Overview</h2>
-          <div class="dataset-stats">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST-100K Dataset Statistics</h3>
-            <div class="stats-grid">
-              <div class="stat-item"><div class="stat-number">100K</div><div class="stat-label">Image Triplets</div></div>
-              <div class="stat-item"><div class="stat-number">669</div><div class="stat-label">Artists</div></div>
-              <div class="stat-item"><div class="stat-number">117</div><div class="stat-label">Art Movements</div></div>
-              <div class="stat-item"><div class="stat-number">65</div><div class="stat-label">Digital Styles</div></div>
-              <div class="stat-item"><div class="stat-number">1K</div><div class="stat-label">Resolution</div></div>
-            </div>
-            <div class="stat-image" style="text-align: center; margin-top: 30px;">
-              <img src="dst_figures/dingxing.jpeg" 
-                   alt="DST-100K Overview" 
-                   class="clickable-image"
-                   style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-              <p style="margin-top: 10px; font-style: italic; color: #555;">
-                Figure: Overview of DST-100K dataset.
-              </p>
+          <h2 class="section-title">Qualitative Comparison</h2>
+          <div class="dataset-stats theme-6">
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Visual Quality Assessment</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/dingxing.jpeg" 
+                     alt="Qualitative Comparison" 
+                     class="showcase-image">
+                <p class="image-caption">Figure: Qualitative comparison of style transfer results.</p>
+              </div>
             </div>
           </div>
         </div>
         
         <div class="section">
-          <h2 class="section-title">Dataset Overview</h2>
-          <div class="dataset-stats">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST-100K Dataset Statistics</h3>
-            <div class="stats-grid">
-              <div class="stat-item"><div class="stat-number">100K</div><div class="stat-label">Image Triplets</div></div>
-              <div class="stat-item"><div class="stat-number">669</div><div class="stat-label">Artists</div></div>
-              <div class="stat-item"><div class="stat-number">117</div><div class="stat-label">Art Movements</div></div>
-              <div class="stat-item"><div class="stat-number">65</div><div class="stat-label">Digital Styles</div></div>
-              <div class="stat-item"><div class="stat-number">1K</div><div class="stat-label">Resolution</div></div>
+          <h2 class="section-title">Method Comparison</h2>
+          <div class="dataset-stats theme-7">
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST-Transfer vs State-of-the-Art</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/vs4o.jpeg" 
+                     alt="Method Comparison" 
+                     class="showcase-image">
+                <p class="image-caption">Figure: DST-Transfer comparison with 4O method.</p>
+              </div>
             </div>
-            <div class="stat-image" style="text-align: center; margin-top: 30px;">
-              <img src="dst_figures/vs4o.jpeg" 
-                   alt="DST-100K Overview" 
-                   class="clickable-image"
-                   style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-              <p style="margin-top: 10px; font-style: italic; color: #555;">
-                Figure: Overview of DST-100K dataset.
-              </p>
-            </div>
-            <div class="stat-image" style="text-align: center; margin-top: 30px;">
-              <img src="dst_figures/dst_vs_4o.jpeg" 
-                   alt="DST-100K Overview" 
-                   class="clickable-image"
-                   style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-              <p style="margin-top: 10px; font-style: italic; color: #555;">
-                Figure: Overview of DST-100K dataset.
-              </p>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/dst_vs_4o.jpeg" 
+                     alt="DST vs 4O" 
+                     class="showcase-image">
+                <p class="image-caption">Figure: Detailed comparison between DST and 4O approaches.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -656,7 +787,7 @@
 
       // 为所有可点击图片（包括轮播图中的）添加放大功能
       function addClickableImageListeners() {
-        document.querySelectorAll('.clickable-image').forEach(img => {
+        document.querySelectorAll('.clickable-image, .showcase-image').forEach(img => {
           img.addEventListener('click', () => {
             modal.style.display = "block";
             modalImg.src = img.src;
@@ -678,5 +809,12 @@
       });
     });
   </script>
+
+  <!-- 图片放大模态框 -->
+  <div id="image-modal" class="modal">
+    <span class="modal-close">&times;</span>
+    <img class="modal-content" id="modal-img">
+  </div>
+
 </body>
 </html>
