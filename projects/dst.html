@@ -523,14 +523,14 @@
         <h1 class="title">Destylize to Stylize</h1>
         <p class="subtitle">Building High Quality Style Transfer Data</p>
         <div class="authors">
-          <a href="#" class="author-link">Ye Wang</a><sup>1</sup>,
-          <a href="#" class="author-link">Zili Yi</a><sup>2</sup>,
-          <a href="#" class="author-link">Yibo Zhang</a><sup>1,3</sup>,
-          <a href="#" class="author-link">Peng Zheng</a><sup>1,3</sup>,
+          <a href="https://wangyephd.github.io/" class="author-link">Ye Wang</a><sup>1</sup>,
+          <a href="https://is.nju.edu.cn/yzl_en/main.htm" class="author-link">Zili Yi</a><sup>2</sup>,
+          <a href="https://yiboz2001.github.io/" class="author-link">Yibo Zhang</a><sup>1,3</sup>,
+          <a href="https://pengzheng0707.github.io/" class="author-link">Peng Zheng</a><sup>1,3</sup>,
           <a href="#" class="author-link">Xuping Xie</a><sup>1</sup>,
           <a href="#" class="author-link">Jiang Lin</a><sup>2</sup>,
-          <a href="#" class="author-link">Yilin Wang</a><sup>4*</sup>,
-          <a href="#" class="author-link">Rui Ma</a><sup>1,5*</sup>
+          <a href="https://yilinwang.org/" class="author-link">Yilin Wang</a><sup>4*</sup>,
+          <a href="https://ruim-jlu.github.io/" class="author-link">Rui Ma</a><sup>1,5*</sup>
         </div>
         <div class="affiliations">
           <sup>1</sup>Jilin University &nbsp;
@@ -584,22 +584,22 @@
                      alt="DST-100K Overview" 
                      class="showcase-image"
                      style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-                <p class="image-caption">Figure: Overview of DST-100K dataset.</p>
+                <p class="image-caption">Overview of DST-100K dataset.</p>
               </div>
             </div>
           </div>
         </div>
 
         <div class="section">
-          <h2 class="section-title">Destylization Process</h2>
+          <h2 class="section-title">Destylization</h2>
           <div class="dataset-stats theme-2">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Text-Guided Destylization Pipeline</h3>
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST: Text-Guided Destylization</h3>
             <div class="image-showcase">
               <div class="image-container">
                 <img src="dst_figures/desty_data.jpeg" 
                      alt="Destylization Process" 
                      class="showcase-image">
-                <p class="image-caption">Figure: Text-guided destylization process demonstration.</p>
+                <p class="image-caption">(a) Destylization Dataset Construction: we use high-resolution images from HQ-50K and FFHQ as content images, covering six categories: humans, animals, plants, objects, scenes, and architecture. These images are stylized by four models, and captions are generated using InternVL2.5-7B. This yields triplets in the form of stylized-content-caption. (b) The architecture of DST model.</p>
               </div>
             </div>
             <div class="image-showcase">
@@ -607,14 +607,14 @@
                 <img src="dst_figures/img_pool.jpeg" 
                      alt="Image Pool" 
                      class="showcase-image">
-                <p class="image-caption">Figure: Diverse image pool for destylization training.</p>
+                <p class="image-caption">(a) Style image collection and (b) text-guided destylization pipeline.</p>
               </div>
             </div>
           </div>
         </div>
         
         <div class="section">
-          <h2 class="section-title">DST-Filter Quality Control</h2>
+          <h2 class="section-title">DST-Filter</h2>
           <div class="dataset-stats theme-3">
             <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Multi-Stage Evaluation Pipeline</h3>
             <div class="image-showcase">
@@ -622,7 +622,7 @@
                 <img src="dst_figures/dst-filter.jpeg" 
                      alt="DST-Filter Pipeline" 
                      class="showcase-image">
-                <p class="image-caption">Figure: DST-Filter quality control pipeline with Chain-of-Thought evaluation.</p>
+                <p class="image-caption">The pipeline of DST-Filter. DST-Filter assesses each <style, destylized> pair from two aspects: content preservation and style discrepancy, using GPT-4o with region-level and attribute-level Chain-of-Thought reasoning.</p>
               </div>
             </div>
           </div>
@@ -631,13 +631,15 @@
         <div class="section">
           <h2 class="section-title">More Results</h2>
           <div class="dataset-stats theme-4">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Additional Style Transfer Results</h3>
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Diverse Style Transfer Results</h3>
             <div class="image-showcase">
               <div class="image-container">
                 <img src="dst_figures/more_res.jpeg" 
                      alt="More Results" 
                      class="showcase-image">
-                <p class="image-caption">Figure: Additional style transfer results showcasing diverse artistic styles.</p>
+                <p class="image-caption">Our method produces a broader range of stylized results across diverse style categories,
+                  including 2D styles such as flat design, PS1 game style, cartoon, line art, illustration, and classic
+                  artworks, as well as 3D styles such as origami art, 3D voxel art and 3D low poly rendering.</p>
               </div>
             </div>
           </div>
@@ -647,13 +649,13 @@
         <div class="section">
           <h2 class="section-title">Quantitative Results</h2>
           <div class="dataset-stats theme-5">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Performance Comparison Table</h3>
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Performance Comparison</h3>
             <div class="image-showcase">
               <div class="image-container">
                 <img src="dst_figures/table1.jpeg" 
                      alt="Quantitative Results" 
                      class="showcase-image">
-                <p class="image-caption">Figure: Quantitative comparison with state-of-the-art methods.</p>
+                <p class="image-caption">Quantitative comparison with state-of-the-art methods.</p>
               </div>
             </div>
           </div>
@@ -662,28 +664,28 @@
         <div class="section">
           <h2 class="section-title">Qualitative Comparison</h2>
           <div class="dataset-stats theme-6">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Visual Quality Assessment</h3>
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Performance Comparison</h3>
             <div class="image-showcase">
               <div class="image-container">
                 <img src="dst_figures/dingxing.jpeg" 
                      alt="Qualitative Comparison" 
                      class="showcase-image">
-                <p class="image-caption">Figure: Qualitative comparison of style transfer results.</p>
+                <p class="image-caption">Qualitative comparison of style transfer results.</p>
               </div>
             </div>
           </div>
         </div>
         
         <div class="section">
-          <h2 class="section-title">Method Comparison</h2>
+          <h2 class="section-title">Comparison to 4o</h2>
           <div class="dataset-stats theme-7">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST-Transfer vs State-of-the-Art</h3>
+            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST-Transfer vs GPT-4o</h3>
             <div class="image-showcase">
               <div class="image-container">
                 <img src="dst_figures/vs4o.jpeg" 
                      alt="Method Comparison" 
                      class="showcase-image">
-                <p class="image-caption">Figure: DST-Transfer comparison with 4O method.</p>
+                <p class="image-caption">DST-Transfer comparison with 4O method on stylization task.</p>
               </div>
             </div>
             <div class="image-showcase">
@@ -691,7 +693,7 @@
                 <img src="dst_figures/dst_vs_4o.jpeg" 
                      alt="DST vs 4O" 
                      class="showcase-image">
-                <p class="image-caption">Figure: Detailed comparison between DST and 4O approaches.</p>
+                <p class="image-caption">DST comparison with 4O method on destylization task.</p>
               </div>
             </div>
           </div>
