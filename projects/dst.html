@@ -622,7 +622,7 @@
                 <img src="dst_figures/dst-filter.jpeg" 
                      alt="DST-Filter Pipeline" 
                      class="showcase-image">
-                <p class="image-caption">The pipeline of DST-Filter. DST-Filter assesses each <style, destylized> pair from two aspects: content preservation and style discrepancy, using GPT-4o with region-level and attribute-level Chain-of-Thought reasoning.</p>
+                <p class="image-caption">The pipeline of DST-Filter. DST-Filter assesses each &lt;style, destylized&gt; pair from two aspects: content preservation and style discrepancy, using GPT-4o with region-level and attribute-level Chain-of-Thought reasoning.</p>
               </div>
             </div>
           </div>
@@ -719,7 +719,9 @@
 
     function updateCarousel() {
       const track = document.getElementById('carousel-track');
-      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      if (track) {
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      }
       
       // 更新指示器
       indicators.forEach((indicator, index) => {
@@ -753,13 +755,33 @@
 
     // 鼠标悬停时暂停自动轮播
     const carouselWrapper = document.querySelector('.carousel-wrapper');
-    carouselWrapper.addEventListener('mouseenter', () => {
-      clearInterval(autoSlideInterval);
-    });
+    if (carouselWrapper) {
+      carouselWrapper.addEventListener('mouseenter', () => {
+        clearInterval(autoSlideInterval);
+      });
 
-    carouselWrapper.addEventListener('mouseleave', () => {
-      autoSlideInterval = setInterval(autoSlide, 5000);
-    });
+      carouselWrapper.addEventListener('mouseleave', () => {
+        autoSlideInterval = setInterval(autoSlide, 5000);
+      });
+
+      // 触摸滑动支持
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      carouselWrapper.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+
+      carouselWrapper.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      });
+
+      function handleSwipe() {
+        if (touchEndX < touchStartX - 50) moveSlide(1);
+        if (touchEndX > touchStartX + 50) moveSlide(-1);
+      }
+    }
 
     // 键盘导航
     document.addEventListener('keydown', (e) => {
@@ -767,36 +789,26 @@
       if (e.key === 'ArrowRight') moveSlide(1);
     });
 
-    // 触摸滑动支持
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    carouselWrapper.addEventListener('touchstart', e => {
-      touchStartX = e.changedTouches[0].screenX;
-    });
-
-    carouselWrapper.addEventListener('touchend', e => {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    });
-
-    function handleSwipe() {
-      if (touchEndX < touchStartX - 50) moveSlide(1);
-      if (touchEndX > touchStartX + 50) moveSlide(-1);
-    }
-
     // 图片放大功能
     document.addEventListener("DOMContentLoaded", function () {
       const modal = document.getElementById("image-modal");
       const modalImg = document.getElementById("modal-img");
       const closeBtn = document.querySelector(".modal-close");
 
-      // 为所有可点击图片（包括轮播图中的）添加放大功能
+      if (!modal || !modalImg || !closeBtn) {
+        console.error('Modal elements not found');
+        return;
+      }
+
+      // 为所有可点击图片添加放大功能
       function addClickableImageListeners() {
         document.querySelectorAll('.clickable-image, .showcase-image').forEach(img => {
-          img.addEventListener('click', () => {
+          img.addEventListener('click', (e) => {
+            e.preventDefault();
             modal.style.display = "block";
             modalImg.src = img.src;
+            modalImg.alt = img.alt;
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
           });
         });
       }
@@ -804,23 +816,28 @@
       // 初始化和重新绑定事件监听器
       addClickableImageListeners();
 
-      closeBtn.onclick = () => { modal.style.display = "none"; };
-      modal.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
+      // 关闭模态框
+      closeBtn.onclick = () => { 
+        modal.style.display = "none";
+        document.body.style.overflow = 'auto';
+      };
+      
+      modal.onclick = (e) => { 
+        if (e.target === modal) {
+          modal.style.display = "none";
+          document.body.style.overflow = 'auto';
+        }
+      };
       
       // ESC键关闭模态框
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal.style.display === 'block') {
           modal.style.display = "none";
+          document.body.style.overflow = 'auto';
         }
       });
     });
   </script>
-
-  <!-- 图片放大模态框 -->
-  <div id="image-modal" class="modal">
-    <span class="modal-close">&times;</span>
-    <img class="modal-content" id="modal-img">
-  </div>
 
 </body>
 </html>
