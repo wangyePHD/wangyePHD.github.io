@@ -47,13 +47,13 @@
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
     .subtitle {
-      font-size: 1.3rem;
+      font-size: 1.6rem;
       font-weight: 300;
       margin-bottom: 30px;
       opacity: 0.9;
     }
     .authors {
-      font-size: 1.1rem;
+      font-size: 1.3rem;
       margin-bottom: 20px;
     }
     .author-link {
@@ -66,7 +66,7 @@
       border-color: white;
     }
     .affiliations {
-      font-size: 0.95rem;
+      font-size: 1.1rem;
       opacity: 0.8;
     }
     .nav-buttons {
@@ -257,6 +257,24 @@
       padding: 30px;
       border-radius: 15px;
       border-left: 5px solid #3498db;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .abstract:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+    .abstract::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3498db, #2ecc71, #f39c12, #e74c3c);
+      border-radius: 0 0 15px 15px;
     }
 
     /* === 美化后的数据集展示块样式 === */
@@ -310,31 +328,31 @@
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
     .dataset-stats.theme-2 {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #f8b5d1 100%);
     }
     .dataset-stats.theme-3 {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      background: linear-gradient(135deg, #a8d8f0 0%, #87ceeb 50%, #a8f0f0 100%);
     }
     .dataset-stats.theme-4 {
-      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      background: linear-gradient(135deg, #a8f0c4 0%, #90ee90 50%, #a8f0e8 100%);
     }
     .dataset-stats.theme-5 {
-      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      background: linear-gradient(135deg, #fa709a 0%, #ffb6c1 50%, #fee140 100%);
     }
     .dataset-stats.theme-6 {
-      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      background: linear-gradient(135deg, #4a9eff 0%, #87ceeb 50%, #ffb6c1 100%);
     }
     .dataset-stats.theme-7 {
-      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      background: linear-gradient(135deg, #ffb366 0%, #ffcc80 50%, #ffab91 100%);
     }
     .dataset-stats.theme-8 {
-      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      background: linear-gradient(135deg, #ff9a9e 0%, #ffb3ba 50%, #fecfef 100%);
     }
     .dataset-stats.theme-9 {
-      background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+      background: linear-gradient(135deg, #a18cd1 0%, #dda0dd 50%, #fbc2eb 100%);
     }
     .dataset-stats.theme-10 {
-      background: linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%);
+      background: linear-gradient(135deg, #fad0c4 0%, #ffd1dc 50%, #ffd1ff 100%);
     }
 
     .stats-grid {
@@ -506,7 +524,7 @@
       .content { padding: 30px; }
       .carousel-container { padding: 20px; }
       .slide-content { padding: 40px 20px; }
-      .slide-title { font-size: 1.5rem; }
+      .slide-title { font-size: 2rem; }
       .carousel-nav { width: 50px; height: 50px; font-size: 20px; }
       .carousel-nav.prev { left: 10px; }
       .carousel-nav.next { right: 10px; }
@@ -520,8 +538,8 @@
   <div class="container">
     <div class="paper-card">
       <div class="header">
-        <h1 class="title">Destylize to Stylize</h1>
-        <p class="subtitle">Building High Quality Style Transfer Data</p>
+        <h1 class="title">OmniStyle2</h1>
+        <p class="subtitle">Scalable and High Quality Artistic Style Transfer Data Generation via Destylization</p>
         <div class="authors">
           <a href="https://wangyephd.github.io/" class="author-link">Ye Wang</a><sup>1</sup>,
           <a href="https://is.nju.edu.cn/yzl_en/main.htm" class="author-link">Zili Yi</a><sup>2</sup>,
@@ -538,7 +556,7 @@
           <sup>3</sup>Shanghai Innovation Institute<br>
           <sup>4</sup>Adobe &nbsp;
           <sup>5</sup>Engineering Research Center of Knowledge-Driven Human-Machine Intelligence, MOE, China<br>
-          <sup>*</sup>Corresponding author
+          <sup>*</sup>Corresponding authors
         </div>
         <div class="nav-buttons">
           <a href="#" class="btn btn-primary">📄 Paper</a>
@@ -551,10 +569,10 @@
 
                   <div class="image-showcase">
               <div class="image-container">
-                <img src="dst_figures/teaser.jpeg" 
+                <img src="dst_figures/teaser0.jpg" 
                      alt="DST-100K Overview" 
                      class="showcase-image">
-                <p class="image-caption">Figure: Overview of DST-100K dataset.</p>
+                <p class="image-caption">Comparison of stylization results between OmniStyle2 and representative closed- and open-source image editing models across diverse styles, including 3D origami art, watercolor, poster design, pill-and-candy mosaic, and artistic painting. Please zoom in for details and view it in color.</p>
               </div>
             </div>
 
@@ -563,37 +581,31 @@
         <div class="section">
           <h2 class="section-title">Abstract</h2>
             <div class="abstract">
-                We present <strong>DST-100K</strong>, a high-quality dataset for style transfer, constructed through a novel destylization-based pipeline. The goal of destylization is to reverse the stylization process by recovering the underlying natural appearance of artistic images. This formulation transforms the original style image into an authentic supervision signal, enabling the learning of style transfer from real styles with aligned content. To achieve destylization, we design <strong>DST</strong>, a text-guided destylization model which can remove stylistic features from artistic images to generate style-free natural counterparts guided by content text. Because imperfect destylization would propagate noise into downstream training, we further introduce <strong>DST-Filter</strong>, a Chain‑of‑Thought, multi‑stage evaluation that jointly measures content preservation and style discrepancy, automatically discarding low‑quality pairs. Leveraging DST‑100K, we build <strong>DST-Transfer</strong>, a feed-forward style transfer model based on FLUX.1-dev without adding any new modules and handcraft design. Despite its simplicity, DST‑Transfer consistently surpasses state‑of‑the‑art methods in qualitative and quantitative evaluations. Our approach reframes style transfer as a data problem and introduces a reliable supervision paradigm derived directly from authentic artistic styles, which helps address the critical challenge posed by the absence of ground truth data in style transfer tasks.
+              <strong>OmniStyle2</strong> introduces a novel approach to artistic style transfer by reframing it as a data problem. Our key insight is destylization, reversing style transfer by removing stylistic elements from artworks to recover natural, style-free counterparts. This yields <strong>DST-100K</strong>, a large-scale dataset that provides authentic supervision signals by aligning real artistic styles with their underlying content. To build DST-100K, we develop (1) <strong>DST</strong>, a text-guided destylization model that reconstructs style-free content, and (2) <strong>DST-Filter</strong>, a multi-stage evaluation model that employs Chain-of-Thought reasoning to automatically discard low-quality pairs while ensuring content fidelity and style accuracy. Leveraging DST-100K, we train OmniStyle2, a simple feed-forward model based on FLUX.1-dev. Despite its simplicity, OmniStyle2 consistently surpasses state-of-the-art methods across both qualitative and quantitative benchmarks. Our results demonstrate that scalable data generation via destylization provides a reliable supervision paradigm, overcoming the fundamental challenge posed by the lack of ground-truth data in artistic style transfer.
             </div>
         </div>
 
         <div class="section">
-          <h2 class="section-title">Dataset Overview</h2>
-          <div class="dataset-stats theme-1">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST-100K Dataset Statistics</h3>
-            <div class="stats-grid">
-              <div class="stat-item"><div class="stat-number">100K</div><div class="stat-label">Image Triplets</div></div>
-              <div class="stat-item"><div class="stat-number">669</div><div class="stat-label">Artists</div></div>
-              <div class="stat-item"><div class="stat-number">117</div><div class="stat-label">Art Movements</div></div>
-              <div class="stat-item"><div class="stat-number">65</div><div class="stat-label">Digital Styles</div></div>
-              <div class="stat-item"><div class="stat-number">1K</div><div class="stat-label">Resolution</div></div>
-            </div>
+          <h2 class="section-title">Why Destylization?</h2>
+          <div class="dataset-stats theme-2">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Destylization vs. Stylization</h3>
             <div class="image-showcase">
               <div class="image-container">
-                <img src="dst_figures/dst-dataset.jpeg" 
-                     alt="DST-100K Overview" 
-                     class="showcase-image"
-                     style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-                <p class="image-caption">Overview of DST-100K dataset.</p>
+                <img src="dst_figures/desty_vs_sty.jpg" 
+                     alt="Destylization Process" 
+                     class="showcase-image">
+                <p class="image-caption">(a) Stylization-based data generation pipeline. (b) Destylization-based data generation pipeline (ours). Our method enables authentic supervision with high-quality and style-faithful data, in contrast to stylization-based pipelines that rely on pseudo-supervision, often artifacts-prone and style-unfaithful.</p>
               </div>
             </div>
           </div>
         </div>
 
+        
+
         <div class="section">
           <h2 class="section-title">Destylization</h2>
-          <div class="dataset-stats theme-2">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST: Text-Guided Destylization</h3>
+          <div class="dataset-stats theme-3">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">DST: Text-Guided Destylization</h3>
             <div class="image-showcase">
               <div class="image-container">
                 <img src="dst_figures/desty_data.jpeg" 
@@ -616,7 +628,7 @@
         <div class="section">
           <h2 class="section-title">DST-Filter</h2>
           <div class="dataset-stats theme-3">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Multi-Stage Evaluation Pipeline</h3>
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Multi-Stage Evaluation Pipeline</h3>
             <div class="image-showcase">
               <div class="image-container">
                 <img src="dst_figures/dst-filter.jpeg" 
@@ -629,33 +641,47 @@
         </div>
 
         <div class="section">
-          <h2 class="section-title">More Results</h2>
-          <div class="dataset-stats theme-4">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Diverse Style Transfer Results</h3>
+          <h2 class="section-title">Dataset Overview</h2>
+          <div class="dataset-stats theme-1">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">DST-100K Dataset Statistics</h3>
+            <div class="stats-grid">
+              <div class="stat-item"><div class="stat-number">100K</div><div class="stat-label">Image Triplets</div></div>
+              <div class="stat-item"><div class="stat-number">669</div><div class="stat-label">Artists</div></div>
+              <div class="stat-item"><div class="stat-number">117</div><div class="stat-label">Art Movements</div></div>
+              <div class="stat-item"><div class="stat-number">65</div><div class="stat-label">Digital Styles</div></div>
+              <div class="stat-item"><div class="stat-number">1K</div><div class="stat-label">Resolution</div></div>
+            </div>
             <div class="image-showcase">
               <div class="image-container">
-                <img src="dst_figures/more_res.jpeg" 
-                     alt="More Results" 
-                     class="showcase-image">
-                <p class="image-caption">Our method produces a broader range of stylized results across diverse style categories,
-                  including 2D styles such as flat design, PS1 game style, cartoon, line art, illustration, and classic
-                  artworks, as well as 3D styles such as origami art, 3D voxel art and 3D low poly rendering.</p>
+                <img src="dst_figures/dst-dataset.jpeg" 
+                     alt="DST-100K Overview" 
+                     class="showcase-image"
+                     style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                <p class="image-caption">Overview of DST-100K dataset.</p>
               </div>
             </div>
           </div>
         </div>
-        
 
         <div class="section">
           <h2 class="section-title">Quantitative Results</h2>
           <div class="dataset-stats theme-5">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Performance Comparison</h3>
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Quantitative comparison of different style transfer methods</h3>
             <div class="image-showcase">
               <div class="image-container">
-                <img src="dst_figures/table1.jpeg" 
+                <img src="dst_figures/table1.png" 
                      alt="Quantitative Results" 
                      class="showcase-image">
-                <p class="image-caption">Quantitative comparison with state-of-the-art methods.</p>
+              </div>
+            </div>
+          </div>
+          <div class="dataset-stats theme-8">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Quantitative comparison of the image editing methods</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/table2.png" 
+                     alt="Quantitative Results" 
+                     class="showcase-image">
               </div>
             </div>
           </div>
@@ -664,41 +690,46 @@
         <div class="section">
           <h2 class="section-title">Qualitative Comparison</h2>
           <div class="dataset-stats theme-6">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Performance Comparison</h3>
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Qualitative comparison with different style transfer methods</h3>
             <div class="image-showcase">
               <div class="image-container">
                 <img src="dst_figures/dingxing.jpeg" 
                      alt="Qualitative Comparison" 
                      class="showcase-image">
-                <p class="image-caption">Qualitative comparison of style transfer results.</p>
+              </div>
+            </div>
+          </div>
+          <div class="dataset-stats theme-7">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Qualitative comparison with different image editing models</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/vs4o.jpg" 
+                     alt="Method Comparison" 
+                     class="showcase-image">
+                <img src="dst_figures/vs4o1.jpg" 
+                     alt="Method Comparison" 
+                     class="showcase-image">
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="section">
+          <h2 class="section-title">More Results</h2>
+          <div class="dataset-stats theme-4">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Diverse Style Transfer Results</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/more-res.jpg" 
+                     alt="More Results" 
+                     class="showcase-image">
+                <p class="image-caption">Our method produces a broader range of stylized results across diverse style categories, including 2D styles such as flat design, PS1 game style, cartoon, line art, illustration, and classic artworks, as well as 3D styles such as origami art, 3D voxel art and 3D low poly rendering.</p>
               </div>
             </div>
           </div>
         </div>
         
-        <div class="section">
-          <h2 class="section-title">Comparison to 4o</h2>
-          <div class="dataset-stats theme-7">
-            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">DST-Transfer vs GPT-4o</h3>
-            <div class="image-showcase">
-              <div class="image-container">
-                <img src="dst_figures/vs4o.jpeg" 
-                     alt="Method Comparison" 
-                     class="showcase-image">
-                <p class="image-caption">DST-Transfer comparison with 4O method on stylization task.</p>
-              </div>
-            </div>
-            <div class="image-showcase">
-              <div class="image-container">
-                <img src="dst_figures/dst_vs_4o.jpeg" 
-                     alt="DST vs 4O" 
-                     class="showcase-image">
-                <p class="image-caption">DST comparison with 4O method on destylization task.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
