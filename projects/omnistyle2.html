@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Destylize to Stylize: Building High Quality Style Transfer Data</title>
+  <style>
+    /* === 原有样式保留，包含整体页面、美术样式、统计卡片等 === */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .paper-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin-bottom: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .header {
+      text-align: center;
+      padding: 60px 40px;
+      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    .subtitle {
+      font-size: 1.6rem;
+      font-weight: 300;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+    .authors {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+    .author-link {
+      color: white;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+      transition: border-color 0.3s ease;
+    }
+    .author-link:hover {
+      border-color: white;
+    }
+    .affiliations {
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 12px 24px;
+      border: 2px solid white;
+      background: transparent;
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn:hover {
+      background: white;
+      color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+    .btn-primary {
+      background: white;
+      color: #667eea;
+    }
+    .btn-primary:hover {
+      background: rgba(255, 255, 255, 0.9);
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    /* === 轮播图样式 === */
+    .carousel-container {
+      position: relative;
+      padding: 40px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .carousel-wrapper {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      background: white;
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .carousel-slide {
+      flex: 0 0 100%;
+      position: relative;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    }
+    .slide-content {
+      padding: 60px 40px;
+      text-align: center;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .slide-image {
+      width: 100%;
+      max-width: 600px;
+      height: 300px;
+      object-fit: contain;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+      cursor: zoom-in;
+      transition: transform 0.3s ease;
+      background: white;
+      padding: 10px;
+    }
+    .slide-image:hover {
+      transform: scale(1.02);
+    }
+    .slide-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 15px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .slide-description {
+      font-size: 1.1rem;
+      color: #34495e;
+      line-height: 1.6;
+      max-width: 700px;
+    }
+    
+    /* 导航按钮 */
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #667eea;
+      transition: all 0.3s ease;
+      z-index: 10;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .carousel-nav:hover {
+      background: white;
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+    .carousel-nav.prev {
+      left: 20px;
+    }
+    .carousel-nav.next {
+      right: 20px;
+    }
+    
+    /* 指示器 */
+    .carousel-indicators {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+    }
+    .indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .indicator.active {
+      background: white;
+      transform: scale(1.2);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    }
+
+    .content {
+      padding: 40px;
+      background: white;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: #2c3e50;
+      position: relative;
+      padding-left: 20px;
+    }
+    .section-title::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 40px;
+      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+      border-radius: 2px;
+    }
+    .abstract {
+      font-size: 1.1rem;
+      text-align: justify;
+      color: #34495e;
+      line-height: 1.8;
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 15px;
+      border-left: 5px solid #3498db;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .abstract:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+    .abstract::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3498db, #2ecc71, #f39c12, #e74c3c);
+      border-radius: 0 0 15px 15px;
+    }
+
+    /* === 美化后的数据集展示块样式 === */
+    .dataset-stats {
+      padding: 40px;
+      border-radius: 20px;
+      color: white;
+      text-align: center;
+      margin: 30px 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .dataset-stats:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    .dataset-stats::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: inherit;
+      z-index: -1;
+      border-radius: 20px;
+    }
+
+    /* 装饰性元素 */
+    .dataset-stats::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    /* 不同的渐变色彩方案 */
+    .dataset-stats.theme-1 {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .dataset-stats.theme-2 {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #f8b5d1 100%);
+    }
+    .dataset-stats.theme-3 {
+      background: linear-gradient(135deg, #a8d8f0 0%, #87ceeb 50%, #a8f0f0 100%);
+    }
+    .dataset-stats.theme-4 {
+      background: linear-gradient(135deg, #a8f0c4 0%, #90ee90 50%, #a8f0e8 100%);
+    }
+    .dataset-stats.theme-5 {
+      background: linear-gradient(135deg, #fa709a 0%, #ffb6c1 50%, #fee140 100%);
+    }
+    .dataset-stats.theme-6 {
+      background: linear-gradient(135deg, #4a9eff 0%, #87ceeb 50%, #ffb6c1 100%);
+    }
+    .dataset-stats.theme-7 {
+      background: linear-gradient(135deg, #ffb366 0%, #ffcc80 50%, #ffab91 100%);
+    }
+    .dataset-stats.theme-8 {
+      background: linear-gradient(135deg, #ff9a9e 0%, #ffb3ba 50%, #fecfef 100%);
+    }
+    .dataset-stats.theme-9 {
+      background: linear-gradient(135deg, #a18cd1 0%, #dda0dd 50%, #fbc2eb 100%);
+    }
+    .dataset-stats.theme-10 {
+      background: linear-gradient(135deg, #fad0c4 0%, #ffd1dc 50%, #ffd1ff 100%);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease, background 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    .stat-item:hover::before {
+      left: 100%;
+    }
+    .stat-item:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .stat-number {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      position: relative;
+      z-index: 1;
+    }
+    .stat-label {
+      font-size: 1rem;
+      opacity: 0.9;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 图像展示样式优化 */
+    .image-showcase {
+      margin-top: 30px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .image-showcase::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+    }
+    .image-container {
+      text-align: center;
+      margin-bottom: 25px;
+      position: relative;
+      z-index: 1;
+    }
+    .image-container:last-child {
+      margin-bottom: 0;
+    }
+    .showcase-image {
+      max-width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      cursor: zoom-in;
+      transition: all 0.3s ease;
+      background: white;
+      padding: 15px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+    }
+    .showcase-image::after {
+      content: '🔍 点击放大';
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+    .showcase-image:hover::after {
+      opacity: 1;
+    }
+    .showcase-image:hover {
+      transform: scale(1.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.7);
+    }
+    .image-caption {
+      margin-top: 15px;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    .clickable-image {
+      cursor: zoom-in;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      padding-top: 40px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(5px);
+    }
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 95%;
+      max-height: 90vh;
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+      object-fit: contain;
+    }
+    .modal-close {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 10000;
+    }
+    @media (max-width: 768px) {
+      .container { padding: 10px; }
+      .title { font-size: 2rem; }
+      .content { padding: 30px; }
+      .carousel-container { padding: 20px; }
+      .slide-content { padding: 40px 20px; }
+      .slide-title { font-size: 2rem; }
+      .carousel-nav { width: 50px; height: 50px; font-size: 20px; }
+      .carousel-nav.prev { left: 10px; }
+      .carousel-nav.next { right: 10px; }
+      .dataset-stats { padding: 30px 20px; }
+      .stats-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 20px; }
+      .stat-number { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="paper-card">
+      <div class="header">
+        <h1 class="title">OmniStyle2</h1>
+        <p class="subtitle">Scalable and High Quality Artistic Style Transfer Data Generation via Destylization</p>
+        <div class="authors">
+          <a href="https://wangyephd.github.io/" class="author-link">Ye Wang</a><sup>1</sup>,
+          <a href="https://is.nju.edu.cn/yzl_en/main.htm" class="author-link">Zili Yi</a><sup>2</sup>,
+          <a href="https://yiboz2001.github.io/" class="author-link">Yibo Zhang</a><sup>1,3</sup>,
+          <a href="https://pengzheng0707.github.io/" class="author-link">Peng Zheng</a><sup>1,3</sup>,
+          <a href="#" class="author-link">Xuping Xie</a><sup>1</sup>,
+          <a href="#" class="author-link">Jiang Lin</a><sup>2</sup>,
+          <a href="https://yilinwang.org/" class="author-link">Yilin Wang</a><sup>4*†</sup>,
+          <a href="https://ruim-jlu.github.io/" class="author-link">Rui Ma</a><sup>1,5*</sup>
+        </div>
+        <div class="affiliations">
+          <sup>1</sup>Jilin University &nbsp;
+          <sup>2</sup>Nanjing University &nbsp;
+          <sup>3</sup>Shanghai Innovation Institute<br>
+          <sup>4</sup>Adobe &nbsp;
+          <sup>5</sup>Engineering Research Center of Knowledge-Driven Human-Machine Intelligence, MOE, China<br>
+          <sup>*</sup>Corresponding authors &nbsp;
+          <sup>†</sup>Project lead
+        </div>
+        <div class="nav-buttons">
+          <a href="#" class="btn btn-primary">📄 Paper</a>
+          <a href="#" class="btn">🌐 Project Page</a>
+          <a href="#" class="btn">💾 Dataset</a>
+          <a href="#" class="btn">💻 Code</a>
+          <a href="#" class="btn">🎬 Demo</a>
+        </div>
+      </div>
+
+                  <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/teaser0.jpg" 
+                     alt="DST-100K Overview" 
+                     class="showcase-image">
+                <p class="image-caption">Comparison of stylization results between OmniStyle2 and representative closed- and open-source image editing models across diverse styles, including 3D origami art, watercolor, poster design, pill-and-candy mosaic, and artistic painting. Please zoom in for details and view it in color.</p>
+              </div>
+            </div>
+
+      
+      <div class="content">
+        <div class="section">
+          <h2 class="section-title">Abstract</h2>
+            <div class="abstract">
+              <strong>OmniStyle2</strong> introduces a novel approach to artistic style transfer by reframing it as a data problem. Our key insight is destylization, reversing style transfer by removing stylistic elements from artworks to recover natural, style-free counterparts. This yields <strong>DST-100K</strong>, a large-scale dataset that provides authentic supervision signals by aligning real artistic styles with their underlying content. To build DST-100K, we develop (1) <strong>DST</strong>, a text-guided destylization model that reconstructs style-free content, and (2) <strong>DST-Filter</strong>, a multi-stage evaluation model that employs Chain-of-Thought reasoning to automatically discard low-quality pairs while ensuring content fidelity and style accuracy. Leveraging DST-100K, we train OmniStyle2, a simple feed-forward model based on FLUX.1-dev. Despite its simplicity, OmniStyle2 consistently surpasses state-of-the-art methods across both qualitative and quantitative benchmarks. Our results demonstrate that scalable data generation via destylization provides a reliable supervision paradigm, overcoming the fundamental challenge posed by the lack of ground-truth data in artistic style transfer.
+            </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Why Destylization?</h2>
+          <div class="dataset-stats theme-2">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Destylization vs. Stylization</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/desty_vs_sty.jpg" 
+                     alt="Destylization Process" 
+                     class="showcase-image">
+                <p class="image-caption">(a) Stylization-based data generation pipeline. (b) Destylization-based data generation pipeline (ours). Our method enables authentic supervision with high-quality and style-faithful data, in contrast to stylization-based pipelines that rely on pseudo-supervision, often artifacts-prone and style-unfaithful.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+
+        <div class="section">
+          <h2 class="section-title">Destylization</h2>
+          <div class="dataset-stats theme-3">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">DST: Text-Guided Destylization</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/desty_data.jpeg" 
+                     alt="Destylization Process" 
+                     class="showcase-image">
+                <p class="image-caption">(a) Destylization Dataset Construction: we use high-resolution images from HQ-50K and FFHQ as content images, covering six categories: humans, animals, plants, objects, scenes, and architecture. These images are stylized by four models, and captions are generated using InternVL2.5-7B. This yields triplets in the form of stylized-content-caption. (b) The architecture of DST model.</p>
+              </div>
+            </div>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/img_pool.jpeg" 
+                     alt="Image Pool" 
+                     class="showcase-image">
+                <p class="image-caption">(a) Style image collection and (b) text-guided destylization pipeline.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="section">
+          <h2 class="section-title">DST-Filter</h2>
+          <div class="dataset-stats theme-3">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Multi-Stage Evaluation Pipeline</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/dst-filter.jpeg" 
+                     alt="DST-Filter Pipeline" 
+                     class="showcase-image">
+                <p class="image-caption">The pipeline of DST-Filter. DST-Filter assesses each &lt;style, destylized&gt; pair from two aspects: content preservation and style discrepancy, using GPT-4o with region-level and attribute-level Chain-of-Thought reasoning.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Dataset Overview</h2>
+          <div class="dataset-stats theme-1">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">DST-100K Dataset Statistics</h3>
+            <div class="stats-grid">
+              <div class="stat-item"><div class="stat-number">100K</div><div class="stat-label">Image Triplets</div></div>
+              <div class="stat-item"><div class="stat-number">669</div><div class="stat-label">Artists</div></div>
+              <div class="stat-item"><div class="stat-number">117</div><div class="stat-label">Art Movements</div></div>
+              <div class="stat-item"><div class="stat-number">65</div><div class="stat-label">Digital Styles</div></div>
+              <div class="stat-item"><div class="stat-number">1K</div><div class="stat-label">Resolution</div></div>
+            </div>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/dst-dataset.jpeg" 
+                     alt="DST-100K Overview" 
+                     class="showcase-image"
+                     style="max-width: 100%; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                <p class="image-caption">Overview of DST-100K dataset.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Quantitative Results</h2>
+          <div class="dataset-stats theme-5">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Quantitative comparison of different style transfer methods</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/table1.png" 
+                     alt="Quantitative Results" 
+                     class="showcase-image">
+              </div>
+            </div>
+          </div>
+          <div class="dataset-stats theme-8">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Quantitative comparison of the image editing methods</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/table2.png" 
+                     alt="Quantitative Results" 
+                     class="showcase-image">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Qualitative Comparison</h2>
+          <div class="dataset-stats theme-6">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Qualitative comparison with different style transfer methods</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/dingxing.jpeg" 
+                     alt="Qualitative Comparison" 
+                     class="showcase-image">
+              </div>
+            </div>
+          </div>
+          <div class="dataset-stats theme-7">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Qualitative comparison with different image editing models</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/vs4o.jpg" 
+                     alt="Method Comparison" 
+                     class="showcase-image">
+                <img src="dst_figures/vs4o1.jpg" 
+                     alt="Method Comparison" 
+                     class="showcase-image">
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="section">
+          <h2 class="section-title">More Results</h2>
+          <div class="dataset-stats theme-4">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">Diverse Style Transfer Results</h3>
+            <div class="image-showcase">
+              <div class="image-container">
+                <img src="dst_figures/more-res.jpg" 
+                     alt="More Results" 
+                     class="showcase-image">
+                <p class="image-caption">Our method produces a broader range of stylized results across diverse style categories, including 2D styles such as flat design, PS1 game style, cartoon, line art, illustration, and classic artworks, as well as 3D styles such as origami art, 3D voxel art and 3D low poly rendering.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- 📷 Modal 放大图结构 -->
+  <div id="image-modal" class="modal">
+    <span class="modal-close">&times;</span>
+    <img class="modal-content" id="modal-img">
+  </div>
+
+  <!-- 🔧 轮播图和放大图交互逻辑 -->
+  <script>
+    // 轮播图功能
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const indicators = document.querySelectorAll('.indicator');
+    const totalSlides = slides.length;
+
+    function updateCarousel() {
+      const track = document.getElementById('carousel-track');
+      if (track) {
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      }
+      
+      // 更新指示器
+      indicators.forEach((indicator, index) => {
+        indicator.classList.toggle('active', index === currentSlide);
+      });
+    }
+
+    function moveSlide(direction) {
+      currentSlide += direction;
+      
+      if (currentSlide < 0) {
+        currentSlide = totalSlides - 1;
+      } else if (currentSlide >= totalSlides) {
+        currentSlide = 0;
+      }
+      
+      updateCarousel();
+    }
+
+    function goToSlide(slideIndex) {
+      currentSlide = slideIndex;
+      updateCarousel();
+    }
+
+    // 自动轮播
+    function autoSlide() {
+      moveSlide(1);
+    }
+
+    let autoSlideInterval = setInterval(autoSlide, 5000);
+
+    // 鼠标悬停时暂停自动轮播
+    const carouselWrapper = document.querySelector('.carousel-wrapper');
+    if (carouselWrapper) {
+      carouselWrapper.addEventListener('mouseenter', () => {
+        clearInterval(autoSlideInterval);
+      });
+
+      carouselWrapper.addEventListener('mouseleave', () => {
+        autoSlideInterval = setInterval(autoSlide, 5000);
+      });
+
+      // 触摸滑动支持
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      carouselWrapper.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+
+      carouselWrapper.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      });
+
+      function handleSwipe() {
+        if (touchEndX < touchStartX - 50) moveSlide(1);
+        if (touchEndX > touchStartX + 50) moveSlide(-1);
+      }
+    }
+
+    // 键盘导航
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') moveSlide(-1);
+      if (e.key === 'ArrowRight') moveSlide(1);
+    });
+
+    // 图片放大功能
+    document.addEventListener("DOMContentLoaded", function () {
+      const modal = document.getElementById("image-modal");
+      const modalImg = document.getElementById("modal-img");
+      const closeBtn = document.querySelector(".modal-close");
+
+      if (!modal || !modalImg || !closeBtn) {
+        console.error('Modal elements not found');
+        return;
+      }
+
+      // 为所有可点击图片添加放大功能
+      function addClickableImageListeners() {
+        document.querySelectorAll('.clickable-image, .showcase-image').forEach(img => {
+          img.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.style.display = "block";
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+          });
+        });
+      }
+
+      // 初始化和重新绑定事件监听器
+      addClickableImageListeners();
+
+      // 关闭模态框
+      closeBtn.onclick = () => { 
+        modal.style.display = "none";
+        document.body.style.overflow = 'auto';
+      };
+      
+      modal.onclick = (e) => { 
+        if (e.target === modal) {
+          modal.style.display = "none";
+          document.body.style.overflow = 'auto';
+        }
+      };
+      
+      // ESC键关闭模态框
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'block') {
+          modal.style.display = "none";
+          document.body.style.overflow = 'auto';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
