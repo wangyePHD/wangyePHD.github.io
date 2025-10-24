@@ -196,46 +196,6 @@ body {
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
-/* 研究兴趣部分 */
-.research-interests {
-    margin-bottom: 80px;
-    padding: 40px;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
-    position: relative;
-    overflow: hidden;
-}
-
-.research-interests::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 5px;
-    height: 100%;
-    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-}
-
-.research-interests h2 {
-    font-family: 'Inter', sans-serif;
-    font-size: 1.9rem;
-    font-weight: 600;
-    color: #1a202c;
-    margin-bottom: 18px;
-    letter-spacing: -0.01em;
-}
-
-.research-interests p {
-    font-family: 'Lato', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: #4a5568;
-    line-height: 1.7;
-    letter-spacing: 0.005em;
-}
 
 /* 项目部分 */
 .projects-section h2 {
@@ -423,9 +383,6 @@ body {
     animation: fadeInUp 0.8s ease-out;
 }
 
-.research-interests {
-    animation: fadeInUp 0.8s ease-out 0.2s both;
-}
 
 .project-card {
     animation: fadeInUp 0.6s ease-out both;
@@ -470,10 +427,6 @@ body {
         letter-spacing: -0.01em;
     }
     
-    .research-interests {
-        padding: 25px 20px;
-        margin-bottom: 60px;
-    }
     
     .project-card {
         flex-direction: column;
@@ -519,10 +472,6 @@ body {
         font-size: 1.05rem;
     }
     
-    .research-interests {
-        padding: 20px 15px;
-        margin-bottom: 50px;
-    }
     
     .project-card {
         padding: 20px;
@@ -544,4 +493,317 @@ body {
         padding: 10px 16px;
         font-size: 0.9rem;
     }
+    
+    /* 实习经历移动端优化 */
+    .timeline::before {
+        left: 30px;
+    }
+    
+    .timeline-item {
+        gap: 20px;
+    }
+    
+    .company-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .company-logo {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .timeline-content {
+        padding-left: 15px;
+    }
+    
+    .internship-card {
+        padding: 25px 20px;
+    }
+    
+    .internship-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .company-name {
+        font-size: 1.3rem;
+    }
+    
+    .skills-tags {
+        gap: 6px;
+    }
+    
+    .skill-tag {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .timeline::before {
+        left: 25px;
+    }
+    
+    .timeline-item {
+        gap: 15px;
+        margin-bottom: 40px;
+    }
+    
+    .company-icon {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .company-logo {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .timeline-content {
+        padding-left: 10px;
+    }
+    
+    .internship-card {
+        padding: 20px 15px;
+    }
+    
+    .company-name {
+        font-size: 1.2rem;
+    }
+    
+    .position {
+        font-size: 1rem;
+    }
+    
+    .internship-description {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    .skills-tags {
+        gap: 5px;
+    }
+    
+    .skill-tag {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+}
+
+/* 实习经历部分 */
+.internship-section {
+    margin-bottom: 80px;
+}
+
+.internship-section h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 50px;
+    text-align: center;
+    letter-spacing: -0.02em;
+}
+
+.timeline {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+}
+
+.timeline-marker {
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.company-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+}
+
+.company-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.company-logo {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.timeline-content {
+    flex: 1;
+    padding-left: 20px;
+}
+
+.internship-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.internship-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.internship-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    border-color: rgba(102, 126, 234, 0.2);
+}
+
+.internship-card:hover::before {
+    transform: scaleX(1);
+}
+
+.internship-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.company-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.internship-period {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.position {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #2d3748;
+    margin-bottom: 8px;
+    letter-spacing: 0.01em;
+}
+
+.location {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.95rem;
+    color: #718096;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.location::before {
+    content: '📍';
+    font-size: 0.9rem;
+}
+
+.internship-description {
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #4a5568;
+    margin-bottom: 20px;
+    letter-spacing: 0.005em;
+}
+
+.skills-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skill-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    transition: all 0.3s ease;
+}
+
+.skill-tag:hover {
+    background: rgba(102, 126, 234, 0.2);
+    transform: translateY(-1px);
+}
+
+/* 实习经历动画 */
+.internship-section {
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.timeline-item {
+    animation: fadeInUp 0.6s ease-out both;
+}
+
+.timeline-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.timeline-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.timeline-item:nth-child(3) {
+    animation-delay: 0.3s;
 }
