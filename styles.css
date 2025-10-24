@@ -1,0 +1,270 @@
+/* 基础样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #fff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 个人简介部分 */
+.profile-section {
+    margin-bottom: 60px;
+}
+
+.profile-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.profile-text {
+    flex: 1;
+}
+
+.name {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    margin-bottom: 5px;
+}
+
+.affiliation {
+    font-size: 1.1rem;
+    color: #34495e;
+    margin-bottom: 20px;
+}
+
+.bio {
+    margin-bottom: 30px;
+}
+
+.bio p {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.contact-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.contact-links a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 16px;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.contact-links a:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+.profile-image {
+    flex-shrink: 0;
+}
+
+.avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #ecf0f1;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* 研究兴趣部分 */
+.research-interests {
+    margin-bottom: 60px;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    border-left: 5px solid #3498db;
+}
+
+.research-interests h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.research-interests p {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+/* 项目部分 */
+.projects-section h2 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.project-grid {
+    display: grid;
+    gap: 30px;
+}
+
+.project-card {
+    display: flex;
+    background-color: #fff;
+    border: 1px solid #e1e8ed;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.project-images {
+    flex-shrink: 0;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-right: 25px;
+}
+
+.project-images img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e1e8ed;
+}
+
+.project-content {
+    flex: 1;
+}
+
+.project-title {
+    font-size: 1.4rem;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.authors {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+}
+
+.venue {
+    color: #e74c3c;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+}
+
+.project-links {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.project-links a {
+    color: #3498db;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 5px 12px;
+    border: 1px solid #3498db;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.project-links a:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+.project-description {
+    color: #555;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .profile-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .avatar {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .name {
+        font-size: 2rem;
+    }
+    
+    .project-card {
+        flex-direction: column;
+    }
+    
+    .project-images {
+        width: 100%;
+        flex-direction: row;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+    
+    .project-images img {
+        height: 100px;
+    }
+    
+    .contact-links {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .name {
+        font-size: 1.8rem;
+    }
+    
+    .project-images {
+        flex-direction: column;
+    }
+    
+    .project-images img {
+        height: 80px;
+    }
+}
