@@ -86,7 +86,30 @@ body {
     font-size: 1.15rem;
     font-weight: 400;
     color: #2d3748;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
+    letter-spacing: 0.005em;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.contact-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #2d3748;
+    letter-spacing: 0.01em;
+}
+
+.contact-value {
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #4a5568;
     letter-spacing: 0.005em;
 }
 
@@ -117,6 +140,7 @@ body {
     color: #2b6cb0;
     font-family: 'Inter', sans-serif;
 }
+
 
 .contact-links {
     display: flex;
@@ -259,7 +283,7 @@ body {
 
 .project-images img {
     width: 100%;
-    height: 90px;
+    height: 200px;
     object-fit: cover;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -656,7 +680,11 @@ body {
     }
     
     .project-images img {
-        height: 120px;
+        height: 180px;
+    }
+    
+    .contact-item {
+        justify-content: center;
     }
     
     .contact-links {
@@ -698,7 +726,7 @@ body {
     }
     
     .project-images img {
-        height: 100px;
+        height: 160px;
     }
     
     .contact-links {
