@@ -245,6 +245,12 @@ html[data-theme="dark"] .sidebar__social-link:focus-visible {
     border-color: var(--border);
 }
 
+html[data-theme="dark"] .sidebar__social-link[aria-current="page"] {
+    color: #f2f2f2;
+    background: #2e2e2e;
+    border-color: var(--border);
+}
+
 html[data-theme="dark"] .skip-link {
     background: var(--content-bg);
     color: var(--gray-900);
@@ -413,6 +419,12 @@ html[data-theme="dark"] .skip-link:focus {
     background: var(--white);
     border-color: var(--border);
     outline: none;
+}
+
+.sidebar__social-link[aria-current="page"] {
+    color: var(--black);
+    background: var(--white);
+    border-color: var(--border);
 }
 
 .icon {
