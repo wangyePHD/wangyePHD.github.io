@@ -97,43 +97,43 @@
                     <div class="journal-feed">
                         <!-- Entries: journal/entries/YYYY-MM-DD.md — run: python3 journal/build_from_md.py (needs markdown) -->
                         <!-- JOURNAL_ENTRIES_START -->
-<article class="journal-card" id="entry-2026-03-22">
-    <header class="journal-card__head">
+<details class="journal-card" id="entry-2026-03-22">
+    <summary class="journal-card__summary">
         <time class="journal-card__time" datetime="2026-03-22">March 22, 2026</time>
-    </header>
+        <span class="journal-card__title">周日-南科大涵泳图书馆学习</span>
+    </summary>
     <div class="journal-card__body prose">
-<h2>周日-南科大涵泳图书馆学习</h2>
 <p><img alt="办公室窗外" src="journal/images/2026年03月22日17:09:51nankeda.jpg" title="南科大环境"></p>
 <ul>
 <li>来南科大图书馆自习了，这边确实环境很好，图书馆的位置上都配有显示器，可以非常方便的链接自己的Mac。</li>
 <li>另外在校园里，真的非常解压和放松，珍惜自己还是学生的最后时光吧！</li>
 </ul>
     </div>
-</article>
+</details>
 
-<article class="journal-card" id="entry-2026-02-28">
-    <header class="journal-card__head">
+<details class="journal-card" id="entry-2026-02-28">
+    <summary class="journal-card__summary">
         <time class="journal-card__time" datetime="2026-02-28">February 28, 2026</time>
-    </header>
+        <span class="journal-card__title">入职腾讯优图啦</span>
+    </summary>
     <div class="journal-card__body prose">
-<h2>入职腾讯优图啦</h2>
 <p>非常开心和激动能够以腾讯青云计划实习生的身份，入职腾讯youtu lab。
 接下来要好好努力，做出好的科研成果呀！</p>
     </div>
-</article>
+</details>
 
-<article class="journal-card" id="entry-2026-01-25">
-    <header class="journal-card__head">
+<details class="journal-card" id="entry-2026-01-25">
+    <summary class="journal-card__summary">
         <time class="journal-card__time" datetime="2026-01-25">January 25, 2026</time>
-    </header>
+        <span class="journal-card__title">从阿里离职了</span>
+    </summary>
     <div class="journal-card__body prose">
-<h2>从阿里离职了</h2>
 <ul>
 <li>感谢阿里，感谢高德。离职了，就这样。</li>
 <li>奔赴下一站</li>
 </ul>
     </div>
-</article>
+</details>
                         <!-- JOURNAL_ENTRIES_END -->
                     </div>
                 </section>
@@ -147,6 +147,17 @@
 
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        (function () {
+            function openEntryFromHash() {
+                var id = location.hash.slice(1);
+                if (!id || id.indexOf('entry-') !== 0) return;
+                var el = document.getElementById(id);
+                if (el && el.tagName === 'DETAILS') el.open = true;
+            }
+            openEntryFromHash();
+            window.addEventListener('hashchange', openEntryFromHash);
+        })();
 
         (function () {
             var root = document.documentElement;
