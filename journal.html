@@ -145,6 +145,12 @@
         </div>
     </div>
 
+    <div id="journal-lightbox" class="journal-lightbox" hidden role="dialog" aria-modal="true" aria-label="放大查看图片">
+        <button type="button" class="journal-lightbox__scrim" aria-label="关闭预览"></button>
+        <img class="journal-lightbox__img" src="" alt="">
+        <button type="button" class="journal-lightbox__close" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+    </div>
+
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -185,6 +191,50 @@
             btn.addEventListener('click', function () {
                 setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
             });
+        })();
+
+        (function () {
+            var feed = document.querySelector('.journal-feed');
+            var box = document.getElementById('journal-lightbox');
+            if (!feed || !box) return;
+            var scrim = box.querySelector('.journal-lightbox__scrim');
+            var lbImg = box.querySelector('.journal-lightbox__img');
+            var closeBtn = box.querySelector('.journal-lightbox__close');
+            var lastFocus = null;
+
+            function close() {
+                box.hidden = true;
+                lbImg.removeAttribute('src');
+                lbImg.alt = '';
+                document.body.classList.remove('journal-lightbox-open');
+                document.removeEventListener('keydown', onKey);
+                if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+            }
+
+            function onKey(e) {
+                if (e.key === 'Escape') close();
+            }
+
+            function open(source) {
+                lastFocus = document.activeElement;
+                lbImg.src = source.currentSrc || source.src;
+                lbImg.alt = source.alt || '';
+                box.hidden = false;
+                document.body.classList.add('journal-lightbox-open');
+                closeBtn.focus();
+                document.addEventListener('keydown', onKey);
+            }
+
+            feed.addEventListener('click', function (e) {
+                var t = e.target;
+                if (t.tagName !== 'IMG') return;
+                if (!t.closest('.journal-card__body')) return;
+                e.preventDefault();
+                open(t);
+            });
+
+            scrim.addEventListener('click', close);
+            closeBtn.addEventListener('click', close);
         })();
     </script>
 </body>
