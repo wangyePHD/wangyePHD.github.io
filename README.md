@@ -7,6 +7,12 @@
 ```
 个人主页/
 ├── index.html              # 主页文件
+├── journal.html            # 随笔页（由 GitHub Actions 从 entries/*.md 生成）
+├── journal/
+│   ├── entries/            # 每篇一篇 Markdown：YYYY-MM-DD.md
+│   ├── build_from_md.py    # 合并脚本（CI 自动跑；本地可选）
+│   └── requirements.txt    # Python 依赖（仅 build 用）
+├── .github/workflows/      # CI：push 后更新 journal.html
 ├── styles.css              # 样式文件
 ├── README.md               # 项目说明
 ├── profile/                # 个人简介文件夹
@@ -47,6 +53,13 @@
 3. 在 `projects/` 文件夹中添加你的研究项目
 4. 替换 `images/avatar.jpg` 为你的个人照片
 5. 在浏览器中打开 `index.html` 查看效果
+
+### Journal（日记）
+
+1. 在 `journal/entries/` 新建 **`YYYY-MM-DD.md`**，用 Markdown 写正文（可参考 `_template.md`，该文件以下划线开头不会被合并）。
+2. **`git push` 到 GitHub** 即可：Actions 会运行 `build_from_md.py`，把各篇按日期**新到旧**写入 `journal.html` 并自动提交（提交说明里带 `[skip ci]`，避免循环触发）。
+3. 若需在本地预览：先 `pip install -r journal/requirements.txt`，再 `python3 journal/build_from_md.py`。
+4. 默认只识别 `YYYY-MM-DD.md`；同一天多篇需改脚本文件名规则。
 
 ## 自定义说明
 
