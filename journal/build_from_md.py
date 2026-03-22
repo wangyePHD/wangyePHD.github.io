@@ -23,6 +23,11 @@ JOURNAL = ROOT / "journal.html"
 START = "<!-- JOURNAL_ENTRIES_START -->"
 END = "<!-- JOURNAL_ENTRIES_END -->"
 DATE_FILE = re.compile(r"^\d{4}-\d{2}-\d{2}\.md$")
+# First block-level heading in rendered HTML → shown in <summary> (collapsed row).
+HEADING_LEAD = re.compile(
+    r"^\s*<h([123])(?:\s[^>]*)?>(.*?)</h\1>\s*",
+    re.DOTALL | re.IGNORECASE,
+)
 
 
 def inject_entries(html: str, merged: str) -> str:
@@ -51,18 +56,31 @@ def md_to_html(text: str) -> str:
     return md.convert(text)
 
 
+def split_title_and_body(inner_html: str) -> tuple[str, str]:
+    """Return (title_inner_html, rest_body_html). Title from first h1–h3, or placeholder."""
+    body = inner_html.strip()
+    m = HEADING_LEAD.match(body)
+    if not m:
+        return ('<span class="journal-card__title journal-card__title--placeholder">随笔</span>', body)
+    title_inner = m.group(2).strip()
+    rest = body[m.end() :].strip()
+    title_html = f'<span class="journal-card__title">{title_inner}</span>'
+    return (title_html, rest)
+
+
 def wrap_article(ymd: str, inner_html: str) -> str:
     display = human_date(ymd)
-    body = inner_html.strip()
+    title_html, main_body = split_title_and_body(inner_html)
     return (
-        f'<article class="journal-card" id="entry-{ymd}">\n'
-        f'    <header class="journal-card__head">\n'
+        f'<details class="journal-card" id="entry-{ymd}">\n'
+        f'    <summary class="journal-card__summary">\n'
         f'        <time class="journal-card__time" datetime="{ymd}">{display}</time>\n'
-        f"    </header>\n"
+        f"        {title_html}\n"
+        f"    </summary>\n"
         f'    <div class="journal-card__body prose">\n'
-        f"{body}\n"
+        f"{main_body}\n"
         f"    </div>\n"
-        f"</article>"
+        f"</details>"
     )
 
 

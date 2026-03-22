@@ -624,6 +624,73 @@ html[data-theme="dark"] .skip-link:focus {
     line-height: 1.65;
 }
 
+/* My Space hub (index of Journal, Notes, …) */
+.my-space-hub__grid {
+    max-width: var(--measure);
+    margin: 1.2rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15.5rem), 1fr));
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+}
+
+.my-space-hub__card {
+    display: block;
+    padding: 1.2rem 1.35rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--white);
+    border-left: 3px solid var(--nav-accent);
+    text-decoration: none;
+    color: inherit;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease;
+}
+
+.my-space-hub__card:hover,
+.my-space-hub__card:focus-visible {
+    border-color: var(--nav-accent);
+    box-shadow: 0 4px 22px rgba(0, 0, 0, 0.07);
+    outline: none;
+}
+
+.my-space-hub__card:focus-visible {
+    outline: 2px solid var(--nav-accent);
+    outline-offset: 2px;
+}
+
+html[data-theme="dark"] .my-space-hub__card:hover,
+html[data-theme="dark"] .my-space-hub__card:focus-visible {
+    box-shadow: 0 4px 28px rgba(0, 0, 0, 0.4);
+}
+
+.my-space-hub__card-title {
+    margin: 0 0 0.45rem;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--black);
+}
+
+.my-space-hub__card-desc {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--gray-700);
+    line-height: 1.55;
+}
+
+.notes-empty {
+    max-width: var(--measure);
+    margin-top: 0.35rem;
+}
+
+.notes-empty.prose p {
+    text-align: left;
+}
+
 .journal-feed {
     max-width: var(--measure);
     display: flex;
@@ -631,7 +698,7 @@ html[data-theme="dark"] .skip-link:focus {
     gap: 1.15rem;
 }
 
-.journal-card {
+details.journal-card {
     margin: 0;
     padding: 1rem 1.15rem 1.15rem;
     border: 1px solid var(--border);
@@ -640,11 +707,49 @@ html[data-theme="dark"] .skip-link:focus {
     border-left: 3px solid var(--nav-accent);
 }
 
-.journal-card__head {
+.journal-card__summary {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.35rem;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 1rem;
+    cursor: pointer;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.journal-card__summary::-webkit-details-marker,
+.journal-card__summary::marker {
+    display: none;
+}
+
+.journal-card__summary::before {
+    content: "";
+    flex-shrink: 0;
+    width: 0.4em;
+    height: 0.4em;
+    margin: 0.45em 0.15rem 0 0;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform 0.15s ease;
+    opacity: 0.5;
+    align-self: flex-start;
+}
+
+details.journal-card[open] > .journal-card__summary::before {
+    transform: rotate(45deg);
+    margin-top: 0.55em;
+}
+
+.journal-card__summary:focus {
+    outline: none;
+}
+
+.journal-card__summary:focus-visible {
+    outline: 2px solid var(--nav-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
 }
 
 .journal-card__time {
@@ -654,6 +759,7 @@ html[data-theme="dark"] .skip-link:focus {
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--gray-500);
+    flex-shrink: 0;
 }
 
 .journal-card__title {
@@ -663,14 +769,26 @@ html[data-theme="dark"] .skip-link:focus {
     font-weight: 700;
     line-height: 1.35;
     color: var(--black);
+    flex: 1 1 12rem;
+    min-width: 0;
+}
+
+.journal-card__title--placeholder {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--gray-500);
+    font-style: italic;
 }
 
 .journal-card__body {
-    margin-top: 0.55rem;
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border);
 }
 
 .journal-card__body.prose {
     max-width: none;
+    container-type: inline-size;
 }
 
 .journal-card__body.prose p {
@@ -749,9 +867,147 @@ html[data-theme="dark"] .skip-link:focus {
     font-style: italic;
 }
 
-/* --------------------------------------------------------------------------
-   Internships
-   -------------------------------------------------------------------------- */
+/* Journal images: 纯图段落用 Grid；多图随宽度自动 1～N 列，单图仍限宽居中 */
+.journal-card__body.prose p:has(> img:first-child):has(> img:last-child) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr));
+    gap: 0.65rem 0.8rem;
+    align-items: start;
+    justify-items: stretch;
+    margin: 1rem 0 1.15rem;
+    padding: 0.85rem 1rem;
+    background: var(--gray-100);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.journal-card__body.prose > p:has(> img:first-child):has(> img:last-child):first-child {
+    margin-top: 0.15rem;
+}
+
+.journal-card__body.prose p:has(> img:first-child):has(> img:last-child) img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.04),
+        0 6px 28px rgba(0, 0, 0, 0.07);
+    object-fit: contain;
+}
+
+/* 单图：不要拉满整条 reading 宽，居中 */
+.journal-card__body.prose p:has(> img:only-child) img {
+    width: min(100%, 40rem);
+    max-width: 100%;
+    justify-self: center;
+}
+
+/* 正文栏变窄时强制单列（比 viewport 媒体查询更贴合金宽） */
+@container (max-width: 22rem) {
+    .journal-card__body.prose p:has(> img:first-child):has(> img:last-child) {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 360px) {
+    .journal-card__body.prose p:has(> img:first-child):has(> img:last-child) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.journal-card__body.prose img {
+    max-width: min(100%, 40rem);
+    height: auto;
+    border-radius: 6px;
+    cursor: zoom-in;
+}
+
+html[data-theme="dark"] .journal-card__body.prose p:has(> img:first-child):has(> img:last-child) img {
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.35),
+        0 10px 36px rgba(0, 0, 0, 0.45);
+}
+
+/* Journal: 点击看大图 */
+body.journal-lightbox-open {
+    overflow: hidden;
+}
+
+.journal-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: min(5vw, 1.75rem);
+    box-sizing: border-box;
+}
+
+.journal-lightbox[hidden] {
+    display: none !important;
+}
+
+.journal-lightbox__scrim {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: rgba(8, 12, 18, 0.92);
+    backdrop-filter: blur(8px);
+    cursor: zoom-out;
+}
+
+.journal-lightbox__img {
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+    max-height: min(90vh, 100%);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 6px;
+    box-shadow: 0 16px 64px rgba(0, 0, 0, 0.55);
+    cursor: default;
+}
+
+.journal-lightbox__close {
+    position: absolute;
+    top: clamp(0.5rem, 2vw, 1rem);
+    right: clamp(0.5rem, 2vw, 1rem);
+    z-index: 2;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.45);
+    color: #f0f4f8;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.journal-lightbox__close:hover,
+.journal-lightbox__close:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.55);
+    outline: none;
+}
+
+.journal-lightbox__close:focus-visible {
+    box-shadow: 0 0 0 2px var(--nav-accent);
+}
+
 .internships__intro {
     max-width: var(--measure);
     margin: 0 0 1.25rem;
