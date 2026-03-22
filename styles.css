@@ -635,7 +635,9 @@ html[data-theme="dark"] .skip-link:focus {
     padding: 0;
 }
 
-.my-space-hub__card {
+/* a.my-space-hub__card：避免块级标题在 <a> 内被旧内核拆 DOM；显式去掉下划线（盖过全局 a / .prose a） */
+section.my-space-hub a.my-space-hub__card,
+section.my-space-hub a.my-space-hub__card:visited {
     display: block;
     padding: 1.2rem 1.35rem;
     border: 1px solid var(--border);
@@ -644,30 +646,34 @@ html[data-theme="dark"] .skip-link:focus {
     border-left: 3px solid var(--nav-accent);
     text-decoration: none;
     color: inherit;
+    box-sizing: border-box;
     transition:
         border-color 0.15s ease,
         box-shadow 0.15s ease,
         background 0.15s ease;
 }
 
-.my-space-hub__card:hover,
-.my-space-hub__card:focus-visible {
+section.my-space-hub a.my-space-hub__card:hover,
+section.my-space-hub a.my-space-hub__card:focus-visible {
+    color: inherit;
+    text-decoration: none;
     border-color: var(--nav-accent);
     box-shadow: 0 4px 22px rgba(0, 0, 0, 0.07);
     outline: none;
 }
 
-.my-space-hub__card:focus-visible {
+section.my-space-hub a.my-space-hub__card:focus-visible {
     outline: 2px solid var(--nav-accent);
     outline-offset: 2px;
 }
 
-html[data-theme="dark"] .my-space-hub__card:hover,
-html[data-theme="dark"] .my-space-hub__card:focus-visible {
+html[data-theme="dark"] section.my-space-hub a.my-space-hub__card:hover,
+html[data-theme="dark"] section.my-space-hub a.my-space-hub__card:focus-visible {
     box-shadow: 0 4px 28px rgba(0, 0, 0, 0.4);
 }
 
 .my-space-hub__card-title {
+    display: block;
     margin: 0 0 0.45rem;
     font-family: var(--font-serif);
     font-size: 1.1rem;
@@ -676,6 +682,7 @@ html[data-theme="dark"] .my-space-hub__card:focus-visible {
 }
 
 .my-space-hub__card-desc {
+    display: block;
     margin: 0;
     font-size: var(--text-sm);
     color: var(--gray-700);
