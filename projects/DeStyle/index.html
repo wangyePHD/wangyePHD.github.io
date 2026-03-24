@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learning to Stylize by Learning to Destylize — scalable supervised style transfer via destylization (DeStylePipe, DeStyle-350K, BCS-Bench).">
+    <title>DeStyle · Learning to Stylize by Learning to Destylize</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0f1419;
+            --muted: #5c6570;
+            --line: #d8dee6;
+            --surface: #f4f6f9;
+            --accent: #1a2f45;
+            --accent-bright: #3b82f6;
+            --max: 62rem;
+            --pad: clamp(1.1rem, 3.2vw, 2rem);
+        }
+        html { scroll-behavior: smooth; }
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Source Serif 4", Georgia, serif;
+            font-size: 1.0625rem;
+            line-height: 1.65;
+            color: var(--ink);
+            background: #fff;
+        }
+        a { color: #3d4f8f; text-underline-offset: 0.2em; }
+        a:hover { color: var(--ink); }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, var(--accent) 0%, #152838 100%);
+            border-bottom: 3px solid var(--accent-bright);
+            box-shadow: 0 4px 20px rgba(0,0,0,.12);
+        }
+        .topbar__inner {
+            max-width: 82rem;
+            margin: 0 auto;
+            padding: 0.65rem var(--pad);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+        .topbar a {
+            color: #e8eef4;
+            text-decoration: none;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .topbar a:hover { color: #fff; }
+        .topbar__nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem 1.25rem;
+        }
+
+        .hero {
+            max-width: 66rem;
+            margin: 0 auto;
+            padding: clamp(2rem, 5vw, 3.25rem) var(--pad) 1.5rem;
+            text-align: center;
+        }
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+        .hero__subtitle {
+            margin: 0.3rem 0 0.95rem;
+            font-size: clamp(1.05rem, 2.25vw, 1.35rem);
+            font-weight: 600;
+            color: #2b3c51;
+            line-height: 1.3;
+        }
+        .hero__authors {
+            margin: 0 0 0.9rem;
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+        .hero__authors a { font-weight: 600; }
+        .hero__affils {
+            margin: 0 0 1.25rem;
+            font-size: 0.92rem;
+            color: #3b4653;
+            line-height: 1.5;
+        }
+        .hero__affils p {
+            margin: 0.05rem 0;
+        }
+        .hero__marks {
+            margin: 0.65rem auto 1.3rem;
+            width: fit-content;
+            max-width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem 0.6rem;
+            text-align: center;
+            font-size: 0.98rem;
+            color: #27303a;
+            line-height: 1.45;
+        }
+        .hero__marks p {
+            margin: 0;
+            padding: 0.22rem 0.58rem;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+        .hero__marks p:first-child {
+            background: #e8eef8;
+            border: 1px solid #c6d5ef;
+            color: #1f3550;
+        }
+        .hero__marks p:last-child {
+            background: #efe8fb;
+            border: 1px solid #d4c4f4;
+            color: #4a2f7a;
+        }
+        .hero__actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.65rem;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.42rem;
+            padding: 0.5rem 1.15rem;
+            font-family: inherit;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid var(--accent);
+            background: var(--accent);
+            color: #fff;
+            transition: background .15s ease, border-color .15s ease;
+        }
+        .btn:hover { background: #243d56; border-color: #243d56; color: #fff; }
+        .btn--ghost {
+            background: transparent;
+            color: var(--accent);
+        }
+        .btn--ghost:hover {
+            background: var(--surface);
+            color: var(--accent);
+        }
+        .btn__icon {
+            font-size: 0.95em;
+            line-height: 1;
+            transform: translateY(-0.02em);
+        }
+
+        .section {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 2rem var(--pad) 2.5rem;
+            border-top: 1px solid var(--line);
+        }
+        .section:first-of-type { border-top: none; padding-top: 0.5rem; }
+        .section h2 {
+            margin: 0 0 1rem;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.02em;
+        }
+        .section h3 {
+            margin: 1.5rem 0 0.65rem;
+            font-size: 1.08rem;
+            font-weight: 700;
+        }
+        .section p { margin: 0 0 1rem; }
+        .section ul { margin: 0 0 1rem; padding-left: 1.35rem; color: #2a3038; }
+        .section li { margin: 0.35rem 0; }
+        .section strong { font-weight: 700; }
+        .motivation-lines {
+            margin: 0.55rem 0 0.9rem;
+        }
+        .motivation-line {
+            margin: 0.55rem 0;
+            line-height: 1.62;
+        }
+        .motivation-line__idx {
+            font-weight: 700;
+            margin-right: 0.4rem;
+            color: #1e2d40;
+        }
+        .hl-pro {
+            display: inline;
+            padding: 0.04em 0.34em;
+            border-radius: 0.3em;
+            background: #e8eef8;
+            color: #1f3550;
+            border: 1px solid #c7d5eb;
+            font-weight: 600;
+        }
+        .hl-con {
+            display: inline;
+            padding: 0.04em 0.34em;
+            border-radius: 0.3em;
+            background: #ffecee;
+            color: #8c1d2f;
+            border: 1px solid #f4c2ca;
+            font-weight: 600;
+        }
+
+        .figure-block {
+            margin: 1.25rem 0 1.75rem;
+        }
+        .figure-block img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            cursor: zoom-in;
+        }
+        .figure-block figcaption {
+            margin-top: 0.65rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-style: italic;
+            line-height: 1.5;
+            text-align: center;
+        }
+        .table-grid {
+            margin: 1rem 0 1.2rem;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.95rem 1rem;
+        }
+        .table-card {
+            margin: 0;
+            padding: 0.72rem 0.72rem 0.6rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+        }
+        .table-card img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            cursor: zoom-in;
+        }
+        .table-card figcaption {
+            margin-top: 0.48rem;
+            font-size: 0.84rem;
+            line-height: 1.45;
+            color: var(--muted);
+            text-align: center;
+        }
+        @media (max-width: 880px) {
+            .table-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Global lightbox for all figures/tables */
+        body.lightbox-open {
+            overflow: hidden;
+        }
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: min(5vw, 1.75rem);
+            box-sizing: border-box;
+        }
+        .lightbox[hidden] {
+            display: none !important;
+        }
+        .lightbox__scrim {
+            position: absolute;
+            inset: 0;
+            border: none;
+            margin: 0;
+            padding: 0;
+            background: rgba(8, 12, 18, 0.92);
+            backdrop-filter: blur(8px);
+            cursor: zoom-out;
+        }
+        .lightbox__img {
+            position: relative;
+            z-index: 1;
+            max-width: 100%;
+            max-height: min(90vh, 100%);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 6px;
+            box-shadow: 0 16px 64px rgba(0, 0, 0, 0.55);
+        }
+        .lightbox__close {
+            position: absolute;
+            top: clamp(0.5rem, 2vw, 1rem);
+            right: clamp(0.5rem, 2vw, 1rem);
+            z-index: 2;
+            width: 2.5rem;
+            height: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.45);
+            color: #f0f4f8;
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        .lightbox__close:hover,
+        .lightbox__close:focus-visible {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.55);
+            outline: none;
+        }
+        .lightbox__close:focus-visible {
+            box-shadow: 0 0 0 2px var(--accent-bright);
+        }
+
+        .hr {
+            border: none;
+            border-top: 1px solid var(--line);
+            margin: 2rem 0;
+        }
+
+        blockquote.pull {
+            margin: 1.5rem 0;
+            padding: 1rem 1.25rem;
+            border-left: 4px solid var(--accent-bright);
+            background: var(--surface);
+            border-radius: 0 8px 8px 0;
+            font-size: 1.08rem;
+            font-style: italic;
+            color: #2a3038;
+        }
+
+        .footer-note {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 2rem var(--pad) 3rem;
+            font-size: 0.8125rem;
+            color: var(--muted);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar__inner">
+            <a href="../../index.html">← Ye Wang · Homepage</a>
+            <nav class="topbar__nav" aria-label="Section navigation">
+                <a href="#overview">Overview</a>
+                <a href="#method">Method</a>
+                <a href="#dataset">Data</a>
+                <a href="#results">Results</a>
+            </nav>
+        </div>
+    </header>
+
+    <header class="hero">
+        <h1>Learning to Stylize by Learning to Destylize</h1>
+        <p class="hero__subtitle">A Scalable Paradigm for Supervised Style Transfer</p>
+        <p class="hero__authors">
+            <a href="https://wangyephd.github.io/">Ye Wang</a><sup>1</sup>, <a href="https://zili-yi.github.io/">Zili Yi</a><sup>2</sup>, <a href="https://yiboz2001.github.io/">Yibo Zhang</a><sup>1,3</sup>, <a href="https://pengzheng0707.github.io/">Peng Zheng</a><sup>1,3</sup>, Xuping Xie<sup>1</sup>, Jiang Lin<sup>2</sup>, <a href="https://yijunmaverick.github.io/">Yijun Li</a><sup>4</sup>, <a href="https://yilinwang.org/">Yilin Wang</a><sup>*†4</sup>, and <a href="https://ruim-jlu.github.io/#about">Rui Ma</a><sup>*1,5</sup>
+        </p>
+        <div class="hero__affils" aria-label="Affiliations">
+            <p><sup>1</sup> Jilin University</p>
+            <p><sup>2</sup> Nanjing University</p>
+            <p><sup>3</sup> Shanghai Innovation Institute</p>
+            <p><sup>4</sup> Adobe</p>
+            <p><sup>5</sup> Engineering Research Center of Knowledge-Driven Human-Machine Intelligence, MOE, China</p>
+        </div>
+        <div class="hero__marks" aria-label="Author notes">
+            <p>* Corresponding authors</p>
+            <p>† Project lead</p>
+        </div>
+        <div class="hero__actions">
+            <a class="btn btn--ghost" href="#" target="_blank" rel="noopener"><span class="btn__icon" aria-hidden="true">📄</span>Main Paper</a>
+            <a class="btn btn--ghost" href="#" target="_blank" rel="noopener"><span class="btn__icon" aria-hidden="true">🧾</span>Supplementary Material</a>
+            <a class="btn btn--ghost" href="#" target="_blank" rel="noopener"><span class="btn__icon" aria-hidden="true">🤗</span>Hugging-Face Demo</a>
+            <a class="btn btn--ghost" href="#" target="_blank" rel="noopener"><span class="btn__icon" aria-hidden="true">💻</span>GitHub</a>
+            <a class="btn btn--ghost" href="#" target="_blank" rel="noopener"><span class="btn__icon" aria-hidden="true">🗂️</span>Hugging-Face Dataset</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="section" id="overview">
+            <h2>Overview</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/teaser.jpg" alt="Teaser: diverse stylization results across artistic styles" width="1200" height="1200" loading="eager">
+                    <figcaption>Figure 1. Diverse stylization results of our method across various artistic styles (from the paper).</figcaption>
+                </figure>
+            </div>
+            <p>This project introduces a scalable paradigm for supervised style transfer by <strong>reversing the stylization process</strong>.</p>
+            <p>Instead of directly learning to stylize, we propose to <strong>learn to destylize</strong>, i.e., removing stylistic elements from artistic images to recover their natural counterparts. This enables the construction of <strong>authentic, pixel-aligned training pairs</strong> at scale.</p>
+        </section>
+
+        <section class="section" id="insight">
+            <h2>Key insight</h2>
+            <blockquote class="pull">Authentic supervision from real artworks is critical for high-fidelity style transfer.</blockquote>
+        </section>
+
+        <section class="section" id="motivation">
+            <h2>Motivation</h2>
+            <p>Style transfer aims to render an image in a target artistic style while preserving its semantic content. However, it remains fundamentally ill-posed due to the absence of definitive ground-truth stylization pairs.</p>
+            <div class="motivation-lines" aria-label="Motivation analysis">
+                <p class="motivation-line"><span class="motivation-line__idx">1)</span> Existing methods often start from handcrafted losses, which are simple to deploy, but they usually provide <span class="hl-con">weak and indirect supervision for style faithfulness</span>.</p>
+                <p class="motivation-line"><span class="motivation-line__idx">2)</span> Feature-statistics-based transfer can capture global appearance trends as a lightweight prior, yet it frequently causes <span class="hl-con">inaccurate style representation and local artifacts</span>.</p>
+                <p class="motivation-line"><span class="motivation-line__idx">3)</span> Data-centric pipelines with pseudo stylized pairs offer larger training scale, but they still suffer from <span class="hl-con">content leakage and unreliable pseudo-supervision signals</span>.</p>
+            </div>
+            <p>Even recent data-centric methods are still bounded by the quality ceiling of pseudo supervision generated by existing models.</p>
+        </section>
+
+        <section class="section" id="key-idea">
+            <h2>Key idea: learn stylize via destylize</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/desty_vs_sty.jpg" alt="Stylization-based vs destylization-based pipelines" width="1600" height="900" loading="lazy">
+                    <figcaption>Figure 2. Stylization-based vs. destylization-based data generation pipelines.</figcaption>
+                </figure>
+            </div>
+            <p>Instead of synthesizing stylized images, we start from real artworks and <strong>remove style to recover natural content</strong>.</p>
+            <div class="motivation-lines" aria-label="Key idea formulation">
+                <p class="motivation-line"><span class="motivation-line__idx">1)</span> <strong>Input:</strong> destylized image (content).</p>
+                <p class="motivation-line"><span class="motivation-line__idx">2)</span> <strong>Target:</strong> original artistic image (style).</p>
+                <p class="motivation-line"><span class="motivation-line__idx">3)</span> This formulation yields <span class="hl-pro">authentic supervision</span>, <span class="hl-pro">improved generalization</span>, and <span class="hl-pro">elimination of pseudo-supervision artifacts</span>.</p>
+            </div>
+        </section>
+
+        <section class="section" id="method">
+            <h2>Method: DeStylePipe</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/pipeline.jpg" alt="DeStylePipe framework overview" width="1600" height="900" loading="lazy">
+                    <figcaption>Figure 3. Overview of the DeStylePipe framework.</figcaption>
+                </figure>
+            </div>
+            <p>We propose <strong>DeStylePipe</strong>, a progressive multi-stage destylization framework.</p>
+            <h3>Stage 1: Global general destylization</h3>
+            <ul>
+                <li>Universal instruction-based destylization</li>
+                <li>Handles simple styles efficiently</li>
+            </ul>
+            <h3>Stage 2: Category-wise instruction adaptation</h3>
+            <ul>
+                <li>Style-aware prompt rewriting</li>
+                <li>Improved performance on complex styles</li>
+            </ul>
+            <h3>Stage 3: Specialized model adaptation</h3>
+            <ul>
+                <li>Fine-tuning for difficult styles (e.g., clay, origami)</li>
+            </ul>
+            <p>At each stage, outputs are filtered for quality control.</p>
+        </section>
+
+        <section class="section" id="filter">
+            <h2>DestyleCoT-Filter</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/filter.jpg" alt="DestyleCoT-Filter structured reasoning" width="1600" height="900" loading="lazy">
+                    <figcaption>Figure 4. DestyleCoT-Filter with structured reasoning for evaluation.</figcaption>
+                </figure>
+            </div>
+            <p>We introduce <strong>DestyleCoT-Filter</strong>, a Chain-of-Thought-based filtering mechanism.</p>
+            <h3>Content preservation</h3>
+            <ul>
+                <li>Region-level object identification</li>
+                <li>Object consistency checking</li>
+            </ul>
+            <h3>Style removal</h3>
+            <ul>
+                <li>Style attribute decomposition</li>
+                <li>Residual style analysis</li>
+            </ul>
+            <h3>Filtering rule</h3>
+            <ul>
+                <li>Content score ≥ 4</li>
+                <li>Style removal score ≥ 4</li>
+            </ul>
+            <p>This ensures high-quality supervision data.</p>
+        </section>
+
+        <section class="section" id="dataset">
+            <h2>Dataset: DeStyle-350K</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/dataset.jpg" alt="DeStyle-350K samples" width="1600" height="900" loading="lazy">
+                    <figcaption>Figure 5. Representative samples of DeStyle-350K.</figcaption>
+                </figure>
+            </div>
+            <p>We construct <strong>DeStyle-350K</strong>, a large-scale dataset:</p>
+            <ul>
+                <li>350K triplets</li>
+                <li>500+ styles</li>
+                <li>100+ content categories</li>
+            </ul>
+            <p>Each triplet:</p>
+            <ul>
+                <li>destylized image (content)</li>
+                <li>reference image</li>
+                <li>style image (target)</li>
+            </ul>
+            <p>This dataset provides authentic supervision compared to synthetic alternatives.</p>
+        </section>
+
+        <section class="section" id="benchmark">
+            <h2>Benchmark: BCS-Bench</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/bench.jpg" alt="BCS-Bench distribution" width="1600" height="900" loading="lazy">
+                    <figcaption>Figure 6. Content and style distribution of BCS-Bench.</figcaption>
+                </figure>
+            </div>
+            <p>We propose <strong>BCS-Bench</strong>, featuring:</p>
+            <ul>
+                <li>81 styles × 60 contents</li>
+                <li>7 semantic categories</li>
+                <li>1024 resolution</li>
+                <li>4,860 pairs</li>
+            </ul>
+            <p>It ensures balanced evaluation across content and style diversity.</p>
+        </section>
+
+        <section class="section" id="results">
+            <h2>Destylization results</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/desty.jpg" alt="Destylization results" width="1600" height="900" loading="lazy">
+                    <figcaption>Figure 7. High-quality destylization with preserved fine details.</figcaption>
+                </figure>
+            </div>
+            <p>Our method:</p>
+            <ul>
+                <li>removes diverse artistic styles</li>
+                <li>preserves fine-grained structures</li>
+                <li>maintains pixel-level alignment</li>
+            </ul>
+        </section>
+
+        <section class="section" id="compare-st">
+            <h2>Comparison with style transfer methods</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/compare_st.jpg" alt="Comparison with style transfer methods" width="1600" height="900" loading="lazy">
+                    <figcaption>Figure 9. Comparison with state-of-the-art style transfer methods.</figcaption>
+                </figure>
+            </div>
+            <p>Our method:</p>
+            <ul>
+                <li>avoids content leakage</li>
+                <li>preserves identity and structure</li>
+                <li>achieves stronger style fidelity</li>
+            </ul>
+        </section>
+
+        <section class="section" id="compare-edit">
+            <h2>Comparison with image editing models</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/Compare_IMG_EDITING.jpg" alt="Comparison with image editing models" width="1600" height="900" loading="lazy">
+                    <figcaption>Figure 10. Comparison with image editing models.</figcaption>
+                </figure>
+            </div>
+            <p>Compared to existing models:</p>
+            <ul>
+                <li>better content preservation</li>
+                <li>less semantic leakage</li>
+                <li>more accurate style transfer</li>
+            </ul>
+        </section>
+
+        <section class="section" id="quantitative">
+            <h2>Quantitative results</h2>
+            <div class="table-grid" aria-label="Quantitative comparison tables">
+                <figure class="table-card">
+                    <img src="assets/Table1.png" alt="Quantitative comparison table 1" loading="lazy">
+                    <figcaption>Table 1. Evaluation of destylization quality.</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/Table2.png" alt="Quantitative comparison table 2" loading="lazy">
+                    <figcaption>Table 2. Comparison between OmniStyle150K and our DeStyle-350K.</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/Table3.png" alt="Quantitative comparison table 3" loading="lazy">
+                    <figcaption>Table 3. Comparison of existing style transfer benchmarks and our proposed BCSBench.</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/Table4.png" alt="Quantitative comparison table 4" loading="lazy">
+                    <figcaption>Table 4. Quantitative comparison of style transfer methods across multiple metrics.</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/Table5.png" alt="Quantitative comparison table 5" loading="lazy">
+                    <figcaption>Table 5. Quantitative comparison of image editing methods across multiple metrics.</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/Table6.png" alt="Quantitative comparison table 6" loading="lazy">
+                    <figcaption>Table 6. Extra comparison under different settings.</figcaption>
+                </figure>
+            </div>
+            
+        </section>
+
+        <section class="section" id="robustness">
+            <h2>Robustness</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/complex.jpg" alt="Robustness in challenging scenarios" width="1600" height="900" loading="lazy">
+                    <figcaption>Figure 12. Performance in challenging scenarios.</figcaption>
+                </figure>
+            </div>
+            <p>Our method maintains:</p>
+            <ul>
+                <li>structural consistency in complex scenes</li>
+                <li>robustness to occlusion and fine details</li>
+            </ul>
+        </section>
+
+        <section class="section" id="ablation-multistage">
+            <h2>Ablation: multi-stage refinement</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/desty_multi_stage.jpg" alt="Multi-stage destylization" width="1600" height="900" loading="lazy">
+                    <figcaption>Figure 8. Progressive improvement across destylization stages.</figcaption>
+                </figure>
+            </div>
+            <ul>
+                <li><strong>Stage 1:</strong> incomplete removal</li>
+                <li><strong>Stage 2:</strong> improved results</li>
+                <li><strong>Stage 3:</strong> fully natural outputs for complex styles</li>
+            </ul>
+        </section>
+
+        <section class="section" id="conclusion">
+            <h2>Conclusion</h2>
+            <p>We introduce a new paradigm for supervised style transfer:</p>
+            <ul>
+                <li>Learn stylization via destylization</li>
+                <li>Build authentic large-scale supervision</li>
+                <li>Achieve superior stylization quality</li>
+            </ul>
+            <p>This work demonstrates that destylization is a scalable and reliable solution for style transfer.</p>
+        </section>
+
+        <section class="section" id="more-results">
+            <h2>More results</h2>
+            <div class="table-grid" aria-label="Additional qualitative results">
+                <figure class="table-card">
+                    <img src="assets/res1.jpg" alt="Additional qualitative result 1" loading="lazy">
+                    <figcaption>Result 1</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/res2.jpg" alt="Additional qualitative result 2" loading="lazy">
+                    <figcaption>Result 2</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/res3.jpg" alt="Additional qualitative result 3" loading="lazy">
+                    <figcaption>Result 3</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/res4.jpg" alt="Additional qualitative result 4" loading="lazy">
+                    <figcaption>Result 4</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/res5.jpg" alt="Additional qualitative result 5" loading="lazy">
+                    <figcaption>Result 5</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/res6.jpg" alt="Additional qualitative result 6" loading="lazy">
+                    <figcaption>Result 6</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/res7.jpg" alt="Additional qualitative result 7" loading="lazy">
+                    <figcaption>Result 7</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/res8.jpg" alt="Additional qualitative result 8" loading="lazy">
+                    <figcaption>Result 8</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/res9.jpg" alt="Additional qualitative result 9" loading="lazy">
+                    <figcaption>Result 9</figcaption>
+                </figure>
+                <figure class="table-card">
+                    <img src="assets/res10.jpg" alt="Additional qualitative result 10" loading="lazy">
+                    <figcaption>Result 10</figcaption>
+                </figure>
+            </div>
+        </section>
+    </main>
+
+    <div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Preview image">
+        <button type="button" class="lightbox__scrim" aria-label="Close preview"></button>
+        <img class="lightbox__img" src="" alt="">
+        <button type="button" class="lightbox__close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+
+    <script>
+        (function () {
+            var root = document.querySelector('main');
+            var box = document.getElementById('lightbox');
+            if (!root || !box) return;
+
+            var scrim = box.querySelector('.lightbox__scrim');
+            var lbImg = box.querySelector('.lightbox__img');
+            var closeBtn = box.querySelector('.lightbox__close');
+            var lastFocus = null;
+
+            function close() {
+                box.hidden = true;
+                lbImg.removeAttribute('src');
+                lbImg.alt = '';
+                document.body.classList.remove('lightbox-open');
+                document.removeEventListener('keydown', onKey);
+                if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+            }
+
+            function onKey(e) {
+                if (e.key === 'Escape') close();
+            }
+
+            function open(source) {
+                lastFocus = document.activeElement;
+                lbImg.src = source.currentSrc || source.src;
+                lbImg.alt = source.alt || '';
+                box.hidden = false;
+                document.body.classList.add('lightbox-open');
+                closeBtn.focus();
+                document.addEventListener('keydown', onKey);
+            }
+
+            root.addEventListener('click', function (e) {
+                var t = e.target;
+                if (!t || t.tagName !== 'IMG') return;
+                e.preventDefault();
+                open(t);
+            });
+
+            scrim.addEventListener('click', close);
+            closeBtn.addEventListener('click', close);
+        })();
+    </script>
+
+</body>
+</html>
