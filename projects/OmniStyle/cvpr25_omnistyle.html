@@ -1,430 +1,398 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OmniStyle: High-Quality Style Transfer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #ffffff;
-      color: #111;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OmniStyle: Filtering High Quality Style Transfer Data at Scale.">
+    <title>OmniStyle · Filtering High Quality Style Transfer Data at Scale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0f1419;
+            --muted: #5c6570;
+            --line: #d8dee6;
+            --surface: #f4f6f9;
+            --accent: #1a2f45;
+            --accent-bright: #3b82f6;
+            --max: 66rem;
+            --pad: clamp(1.1rem, 3.2vw, 2rem);
+        }
+        html { scroll-behavior: smooth; }
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Source Serif 4", Georgia, serif;
+            font-size: 1.0625rem;
+            line-height: 1.65;
+            color: var(--ink);
+            background: #fff;
+        }
+        a { color: #3d4f8f; text-underline-offset: 0.2em; }
+        a:hover { color: var(--ink); }
 
-    header {
-      text-align: center;
-      padding: 60px 20px 30px;
-    }
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, var(--accent) 0%, #152838 100%);
+            border-bottom: 3px solid var(--accent-bright);
+            box-shadow: 0 4px 20px rgba(0,0,0,.12);
+        }
+        .topbar__inner {
+            max-width: 86rem;
+            margin: 0 auto;
+            padding: 0.65rem var(--pad);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+        .topbar a {
+            color: #e8eef4;
+            text-decoration: none;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .topbar a:hover { color: #fff; }
+        .topbar__nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem 1.25rem;
+        }
 
-    .cvpr-badge {
-      display: inline-block;
-      background-color: #e63946;
-      color: white;
-      padding: 6px 14px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      border-radius: 6px;
-      margin-bottom: 20px;
-    }
+        .hero {
+            max-width: 70rem;
+            margin: 0 auto;
+            padding: clamp(2rem, 5vw, 3.25rem) var(--pad) 1.5rem;
+            text-align: center;
+        }
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+        .hero__subtitle {
+            margin: 0.3rem 0 0.95rem;
+            font-size: clamp(1.05rem, 2.25vw, 1.35rem);
+            font-weight: 600;
+            color: #2b3c51;
+            line-height: 1.3;
+        }
+        .hero__authors {
+            margin: 0 0 0.9rem;
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+        .hero__authors a { font-weight: 600; }
+        .hero__affils {
+            margin: 0 0 1.1rem;
+            font-size: 0.92rem;
+            color: #3b4653;
+            line-height: 1.5;
+        }
+        .hero__marks {
+            margin: 0.5rem auto 1.2rem;
+            width: fit-content;
+            max-width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem 0.6rem;
+            font-size: 0.98rem;
+        }
+        .hero__marks p {
+            margin: 0;
+            padding: 0.22rem 0.58rem;
+            border-radius: 999px;
+            font-weight: 600;
+            background: #e8eef8;
+            border: 1px solid #c6d5ef;
+            color: #1f3550;
+        }
+        .hero__actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.65rem;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.42rem;
+            padding: 0.5rem 1.15rem;
+            font-family: inherit;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            transition: background .15s ease, border-color .15s ease;
+        }
+        .btn:hover { background: var(--surface); color: var(--accent); }
 
-    header h1 {
-      font-size: 2.8rem;
-      margin: 0.2em 0;
-    }
+        .section {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 2rem var(--pad) 2.5rem;
+            border-top: 1px solid var(--line);
+        }
+        .section:first-of-type { border-top: none; padding-top: 0.5rem; }
+        .section h2 {
+            margin: 0 0 1rem;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.02em;
+        }
+        .section p { margin: 0 0 1rem; }
+        .section ul { margin: 0 0 1rem; padding-left: 1.35rem; color: #2a3038; }
 
-    header h2 {
-      font-weight: 400;
-      font-size: 1.3rem;
-      margin: 0.3em 0 1em;
-      color: #444;
-    }
+        .figure-block { margin: 1.25rem 0 1.75rem; }
+        .figure-block img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            cursor: zoom-in;
+        }
+        .figure-block figcaption {
+            margin-top: 0.65rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-style: italic;
+            line-height: 1.5;
+            text-align: center;
+        }
 
-    .authors {
-      font-size: 0.95em;
-      color: #555;
-      margin-top: 10px;
-      line-height: 1.6;
-    }
+        .result-grid {
+            margin-top: 0.8rem;
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 0.8rem;
+        }
+        .result-grid img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 1 / 1;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            cursor: zoom-in;
+        }
+        @media (max-width: 1080px) { .result-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 760px) { .result-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 520px) { .result-grid { grid-template-columns: 1fr; } }
 
-    .badges {
-      margin-top: 20px;
-    }
-
-    .badges a {
-      display: inline-block;
-      background: black;
-      color: white;
-      font-size: 0.85em;
-      padding: 8px 12px;
-      margin: 4px;
-      border-radius: 6px;
-      text-decoration: none;
-      transition: background 0.3s;
-    }
-
-    .badges a:hover {
-      background: #444;
-    }
-
-    .grid {
-      max-width: 1500px;
-      margin: 40px auto;
-      padding: 0 20px;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 24px;
-    }
-
-    @media (max-width: 1200px) {
-      .grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    @media (max-width: 800px) {
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 500px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .grid-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .grid img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      max-height: 1024px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-      object-fit: cover;
-      transition: transform 0.3s ease-in-out; 
-      cursor: zoom-in;
-    }
-
-    .grid img:hover {
-      transform: scale(1.3);
-    }
-
-    .caption {
-      margin-top: 8px;
-      font-size: 0.9em;
-      color: #666;
-      text-align: center;
-    }
-
-    .lightbox {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.85);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .lightbox img {
-      max-width: 90vw;
-      max-height: 90vh;
-      border-radius: 8px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.6);
-      cursor: zoom-out;
-    }
-
-    footer {
-      text-align: center;
-      padding: 40px 10px 20px;
-      font-size: 0.9em;
-      color: #aaa;
-    }
-  </style>
+        body.lightbox-open { overflow: hidden; }
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: min(5vw, 1.75rem);
+        }
+        .lightbox[hidden] { display: none !important; }
+        .lightbox__scrim {
+            position: absolute;
+            inset: 0;
+            border: none;
+            background: rgba(8, 12, 18, 0.92);
+            backdrop-filter: blur(8px);
+            cursor: zoom-out;
+        }
+        .lightbox__img {
+            position: relative;
+            z-index: 1;
+            max-width: 100%;
+            max-height: min(90vh, 100%);
+            border-radius: 6px;
+            box-shadow: 0 16px 64px rgba(0,0,0,.55);
+        }
+        .lightbox__close {
+            position: absolute;
+            top: clamp(0.5rem, 2vw, 1rem);
+            right: clamp(0.5rem, 2vw, 1rem);
+            z-index: 2;
+            width: 2.5rem;
+            height: 2.5rem;
+            border: 1px solid rgba(255,255,255,.35);
+            border-radius: 8px;
+            background: rgba(0,0,0,.45);
+            color: #f0f4f8;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
+    <header class="topbar">
+        <div class="topbar__inner">
+            <a href="../../index.html">← Ye Wang · Homepage</a>
+            <nav class="topbar__nav">
+                <a href="#overview">Overview</a>
+                <a href="#method">Method</a>
+                <a href="#dataset">Dataset</a>
+                <a href="#results">Results</a>
+            </nav>
+        </div>
+    </header>
 
-  <header>
-    <h1><strong>OmniStyle</strong></h1>
-    <h2>Filtering High Quality Style Transfer Data at Scale</h2>
-    <div class="cvpr-badge">📣 Accepted at CVPR 2025</div>
-  
-    <div class="authors">
-      <a href="https://wangyephd.github.io/" target="_blank">Ye Wang<sup>1</sup></a>,
-      Ruiqi Liu<sup>1</sup>,
-      Jiang Lin<sup>2</sup>,
-      Fei Liu<sup>3</sup>,
-      <a href="https://is.nju.edu.cn/yzl_en/main.htm" target="_blank">Zili Yi<sup>2</sup></a>,
-      <a href="https://yilinwang.org/" target="_blank">Yilin Wang<sup>4*</sup></a>,
-      <a href="https://ruim-jlu.github.io/#about" target="_blank">Rui Ma<sup>1,5*</sup></a><br/>
-      <sup>1</sup>Jilin University, <sup>2</sup>Nanjing University, <sup>3</sup>ByteDance, <sup>4</sup>Adobe,<br/>
-      <sup>5</sup>Engineering Research Center of Knowledge-Driven Human-Machine Intelligence, MOE, China
-    </div>
-  
-    <div class="badges">
-      <a href="https://arxiv.org/abs/2505.14028">📄 Paper</a>
-      <a href="https://github.com/StyleX-Research/OmniStyle">📦 Code</a>
-      <a href="https://huggingface.co/StyleXX/OmniStyle/tree/main">🤗 Model</a>
-      <a href="#">💡 Demo</a>
-      <a href="https://huggingface.co/datasets/StyleXX/OmniStyle-150k">🗂️ Dataset</a>
-    </div>
-  
-    <div style="max-width: 900px; margin: 40px auto 0; text-align: left; font-size: 1rem; line-height: 1.6; color: #333;">
-      <p>🤖 <strong>OmniStyle</strong> is the first end-to-end style transfer framework based on the Diffusion Transformer (DiT) architecture, achieving high-quality 1K-resolution stylization by leveraging the large-scale, filtered OmniStyle-1M dataset. It supports both instruction- and image-guided stylization, enabling efficient and versatile style transfer across diverse styles.</p>
-      <p>🗂️ <strong>OmniStyle-1M</strong> is the first million-scale paired style transfer dataset, comprising over one million triplets of content, style, and stylized images across 1,000 diverse style categories. It provides strong supervision for learning controllable and generalizable style transfer models.</p>
-      <p>🧪 <strong>OmniStyle-150K</strong> is a high-quality subset of OmniStyle-1M, specifically filtered to train the OmniStyle model.</p>
-    </div>
-  </header>
+    <header class="hero">
+        <h1>OmniStyle</h1>
+        <p class="hero__subtitle">Filtering High Quality Style Transfer Data at Scale</p>
+        <p class="hero__authors">
+            <a href="https://wangyephd.github.io/">Ye Wang</a><sup>1</sup>, Ruiqi Liu<sup>1</sup>, Jiang Lin<sup>2</sup>, Fei Liu<sup>3</sup>, <a href="https://is.nju.edu.cn/yzl_en/main.htm">Zili Yi</a><sup>2</sup>, <a href="https://yilinwang.org/">Yilin Wang</a><sup>4*</sup>, <a href="https://ruim-jlu.github.io/#about">Rui Ma</a><sup>1,5*</sup>
+        </p>
+        <div class="hero__affils">
+            <p><sup>1</sup> Jilin University · <sup>2</sup> Nanjing University · <sup>3</sup> ByteDance · <sup>4</sup> Adobe</p>
+            <p><sup>5</sup> Engineering Research Center of Knowledge-Driven Human-Machine Intelligence, MOE, China</p>
+        </div>
+        <div class="hero__marks"><p>* Corresponding authors</p></div>
+        <div class="hero__actions">
+            <a class="btn" href="https://arxiv.org/abs/2505.14028" target="_blank" rel="noopener">📄 Paper</a>
+            <a class="btn" href="https://github.com/StyleX-Research/OmniStyle" target="_blank" rel="noopener">💻 Code</a>
+            <a class="btn" href="https://huggingface.co/StyleXX/OmniStyle/tree/main" target="_blank" rel="noopener">🤗 Model</a>
+            <a class="btn" href="https://huggingface.co/datasets/StyleXX/OmniStyle-150k" target="_blank" rel="noopener">🗂️ Dataset</a>
+        </div>
+    </header>
 
-  
-<div style="text-align: center;">
-  <h2 style="
-  font-weight: 700;
-  margin: 40px 0 20px;
-  font-size: 1.5rem;
-  background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-">
-  1. Diverse Stylization Results
-</h2>
-</div>
- 
-  <div class="grid">
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed/tower.png" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed/tower@2.5D_s0011____1109_01_query_2_img_000085_1683879820929_05194863207239723.jpg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed/tower@Cartoonish Vibrancy_s0497____0928_01_query_0_img_000199_1683196918852_0021596675375920915.jpg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed/tower@Idyllic Digital Art_s0255____0911_01_query_1_img_000044_1682338959001_012332992189226777.jpg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed/tower@Magic color illustration_s1101____1017_01_query_1_img_000119_1683939673901_03048207210068038.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed/tower@Sinkai Makoto Comic_s0611____0907_01_query_1_img_000032_1682128273658_010881010175445871.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed/tower@Steampunk Exploration_s0532____1019_01_query_0_img_000081_1683387897667_0030019438431530432.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed/tower@Tranquil_s0217____1031_01_query_2_img_000074_1683985450311_005454747623068412.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed/tower@Vivid Architectural Illustration_s0503____0911_01_query_2_img_000116_1683847296322_017858942651421972.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed/tower@line art_s0315____1027_01_query_0_img_000014_1683694580674_06654237059746868.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_bridge/bridge.png" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_bridge/bridge@American Comic_s0101____1103_01_query_1_img_000187_1683381942974_05382311884613603.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_bridge/bridge@Steampunk Exploration_s0532____1019_01_query_0_img_000081_1683387897667_0030019438431530432.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_bridge/bridge@Surreal_s0042____0911_01_query_0_img_000034_1682330269283_04434056690766527.jpg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_bridge/bridge@Travis Foster_s0133____1110_01_query_2_img_000143_1683689244308_007959849308969402.jpg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_bridge/bridge@Whimsical Sumi-e_s0374____1012_01_query_1_img_000083_1683983445321_07093736199445253.jpg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_bridge/bridge@black white_s0038____1108_01_query_2_img_000146_1683315708982_07343582984298568.jpg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_bridge/bridge@ink line_s0448____0911_01_query_2_img_000036_1682350766978_06081861206123386.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_bridge/bridge@intimate atmosphere_s0669____1025_01_query_1_img_000024_1683092204905_0873700838822412.webp.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_bridge/bridge@modern_s0795____0911_01_query_1_img_000139_1683298841223_011687509847685096.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
+    <main>
+        <section class="section" id="overview">
+            <h2>Overview</h2>
+            <p><strong>OmniStyle</strong> is an end-to-end style transfer framework based on a Diffusion Transformer (DiT), targeting high-quality 1K stylization with both instruction-guided and reference-guided settings.</p>
+            <p><strong>OmniStyle-1M</strong> is a million-scale triplet dataset (content, style, stylized image) spanning 1,000 style categories. <strong>OmniStyle-150K</strong> is its high-quality filtered subset for training.</p>
+            <div class="figure-block">
+                <figure>
+                    <img src="omnistyle/teaser.png" alt="OmniStyle teaser examples" loading="eager">
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="results">
+            <h2>Diverse Stylization Results</h2>
+            <div class="result-grid">
+                <img src="omnistyle/1800-tower/processed/tower.png" alt="OmniStyle result sample 1" loading="lazy">
+                <img src="omnistyle/1800-tower/processed/tower@2.5D_s0011____1109_01_query_2_img_000085_1683879820929_05194863207239723.jpg.jpg" alt="OmniStyle result sample 2" loading="lazy">
+                <img src="omnistyle/1800-tower/processed/tower@Cartoonish Vibrancy_s0497____0928_01_query_0_img_000199_1683196918852_0021596675375920915.jpg.jpg" alt="OmniStyle result sample 3" loading="lazy">
+                <img src="omnistyle/1800-tower/processed/tower@Idyllic Digital Art_s0255____0911_01_query_1_img_000044_1682338959001_012332992189226777.jpg.jpg" alt="OmniStyle result sample 4" loading="lazy">
+                <img src="omnistyle/1800-tower/processed/tower@Magic color illustration_s1101____1017_01_query_1_img_000119_1683939673901_03048207210068038.jpeg.jpg" alt="OmniStyle result sample 5" loading="lazy">
+                <img src="omnistyle/1800-tower/processed_bridge/bridge.png" alt="OmniStyle result sample 6" loading="lazy">
+                <img src="omnistyle/1800-tower/processed_bridge/bridge@American Comic_s0101____1103_01_query_1_img_000187_1683381942974_05382311884613603.jpeg.jpg" alt="OmniStyle result sample 7" loading="lazy">
+                <img src="omnistyle/1800-tower/processed_bridge/bridge@ink line_s0448____0911_01_query_2_img_000036_1682350766978_06081861206123386.jpeg.jpg" alt="OmniStyle result sample 8" loading="lazy">
+                <img src="omnistyle/1800-tower/processed_indoor/indoor.png" alt="OmniStyle result sample 9" loading="lazy">
+                <img src="omnistyle/1800-tower/processed_indoor/1@Vogue_s0002____1008_01_query_1_img_000128_1683948832467_035748842004282355.jpeg.jpg" alt="OmniStyle result sample 10" loading="lazy">
+            </div>
+        </section>
+
+        <section class="section" id="method">
+            <h2>Method</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="omnistyle/method.png" alt="OmniStyle dataset generation and filtering pipeline" loading="lazy">
+                    <figcaption>Large-scale generation pipeline with OmniFilter for quality control.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="dataset">
+            <h2>Dataset</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="omnistyle/dataset.jpeg" alt="OmniStyle dataset overview" loading="lazy">
+                    <figcaption>Overview of OmniStyle-1M style/content distribution and triplet examples.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="model">
+            <h2>OmniStyle Model</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="omnistyle/model.jpeg" alt="OmniStyle model architecture" loading="lazy">
+                    <figcaption>The architecture of OmniStyle.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="more">
+            <h2>More Results</h2>
+            <div class="figure-block">
+                <figure>
+                    <img src="omnistyle/res.png" alt="More OmniStyle results" loading="lazy">
+                    <figcaption>Instruction-guided and reference-guided style transfer across diverse styles.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="ack">
+            <h2>Acknowledgements</h2>
+            <p>This work was supported in part by the National Natural Science Foundation of China (No. 62202199, 62406134), the Suzhou Key Technologies Project (No. SYG2024136), and the Fundamental Research Funds for the Central Universities.</p>
+        </section>
+    </main>
+
+    <div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Preview image">
+        <button type="button" class="lightbox__scrim" aria-label="Close preview"></button>
+        <img class="lightbox__img" src="" alt="">
+        <button type="button" class="lightbox__close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
 
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_indoor/indoor.png" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_indoor/1@Cartoonish Vibrancy_s0497____0928_01_query_0_img_000199_1683196918852_0021596675375920915.jpg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_indoor/1@Children illustration_s0300____1007_01_query_0_img_000035_1683225533070_05078738848559132.jpg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_indoor/1@Cozy Line Art_s0863____1031_01_query_0_img_000099_1683272015693_0059043084791660316.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_indoor/1@Romanticism_s0760____1101_01_query_2_img_000085_1682339488395_045239362321727106.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_indoor/1@Travis Foster_s0133____1110_01_query_2_img_000143_1683689244308_007959849308969402.jpg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_indoor/1@Vogue_s0002____1008_01_query_1_img_000128_1683948832467_035748842004282355.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_indoor/1@illustration poster_s0047____0927_01_query_2_img_000110_1683418641509_09545690068251556.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_indoor/1@intimate atmosphere_s0669____1025_01_query_1_img_000024_1683092204905_0873700838822412.webp.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-    <div class="grid-item">
-      <img src="omnistyle/1800-tower/processed_indoor/1@line art_s0119____0912_01_query_2_img_000129_1682339542367_010238400858816221.jpeg.jpg" alt="Example" loading="lazy" onclick="openLightbox(this.src)">
-    </div>
-  </div>
-
-
-<div style="text-align: center;">
-  <h2 style="
-  font-weight: 700;
-  margin: 40px 0 20px;
-  font-size: 1.5rem;
-  background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-">
-  2. Method
-</h2>
-<br>
-<img src="omnistyle/method.png" alt="Original Eiffel Tower" style="width: 100%; max-width: 1000px; height: auto; border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
-<p style="max-width: 1000px; margin: 20px auto 0; line-height: 1.6; font-size: 1rem; color: #444;">
-  Overview of our dataset creation and filtering pipeline. (a) <strong>Content Image Generation</strong>: We utilize ChatGPT to automatically generate textual descriptions across 20 categories (e.g., animals, architecture, humans, food) and generate corresponding images using the FLUX model. (b) <strong>Style Transfer</strong>: Style images are randomly sampled from the Style30K dataset, and six SOTA style transfer models are applied to generate a large and diverse dataset of one million triplets. (c) <strong>OmniFilter</strong>: Stylized images are filtered based on content consistency, style preservation, and aesthetic appeal to ensure high-quality, visually cohesive results.
-</p>
-</div>
-
-
-
-<div style="text-align: center;">
-  <h2 style="
-  font-weight: 700;
-  margin: 40px 0 20px;
-  font-size: 1.5rem;
-  background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-">
-  3. Dataset
-</h2>
-<br>
-<img src="omnistyle/dataset.jpeg" alt="Original Eiffel Tower" style="width: 100%; max-width: 1000px; height: auto; border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
-<p style="max-width: 1000px; margin: 20px auto 0; line-height: 1.6; font-size: 1rem; color: #444;">
-  Overview of OmniStyle-1M. (a) The inner ring represents the eight primary categories, while the outer ring corresponds to specific fine-grained classifications, illustrating the extensive diversity of style categories within our dataset. (b) Two examples of triplets are shown, each includes a content image, a style image, a stylized output, a corresponding textual description, and an instructional prompt. (c) Distribution of stylized results across different content categories.
-</p>
-</div>
-
-
-
-<div style="text-align: center;">
-  <h2 style="
-  font-weight: 700;
-  margin: 40px 0 20px;
-  font-size: 1.5rem;
-  background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-">
-  4. OmniStyle Model
-</h2>
-<br>
-<img src="omnistyle/model.jpeg" alt="Original Eiffel Tower" style="width: 60%; max-width: 1000px; height: auto; border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
-<p style="max-width: 1000px; margin: 20px auto 0; line-height: 1.6; font-size: 1rem; color: #444;">
-  The architecture of OmniStyle.
-</p>
-</div>
-
-
-
-<div style="text-align: center;">
-  <h2 style="
-  font-weight: 700;
-  margin: 40px 0 20px;
-  font-size: 1.5rem;
-  background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-">
-  5. More Results
-</h2>
-<br>
-<img src="omnistyle/res.png" alt="Original Eiffel Tower" style="width: 100%; max-width: 1000px; height: auto; border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
-<p style="max-width: 1000px; margin: 20px auto 0; line-height: 1.6; font-size: 1rem; color: #444;">
-  OmniStyle enables high-quality (a) instruction-guided style transfer and (b) reference image-guided style transfer, covering a diverse range of styles, including but not limited to comics, vector art, oil painting, sketch, and Chinese ancient art.
-</p>
-</div>
-
-
-
-
-<div style="text-align: center;">
-  <h2 style="
-  font-weight: 700;
-  margin: 40px 0 20px;
-  font-size: 1.5rem;
-  background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-">
-  5. Acknowledgements
-</h2>
-<br>
-
-<p style="max-width: 1000px; margin: 20px auto 0; line-height: 1.6; font-size: 1rem; color: #444;">
-  This work  was supported in part by the National Natural Science Foundation of China (No. 62202199, 62406134), the Suzhou Key Technologies Project (No. SYG2024136) and the Fundamental Research Funds for the Central Universities.
-</p>
-</div>
-
-
-
-
-  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-    <img id="lightbox-img" src="" alt="Full Image">
-  </div>
-
-  <footer>
-    © 2025 OmniStyle Authors. Built for the research community.<br/>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <span id="busuanzi_container_site_pv">Total visitors: <span id="busuanzi_value_site_pv"></span> times</span>
-  </footer>
-  
-
-  <script>
-    function openLightbox(src) {
-      document.getElementById("lightbox-img").src = src;
-      document.getElementById("lightbox").style.display = "flex";
-    }
-
-    function closeLightbox() {
-      document.getElementById("lightbox").style.display = "none";
-    }
-  </script>
-
+    <script>
+        (function () {
+            var root = document.querySelector('main');
+            var box = document.getElementById('lightbox');
+            if (!root || !box) return;
+            var scrim = box.querySelector('.lightbox__scrim');
+            var lbImg = box.querySelector('.lightbox__img');
+            var closeBtn = box.querySelector('.lightbox__close');
+            var lastFocus = null;
+            function close() {
+                box.hidden = true;
+                lbImg.removeAttribute('src');
+                lbImg.alt = '';
+                document.body.classList.remove('lightbox-open');
+                document.removeEventListener('keydown', onKey);
+                if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+            }
+            function onKey(e) { if (e.key === 'Escape') close(); }
+            function open(source) {
+                lastFocus = document.activeElement;
+                lbImg.src = source.currentSrc || source.src;
+                lbImg.alt = source.alt || '';
+                box.hidden = false;
+                document.body.classList.add('lightbox-open');
+                closeBtn.focus();
+                document.addEventListener('keydown', onKey);
+            }
+            root.addEventListener('click', function (e) {
+                var t = e.target;
+                if (!t || t.tagName !== 'IMG') return;
+                e.preventDefault();
+                open(t);
+            });
+            scrim.addEventListener('click', close);
+            closeBtn.addEventListener('click', close);
+        })();
+    </script>
 </body>
 </html>

@@ -1,119 +1,385 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>SigStyle</title>
-<link href="./imgs/style.css" rel="stylesheet">
-<script type="text/javascript" src="./imgs/jquery.mlens-1.0.min.js"></script> 
-<script type="text/javascript" src="./imgs/jquery.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SigStyle: Signature Style Transfer via Personalized Text-to-Image Models.">
+    <title>SigStyle · Signature Style Transfer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0f1419;
+            --muted: #5c6570;
+            --line: #d8dee6;
+            --surface: #f4f6f9;
+            --accent: #1a2f45;
+            --accent-bright: #3b82f6;
+            --max: 62rem;
+            --pad: clamp(1.1rem, 3.2vw, 2rem);
+        }
+        html { scroll-behavior: smooth; }
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Source Serif 4", Georgia, serif;
+            font-size: 1.0625rem;
+            line-height: 1.65;
+            color: var(--ink);
+            background: #fff;
+        }
+        a { color: #3d4f8f; text-underline-offset: 0.2em; }
+        a:hover { color: var(--ink); }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, var(--accent) 0%, #152838 100%);
+            border-bottom: 3px solid var(--accent-bright);
+            box-shadow: 0 4px 20px rgba(0,0,0,.12);
+        }
+        .topbar__inner {
+            max-width: 82rem;
+            margin: 0 auto;
+            padding: 0.65rem var(--pad);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+        .topbar a {
+            color: #e8eef4;
+            text-decoration: none;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .topbar a:hover { color: #fff; }
+        .topbar__nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem 1.25rem;
+        }
+
+        .hero {
+            max-width: 66rem;
+            margin: 0 auto;
+            padding: clamp(2rem, 5vw, 3.25rem) var(--pad) 1.5rem;
+            text-align: center;
+        }
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(1.65rem, 4vw, 2.35rem);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+        .hero__subtitle {
+            margin: 0.3rem 0 0.95rem;
+            font-size: clamp(1.05rem, 2.25vw, 1.35rem);
+            font-weight: 600;
+            color: #2b3c51;
+            line-height: 1.3;
+        }
+        .hero__authors {
+            margin: 0 0 0.9rem;
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+        .hero__authors a { font-weight: 600; }
+        .hero__affils {
+            margin: 0 0 1rem;
+            font-size: 0.92rem;
+            color: #3b4653;
+            line-height: 1.5;
+        }
+        .hero__affils p { margin: 0.05rem 0; }
+        .hero__marks {
+            margin: 0.5rem auto 1.2rem;
+            width: fit-content;
+            max-width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem 0.6rem;
+            font-size: 0.98rem;
+            line-height: 1.45;
+        }
+        .hero__marks p {
+            margin: 0;
+            padding: 0.22rem 0.58rem;
+            border-radius: 999px;
+            font-weight: 600;
+            background: #e8eef8;
+            border: 1px solid #c6d5ef;
+            color: #1f3550;
+        }
+        .hero__actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.65rem;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.42rem;
+            padding: 0.5rem 1.15rem;
+            font-family: inherit;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            transition: background .15s ease, border-color .15s ease;
+        }
+        .btn:hover { background: var(--surface); color: var(--accent); }
+
+        .section {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 2rem var(--pad) 2.5rem;
+            border-top: 1px solid var(--line);
+        }
+        .section:first-of-type { border-top: none; padding-top: 0.5rem; }
+        .section h2 {
+            margin: 0 0 1rem;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.02em;
+        }
+        .section p { margin: 0 0 1rem; }
+        .section ul { margin: 0 0 1rem; padding-left: 1.35rem; color: #2a3038; }
+        .section li { margin: 0.35rem 0; }
+        .section strong { font-weight: 700; }
+
+        .figure-block { margin: 1.25rem 0 1.75rem; }
+        .figure-block img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            cursor: zoom-in;
+        }
+        .figure-block figcaption {
+            margin-top: 0.65rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-style: italic;
+            line-height: 1.5;
+            text-align: center;
+        }
+        .split-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+        @media (max-width: 860px) {
+            .split-2 { grid-template-columns: 1fr; }
+        }
+
+        body.lightbox-open { overflow: hidden; }
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: min(5vw, 1.75rem);
+        }
+        .lightbox[hidden] { display: none !important; }
+        .lightbox__scrim {
+            position: absolute;
+            inset: 0;
+            border: none;
+            background: rgba(8, 12, 18, 0.92);
+            backdrop-filter: blur(8px);
+            cursor: zoom-out;
+        }
+        .lightbox__img {
+            position: relative;
+            z-index: 1;
+            max-width: 100%;
+            max-height: min(90vh, 100%);
+            border-radius: 6px;
+            box-shadow: 0 16px 64px rgba(0,0,0,.55);
+        }
+        .lightbox__close {
+            position: absolute;
+            top: clamp(0.5rem, 2vw, 1rem);
+            right: clamp(0.5rem, 2vw, 1rem);
+            z-index: 2;
+            width: 2.5rem;
+            height: 2.5rem;
+            border: 1px solid rgba(255,255,255,.35);
+            border-radius: 8px;
+            background: rgba(0,0,0,.45);
+            color: #f0f4f8;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
-
 <body>
-<div class="content">
-  <h1><strong>SigStyle: Signature Style Transfer via Personalized Text-to-Image Models</strong></h1>
-  <p id="authors"><span></span><a href="https://wangyephd.github.io/">Ye Wang<sup>1</sup></a> Tongyuan Bai<sup>1</sup> Xuping Xie<sup>2</sup><a href="https://is.nju.edu.cn/yzl_en/main.htm">Zili Yi<sup>3</sup></a><a href="https://yilinwang.org/">Yilin Wang<sup>4,*</sup></a><a href="https://ruim-jlu.github.io/#about">Rui Ma<sup>1,5,*</sup></a><br>
-    <br>
-  <span style="font-size: 20px"><sup>1</sup> School of Artificial Intelligence, Jilin University</span> <br>
-  <span style="font-size: 20px"><sup>2</sup> College of Computer Science and Technology, Jilin University</span> <br>
-  <span style="font-size: 20px"><sup>3</sup> School of Intelligence Science and Technology, Nanjing University</span> <br>
-  <span style="font-size: 20px"><sup>4</sup> Adobe</span> <br>
-  <span style="font-size: 20px"><sup>5</sup> Engineering Research Center of Knowledge-Driven Human-Machine Intelligence, MOE, China</span> <br>
-  <span style="font-size: 20px"><sup>*</sup> Corresponding authors</span>
-  
+    <header class="topbar">
+        <div class="topbar__inner">
+            <a href="../../index.html">← Ye Wang · Homepage</a>
+            <nav class="topbar__nav">
+                <a href="#abstract">Abstract</a>
+                <a href="#approach">Approach</a>
+                <a href="#results">Results</a>
+            </nav>
+        </div>
+    </header>
 
-</p>
-  <br>
-  <img src="./imgs/teaser_page-0001.jpg" class="teaser-gif" style="width:100%;"><br>
-  <h3 style="text-align:center"><em>Our method can achieve high-quality global style transfer (a) while keeping the signature style such as distinct and
-    recognizable visual traits like geometric and structural patterns, color palettes and brush strokes etc. Also, our method is flexible
-    and supports local style transfer (b), style-guided text-to-image generation (c), and texture transfer (d).</em></h3>
-    <font size="+2">
-          <p style="text-align: center;">
-            <a href="https://github.com/wangyePHD/SigStyle" target="_blank">[Code]</a> &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="https://arxiv.org/pdf/2502.13997" target="_blank">[Paper]</a> &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="imgs/bibtex.txt" target="_blank">[BibTeX]</a>
-          </p>
-    </font>
-</div>
-<div class="content">
-  <h2 style="text-align:center;">Abstract</h2>
-  <p>Style transfer enables the seamless integration of artistic styles from a style image into a content image, resulting in visually striking and aesthetically enriched outputs. 
-    Despite numerous advances in this field, existing methods did not explicitly focus on the signature style, which represents the distinct and recognizable visual traits of the image such as geometric and structural patterns, color palettes and brush strokes etc.
-    In this paper, we introduce SigStyle, a framework that leverages the semantic priors that embedded in a personalized text-to-image diffusion model to capture the signature style representation. This style capture process is powered by a hypernetwork that efficiently fine-tunes the diffusion model for any given single style image. Style transfer then is conceptualized as the reconstruction process of content image through learned style tokens from the personalized diffusion model. Additionally, to ensure the content consistency throughout the style transfer process, we introduce a time-aware attention swapping technique that incorporates content information from the original image into the early denoising steps of target image generation. Beyond enabling high-quality signature style transfer across a wide range of styles, SigStyle supports multiple interesting applications, such as local style transfer, texture transfer, style fusion and style-guided text-to-image generation. Quantitative and qualitative evaluations demonstrate our approach outperforms existing style transfer methods for recognizing and transferring the signature styles..</p>
-</div>
-<div class="content">
-  <h2>Background</h2>
-  <p> Despite the significant progress of the aforementioned methods, signature style transfer remains underexplored. Signature style refers to the unique and recognizable visual traits that define a particular artistic style, such as geometric and structural patterns, color palettes, and brush strokes.
-    For example, as illustrated in the first row of the figure below, the signature style of the image is defined by the structural arrangement and composition of numerous small images that together form the figure of a person. Additionally, the signature style of the image in the second row is characterized by geometric and structural patterns, as well as distinctive color palettes.
-    Although existing methods often succeed in transferring basic color information, they fail to capture and retain the essential artistic style from the reference images, including small image blocks, colorful ribbon-shaped lines, and other intricate characteristics, as shown in the figure.
-    This highlights a critical limitation: current methods struggle to achieve signature style transfer.</p>
-  <br>
-  <img class="summary-img" src="./imgs/complex_style1_page-0001.jpg" style="width:100%;"> <br>
-</div>
-<div class="content">
-  <h2>Approach</h2>
-  <p> The SigStyle framework. First, given a style image, we perform hypernetwork-powered style-aware fine-tuning for style inversion and represent the reference style as a special token * (see Figure 1.a). In Figure 1, the upper branch represents the reconstruction process of the content image, while the lower branch represents the generation process of the target image. When generating the target image using a pre-trained model and target text, we first use DDIM Inversion to map the content image into noise latents, which are then copied as the initial noise for generating the target image. Then, we adopt time-aware attention swapping to inject structural and content information during the first k steps of the denoising process (see Figure 1.b). In the subsequent T-k steps, we proceed with the usual denoising process without any swapping. Finally, by decoding with VAE, we obtain the style-transferred image.</p>
-  <br>
-  <figure style="width:90%; text-align: center;">
-    <img class="summary-img" src="./imgs/pipeline_page-0001.jpg" style="width:100%;">
-    <figcaption>Figure 1: The framework of SigStyle.</figcaption>
-  </figure>
-  <!-- <img class="summary-img" src="./imgs/pipeline_page-0001.jpg" style="width:100%;"> <br> -->
-  <p>Figure 2 illustrates the analysis of style attribute learning preferences for the encoder and decoder of the U-Net. We observe that the decoder of the Diffusion U-Net is more sensitive to style attributes, making it better suited for learning style information. Figure 3 presents the architecture of the hypernetwork.</p>
-  <br>
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <figure style="width:48%; text-align: center;">
-      <img class="summary-img" src="./imgs/style_tuning_page-0001.jpg" style="width:100%;">
-      <figcaption>Figure 2: Style learning preferences analysis of UNet’s en-
-        coder and decoder.</figcaption>
-    </figure>
-    <figure style="width:48%; text-align: center;">
-      <img class="summary-img" src="./imgs/hypernetwork_page-0001.jpg" style="width:100%;">
-      <figcaption>Figure 3: The architecture of hypernetwork.</figcaption>
-    </figure>
-  </div>
-  <!-- <div style="display: flex; justify-content: space-between; align-items: center;">
-    <img class="summary-img" src="./imgs/style_tuning_page-0001.jpg" style="width:48%;"> <br>
-    <figcaption>Figure 1: Caption for the first image</figcaption>
-    <img class="summary-img" src="./imgs/hypernetwork_page-0001.jpg" style="width:48%;">
-  </div> --> 
-  <br> 
-</div>
-<div class="content">
-  <h2>Global Style Transfer</h2>
-  <p>Qualitative comparison with various SOTA image style transfer methods for global style transfer. </p>
-<img class="summary-img" src="./imgs/compare_page-0001.jpg" style="width:100%;">
-</div>
-<div class="content">
-  <h2>Local Style Transfer</h2>
-  <p>Local style transfer applies style only to regions specified by a user-provided mask. Within the masked areas, we use SigStyle for style transfer, while denoising reconstruction is applied to non-masked areas to maintain consistency. Blending operations then integrate these regions seamlessly, producing a complete image and achieving local style transfer.</p>
-  <br>
-  <img class="summary-img" src="./imgs/local_transfer_page-0001.jpg" style="width:100%;"> <br>
-</div>
-<div class="content">
-  <h2>Cross Domain Texture Transfer</h2>
-  <p>Texture, appearance, and style are interrelated concepts best learned by the same module, the UNet decoder. By replacing "style" with "appearance" in prompts while keeping inversion and transfer processes unchanged, a mask constrains the texture transfer region. As shown in the following figure, our method demonstrates high-quality cross-domain texture transfer, preserving the original image's pose, structure, identity, and other content.</p>
-  <br>
-  <img class="summary-img" src="./imgs/texture_transfer_page-0001.jpg" style="width:100%;"> <br>
-</div>
-<div class="content">
-  <h2>Style-Guided Text-to-Image Generation</h2>
-  <p>Our fine-tuning mechanism represents style as a special token *, enabling style-guided text-to-image generation. With a single style image, we can generate images guided by that style (see the first row of the following figure ). When using multiple style images, our method fuses them into a new style for more creative outputs (see the second row of following figure).</p>
-  <br>
-  <img class="summary-img" src="./imgs/style_personlized_page-0001.jpg" style="width:100%;"> <br>
-</div>
-<!-- <div class="content">
-  <h2>BibTex</h2>
-  <code> @article{ruiz2022dreambooth,<br>
-  &nbsp;&nbsp;title={DreamBooth: Fine Tuning Text-to-image Diffusion Models for Subject-Driven Generation},<br>
-  &nbsp;&nbsp;author={Ruiz, Nataniel and Li, Yuanzhen and Jampani, Varun and Pritch, Yael and Rubinstein, Michael and Aberman, Kfir},<br>
-  &nbsp;&nbsp;booktitle={arXiv preprint arxiv:2208.12242},<br>
-  &nbsp;&nbsp;year={2022}<br>
-  } </code> 
-</div> -->
-<div class="content" id="acknowledgements">
-  <p><strong>Acknowledgements</strong>:
-    This work is supported in part by the National Natural Science Foundation of China (No. 62202199, No. 62406134) and the Science and Technology Development Plan of Jilin Province (No. 20230101071JC).
-  </p>
-</div>
+    <header class="hero">
+        <h1>SigStyle: Signature Style Transfer via Personalized Text-to-Image Models</h1>
+        <p class="hero__subtitle">AAAI 2025</p>
+        <p class="hero__authors">
+            <a href="https://wangyephd.github.io/">Ye Wang</a><sup>1</sup>, Tongyuan Bai<sup>1</sup>, Xuping Xie<sup>2</sup>, <a href="https://is.nju.edu.cn/yzl_en/main.htm">Zili Yi</a><sup>3</sup>, <a href="https://yilinwang.org/">Yilin Wang</a><sup>4,*</sup>, <a href="https://ruim-jlu.github.io/#about">Rui Ma</a><sup>1,5,*</sup>
+        </p>
+        <div class="hero__affils">
+            <p><sup>1</sup> School of Artificial Intelligence, Jilin University</p>
+            <p><sup>2</sup> College of Computer Science and Technology, Jilin University</p>
+            <p><sup>3</sup> School of Intelligence Science and Technology, Nanjing University</p>
+            <p><sup>4</sup> Adobe · <sup>5</sup> Engineering Research Center of Knowledge-Driven Human-Machine Intelligence, MOE, China</p>
+        </div>
+        <div class="hero__marks">
+            <p>* Corresponding authors</p>
+        </div>
+        <div class="hero__actions">
+            <a class="btn" href="https://arxiv.org/pdf/2502.13997" target="_blank" rel="noopener">📄 Paper</a>
+            <a class="btn" href="https://github.com/wangyePHD/SigStyle" target="_blank" rel="noopener">💻 Code</a>
+            <a class="btn" href="imgs/bibtex.txt" target="_blank" rel="noopener">🧾 BibTeX</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="section" id="overview">
+            <div class="figure-block">
+                <figure>
+                    <img src="./imgs/teaser_page-0001.jpg" alt="SigStyle teaser" loading="eager">
+                    <figcaption>Our method supports global style transfer, local style transfer, style-guided generation, and texture transfer.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="abstract">
+            <h2>Abstract</h2>
+            <p>Style transfer enables integrating artistic style into content images. Existing methods often miss the unique, recognizable visual signature of style (e.g., structural motifs, color palettes, brush patterns). SigStyle learns signature style via a personalized text-to-image model and a hypernetwork-based style capture module. We further introduce time-aware attention swapping to preserve content structure during transfer, and demonstrate superior quality across diverse style transfer settings.</p>
+        </section>
+
+        <section class="section" id="background">
+            <h2>Background</h2>
+            <p>Signature style transfer remains underexplored. While many methods transfer coarse color statistics, they struggle to preserve key artistic patterns and compositional identity from style references.</p>
+            <div class="figure-block">
+                <figure>
+                    <img src="./imgs/complex_style1_page-0001.jpg" alt="Complex signature style examples" loading="lazy">
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="approach">
+            <h2>Approach</h2>
+            <p>Given a reference style image, SigStyle performs hypernetwork-powered style-aware fine-tuning and represents style using a special token. We combine DDIM inversion with time-aware attention swapping to preserve content while injecting style traits.</p>
+            <div class="figure-block">
+                <figure>
+                    <img src="./imgs/pipeline_page-0001.jpg" alt="SigStyle pipeline" loading="lazy">
+                    <figcaption>Figure 1: The framework of SigStyle.</figcaption>
+                </figure>
+            </div>
+            <div class="split-2">
+                <div class="figure-block">
+                    <figure>
+                        <img src="./imgs/style_tuning_page-0001.jpg" alt="Style learning preference analysis" loading="lazy">
+                        <figcaption>Figure 2: Style learning preferences in UNet.</figcaption>
+                    </figure>
+                </div>
+                <div class="figure-block">
+                    <figure>
+                        <img src="./imgs/hypernetwork_page-0001.jpg" alt="Hypernetwork architecture" loading="lazy">
+                        <figcaption>Figure 3: Hypernetwork architecture.</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="results">
+            <h2>Global style transfer</h2>
+            <div class="figure-block"><img src="./imgs/compare_page-0001.jpg" alt="Global style transfer comparison" loading="lazy"></div>
+            <h2>Local style transfer</h2>
+            <div class="figure-block"><img src="./imgs/local_transfer_page-0001.jpg" alt="Local style transfer results" loading="lazy"></div>
+            <h2>Cross-domain texture transfer</h2>
+            <div class="figure-block"><img src="./imgs/texture_transfer_page-0001.jpg" alt="Texture transfer results" loading="lazy"></div>
+            <h2>Style-guided text-to-image generation</h2>
+            <div class="figure-block"><img src="./imgs/style_personlized_page-0001.jpg" alt="Style-guided generation results" loading="lazy"></div>
+        </section>
+
+        <section class="section" id="ack">
+            <h2>Acknowledgements</h2>
+            <p>This work is supported in part by the National Natural Science Foundation of China (No. 62202199, No. 62406134) and the Science and Technology Development Plan of Jilin Province (No. 20230101071JC).</p>
+        </section>
+    </main>
+
+    <div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Preview image">
+        <button type="button" class="lightbox__scrim" aria-label="Close preview"></button>
+        <img class="lightbox__img" src="" alt="">
+        <button type="button" class="lightbox__close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+
+    <script>
+        (function () {
+            var root = document.querySelector('main');
+            var box = document.getElementById('lightbox');
+            if (!root || !box) return;
+            var scrim = box.querySelector('.lightbox__scrim');
+            var lbImg = box.querySelector('.lightbox__img');
+            var closeBtn = box.querySelector('.lightbox__close');
+            var lastFocus = null;
+            function close() {
+                box.hidden = true;
+                lbImg.removeAttribute('src');
+                lbImg.alt = '';
+                document.body.classList.remove('lightbox-open');
+                document.removeEventListener('keydown', onKey);
+                if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+            }
+            function onKey(e) { if (e.key === 'Escape') close(); }
+            function open(source) {
+                lastFocus = document.activeElement;
+                lbImg.src = source.currentSrc || source.src;
+                lbImg.alt = source.alt || '';
+                box.hidden = false;
+                document.body.classList.add('lightbox-open');
+                closeBtn.focus();
+                document.addEventListener('keydown', onKey);
+            }
+            root.addEventListener('click', function (e) {
+                var t = e.target;
+                if (!t || t.tagName !== 'IMG') return;
+                e.preventDefault();
+                open(t);
+            });
+            scrim.addEventListener('click', close);
+            closeBtn.addEventListener('click', close);
+        })();
+    </script>
 </body>
 </html>

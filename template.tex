@@ -1,0 +1,468 @@
+\documentclass[10pt,a4paper]{article}
+
+% ============================================================
+%  Jilin University — Stylized Technical Report Template
+%  Compact two-column layout inspired by Google DeepMind papers
+% ============================================================
+
+% ---------- geometry (tight margins like NeurIPS/ICML) ----------
+\usepackage[
+  top=0.75in,
+  bottom=0.85in,
+  left=0.62in,
+  right=0.62in
+]{geometry}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{CJKutf8}
+
+% ---------- fonts ----------
+\usepackage{XCharter}
+\usepackage[scaled=1.1]{zlmtt}
+\usepackage{microtype}
+\usepackage{helvet}
+
+% ---------- math ----------
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{mathtools}
+\usepackage{bm}
+
+% ---------- graphics & tables ----------
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+\usepackage{float}
+
+% ---------- two-column ----------
+\usepackage{multicol}
+\setlength{\columnsep}{0.25in}
+
+% ---------- algorithms ----------
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+% ---------- spacing ----------
+\usepackage{setspace}
+\setstretch{0.95}
+\setlength{\parskip}{2pt plus 1pt minus 0.5pt}
+\setlength{\parindent}{1em}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+\setlength{\belowcaptionskip}{2pt}
+
+% ---------- compact lists ----------
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=*,topsep=2pt,parsep=1pt,itemsep=1pt}
+
+% ---------- hyperlinks & references ----------
+\usepackage[table]{xcolor}
+
+\definecolor{jluDeepBlue}{RGB}{0,51,153}
+\definecolor{jluRed}{RGB}{198,40,40}
+\definecolor{jluTeal}{RGB}{0,137,123}
+\definecolor{jluAmber}{RGB}{255,160,0}
+\definecolor{jluPurple}{RGB}{106,27,154}
+\definecolor{jluLightBg}{RGB}{245,247,252}
+\definecolor{jluGray}{RGB}{100,100,100}
+
+\newcommand{\MonthYear}{\the\year-\ifnum\month<10 0\fi\the\month}
+
+\usepackage[colorlinks=true,linkcolor=jluDeepBlue,citecolor=jluTeal,urlcolor=jluRed]{hyperref}
+\usepackage{cleveref}
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{unsrtnat}
+
+% ---------- misc ----------
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{titlesec}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,skip=3pt}
+
+% ============================================================
+%  PAGE STYLE
+% ============================================================
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.8pt}
+\renewcommand{\headrule}{%
+  \begingroup\color{jluDeepBlue}\hrule width\headwidth height 0.8pt\endgroup}
+\fancyhead[L]{%
+  \raisebox{-0.18ex}{\logoimg[2.05em]{university}{jluDeepBlue}{University}}}
+\fancyhead[R]{\small\rmfamily\color{black}\MonthYear}
+\fancyfoot[C]{\footnotesize\sffamily\color{jluGray}\thepage}
+
+% ============================================================
+%  SECTION HEADING STYLES — compact & colourful
+% ============================================================
+\titleformat{\section}
+  {\normalsize\rmfamily\bfseries\color{jluDeepBlue}}
+  {\colorbox{jluDeepBlue}{\textcolor{white}{\;\thesection\;}}}{0.5em}{}
+  [\vspace{1pt}{\color{jluDeepBlue}\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\normalsize\rmfamily\bfseries\color{black}}
+  {\thesubsection}{0.5em}{}
+
+\titleformat{\subsubsection}
+  {\small\sffamily\bfseries\color{black}}
+  {\thesubsubsection}{0.5em}{}
+
+\titlespacing*{\section}{0pt}{1.0em}{0.4em}
+\titlespacing*{\subsection}{0pt}{0.7em}{0.25em}
+\titlespacing*{\subsubsection}{0pt}{0.5em}{0.15em}
+
+% ============================================================
+%  CATEGORY TAG — coloured pill label
+% ============================================================
+\newcommand{\cattag}[2]{%
+  \tikz[baseline=(tag.base)]{%
+    \node[fill=#1, text=white, rounded corners=2.5pt,
+          inner xsep=5pt, inner ysep=1.5pt,
+          font=\footnotesize\sffamily\bfseries] (tag) {#2};}}
+
+% ============================================================
+%  LOGO HELPER — uses actual file if found, else coloured badge
+%  Usage: \logoimg{jlu}{jluDeepBlue}{吉林大学}
+%  It searches these paths in order:
+%    logo/<name>.pdf, logo/<name>.png,
+%    logos/<name>.pdf, logos/<name>.png,
+%    <name>.pdf, <name>.png
+% ============================================================
+\newcommand{\logobadge}[2]{%
+  \tikz[baseline=-0.5ex]{%
+    \node[fill=#1, text=white, rounded corners=3pt,
+          inner xsep=6pt, inner ysep=3pt,
+          font=\small\sffamily\bfseries]{#2};}}
+
+\newcommand{\logoimg}[4][1.9em]{% [height]{stem}{color}{fallback-text}
+  \IfFileExists{logo/#2.pdf}%
+    {\includegraphics[height=#1]{logo/#2}}%
+    {\IfFileExists{logo/#2.png}%
+      {\includegraphics[height=#1]{logo/#2}}%
+      {\IfFileExists{logos/#2.pdf}%
+        {\includegraphics[height=#1]{logos/#2}}%
+        {\IfFileExists{logos/#2.png}%
+          {\includegraphics[height=#1]{logos/#2}}%
+          {\IfFileExists{#2.pdf}%
+            {\includegraphics[height=#1]{#2}}%
+            {\IfFileExists{#2.png}%
+              {\includegraphics[height=#1]{#2}}%
+              {\logobadge{#3}{#4}}}}}}}}
+
+% ============================================================
+%  HIGHLIGHT BOX — compact
+% ============================================================
+\newtcolorbox{highlightbox}[1][]{%
+  enhanced, breakable,
+  colback=jluLightBg,
+  colframe=jluDeepBlue,
+  coltitle=white,
+  fonttitle=\small\sffamily\bfseries,
+  boxrule=0.6pt,
+  arc=3pt,
+  left=5pt, right=5pt, top=4pt, bottom=4pt,
+  title=#1}
+
+% ============================================================
+%  DOCUMENT
+% ============================================================
+\begin{document}
+\thispagestyle{fancy}
+
+% ======================  TITLE BLOCK (full width) ============
+% --- title ---
+\begin{center}
+  {\fontsize{20}{24}\selectfont\rmfamily\bfseries\color{black}%
+    Learning to Stylize by Learning to Destylize:\par}
+  \vspace{1pt}
+  {\fontsize{16}{20}\selectfont\rmfamily\bfseries\color{black}%
+    A Scalable Paradigm for Supervised Style Transfer\par}
+  \vspace{6pt}
+
+  % --- authors ---
+  {\normalsize\rmfamily
+    \textbf{Ye Wang}\textsuperscript{1}\quad
+    \textbf{Zili Yi}\textsuperscript{2}\quad
+    \textbf{Yibo Zhang}\textsuperscript{1,3}\quad
+    \textbf{Peng Zheng}\textsuperscript{1,3}\quad
+    \textbf{Xuping Xie}\textsuperscript{1}\quad
+    \textbf{Jiang Lin}\textsuperscript{2}\\[2pt]
+    \textbf{Yijun Li}\textsuperscript{4}\quad
+    \textbf{Yilin Wang}\textsuperscript{4,$\star\dagger$}\quad
+    \textbf{Rui Ma}\textsuperscript{1,5,$\star$}}\\[4pt]
+  % --- affiliations ---
+  {\footnotesize\rmfamily\color{black}
+    \textsuperscript{1}Jilin University\quad
+    \textsuperscript{2}Nanjing University\quad
+    \textsuperscript{3}Shanghai Innovation Institute\\[1pt]
+    \textsuperscript{4}Adobe\quad
+    \textsuperscript{5}Engineering Research Center of Knowledge-Driven Human-Machine Intelligence, MOE, China}\\[2pt]
+  {\footnotesize\rmfamily\color{jluGray}
+    $\star$ Corresponding authors \quad\quad $\dagger$ Project lead}
+\end{center}
+
+\vspace{-1em}
+\noindent{\color{jluDeepBlue}\rule{\textwidth}{0.7pt}}
+\vspace{-1em}
+
+% --- abstract (full width) ---
+\begin{center}
+\begin{tcolorbox}[
+  enhanced,
+  width=0.92\textwidth,
+  colback=jluDeepBlue!6!white,
+  colframe=jluDeepBlue!35!white,
+  boxrule=0.6pt,
+  arc=3pt,
+  left=6pt,right=6pt,top=5pt,bottom=5pt
+]
+  {\small
+  \noindent{\sffamily\bfseries\color{jluDeepBlue}Abstract\quad}%
+  Write a concise abstract here (150--250 words). Briefly state the
+  problem, your approach, key results, and the main conclusion. Avoid
+  citations and undefined abbreviations in the abstract. This template
+  uses a compact single-column layout with tight margins inspired by
+  top-tier ML papers, allowing clear presentation of text, figures,
+  and equations in one continuous flow.}
+\end{tcolorbox}
+\end{center}
+
+\vspace{0.4em}
+\begin{center}
+  {\footnotesize\sffamily\bfseries\color{jluDeepBlue}Keywords:\;}
+  {\footnotesize keyword one, keyword two, keyword three, keyword four}
+  \\[4pt]
+  \cattag{jluDeepBlue}{Topic A}\;\;
+  \cattag{jluRed}{Topic B}\;\;
+  \cattag{jluTeal}{Topic C}\;\;
+  \cattag{jluAmber}{Topic D}
+\end{center}
+
+\vspace{0.8em}
+
+% ====================== SINGLE-COLUMN BODY ======================
+
+% ============================================================
+\section{Introduction}
+\label{sec:intro}
+% ============================================================
+
+Introduce the research problem and its significance. Provide background
+context and clearly state the contributions of your work. The compact
+single-column layout keeps readability high while still allowing dense
+technical content.
+
+\begin{highlightbox}[Main Contributions]
+\begin{enumerate}
+  \item \textbf{Contribution 1:} Brief description of the first contribution.
+  \item \textbf{Contribution 2:} Brief description of the second contribution.
+  \item \textbf{Contribution 3:} Brief description of the third contribution.
+\end{enumerate}
+\end{highlightbox}
+
+% ============================================================
+\section{Related Work}
+\label{sec:related}
+% ============================================================
+
+Review relevant prior work. Group papers thematically and explain how
+your work differs from or builds upon existing methods.
+
+\subsection{Sub-topic A}
+Discussion of sub-topic A literature. With the compact layout, related
+work sections can accommodate thorough literature review without
+consuming excessive page real estate.
+
+\subsection{Sub-topic B}
+Discussion of sub-topic B literature and connections to your approach.
+
+% ============================================================
+\section{Methods}
+\label{sec:methods}
+% ============================================================
+
+Describe your proposed method in detail.
+
+\subsection{Problem Formulation}
+\label{sec:formulation}
+
+Define notation and formally state the problem:
+\begin{equation}
+  \mathcal{L}(\theta) \!=\! \frac{1}{N}\!\sum_{i=1}^{N}
+      \ell\bigl(f_\theta(x_i), y_i\bigr)
+    + \lambda\|\theta\|_2^2
+  \label{eq:loss}
+\end{equation}
+where $f_\theta$ is the model parameterised by $\theta$, $(x_i,y_i)$
+are training samples, and $\lambda$ is the regularisation coefficient.
+
+\subsection{Model Architecture}
+\label{sec:architecture}
+
+Explain the architecture or algorithm design. You can use category tags
+inline to label components: \cattag{jluTeal}{Encoder}
+\cattag{jluRed}{Decoder} \cattag{jluAmber}{Loss}.
+
+\subsection{Training Procedure}
+\label{sec:training}
+
+Describe training details, hyper-parameter choices, and optimisation
+strategy. Example algorithm block:
+
+\begin{algorithm}[H]
+\caption{Training procedure}\label{alg:train}
+\begin{algorithmic}[1]
+\small
+\REQUIRE Dataset $\mathcal{D}$, learning rate $\eta$, epochs $T$
+\FOR{$t = 1$ \TO $T$}
+  \FOR{mini-batch $(x,y) \sim \mathcal{D}$}
+    \STATE $g \leftarrow \nabla_\theta \mathcal{L}(\theta; x, y)$
+    \STATE $\theta \leftarrow \theta - \eta \cdot g$
+  \ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+% ============================================================
+\section{Experiments}
+\label{sec:experiments}
+% ============================================================
+
+\subsection{Experimental Setup}
+\label{sec:setup}
+
+Describe datasets, evaluation metrics, baselines, and hardware/software
+environment. The compact format works well for dense experimental
+sections with multiple tables and figures.
+
+\subsection{Main Results}
+\label{sec:results}
+
+\begin{table}[H]
+  \centering
+  \caption{Comparison on Benchmark X.}
+  \label{tab:main_results}
+  \small
+  \rowcolors{2}{jluLightBg}{white}
+  \begin{tabular}{@{}lccc@{}}
+    \toprule
+    \textbf{\sffamily Method}
+      & \textbf{\sffamily Acc.\,(\%)}
+      & \textbf{\sffamily F1}
+      & \textbf{\sffamily \#P\,(M)} \\
+    \midrule
+    Baseline A    & 85.3 & 0.841 & 12.5 \\
+    Baseline B    & 87.1 & 0.862 & 24.0 \\
+    Baseline C    & 88.0 & 0.873 & 30.1 \\
+    \rowcolor{blue!8}
+    \textbf{Ours} & \textbf{\color{jluRed}89.7}
+                  & \textbf{\color{jluRed}0.891} & 18.2 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Ablation Study}
+\label{sec:ablation}
+
+\begin{table}[H]
+  \centering
+  \caption{Ablation study on key components.}
+  \label{tab:ablation}
+  \small
+  \begin{tabular}{@{}lcc@{}}
+    \toprule
+    \textbf{\sffamily Variant} & \textbf{\sffamily Acc.\,(\%)} & \textbf{\sffamily $\Delta$} \\
+    \midrule
+    Full model           & \textbf{89.7} & ---    \\
+    w/o Component A      & 87.2 & \color{jluRed}$-$2.5 \\
+    w/o Component B      & 86.5 & \color{jluRed}$-$3.2 \\
+    w/o Component C      & 88.4 & \color{jluRed}$-$1.3 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{highlightbox}[Key Finding]
+Removing component B causes the largest drop
+(\textbf{\color{jluRed}$-$3.2\%}), confirming its critical role.
+\end{highlightbox}
+
+\subsection{Qualitative Analysis}
+\label{sec:qualitative}
+
+\begin{figure}[H]
+  \centering
+  % \includegraphics[width=\linewidth]{figures/qualitative.pdf}
+  \fbox{\parbox{0.92\linewidth}{\centering\vspace{1.5em}
+    {\small\sffamily\color{jluGray}[Your figure here]}
+  \vspace{1.5em}}}
+  \caption{Qualitative comparison. Best viewed in colour.}
+  \label{fig:qualitative}
+\end{figure}
+
+% ============================================================
+\section{Discussion}
+\label{sec:discussion}
+% ============================================================
+
+Interpret results, discuss limitations, and suggest future directions.
+
+\subsubsection{Limitations}
+Describe limitations honestly.
+
+\subsubsection{Future Work}
+Outline promising follow-up avenues.
+
+% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% ============================================================
+
+Summarise findings and contributions. Restate significance and impact.
+
+% ============================================================
+\section*{Acknowledgements}
+% ============================================================
+{\small This work was supported by [funding agency / grant number].
+The authors thank [collaborators] for helpful discussions.}
+
+% ============================================================
+%  References
+% ============================================================
+{\small
+% \bibliography{references}
+\begin{thebibliography}{9}
+\bibitem{ref1}
+  A.~Author and B.~Author.
+  Title of the first reference.
+  \emph{Journal Name}, 1(2):34--56, 2024.
+
+\bibitem{ref2}
+  C.~Author, D.~Author, and E.~Author.
+  Title of the second reference.
+  In \emph{Proc.\ Conference}, pp.\ 78--90, 2025.
+\end{thebibliography}
+}
+
+% ====================== APPENDIX ======================
+\newpage
+\appendix
+\section{Additional Experimental Details}
+\label{app:details}
+
+Supplementary material: extended tables, proofs, or extra figures.
+
+\section{Hyper-parameter Sensitivity}
+\label{app:hyperparams}
+
+Additional hyper-parameter analysis or sensitivity plots.
+
+\end{document}
