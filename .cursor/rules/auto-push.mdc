@@ -1,0 +1,21 @@
+---
+description: Auto commit and push after homepage changes
+globs: "**/*"
+alwaysApply: true
+---
+
+# Auto Push
+
+After any modification to this repository (`wangyePHD.github.io`):
+
+1. Commit with a concise message describing the change.
+2. Push to `origin master` immediately — do not wait for the user to ask.
+
+Use SSH remote (already configured):
+
+```bash
+unset GIT_ASKPASS && unset SSH_ASKPASS
+GIT_SSH_COMMAND="ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519_wangyePHD" git push origin master
+```
+
+Only skip push if the user explicitly says not to push, or if push fails due to auth (then report the error).
