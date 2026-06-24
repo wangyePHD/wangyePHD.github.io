@@ -170,6 +170,32 @@
             transform: translateY(-0.02em);
         }
 
+        .hero-showcase {
+            max-width: 66rem;
+            margin: 0 auto;
+            padding: 0 var(--pad) clamp(1.5rem, 4vw, 2.5rem);
+        }
+        .hero-showcase figure {
+            margin: 0;
+        }
+        .hero-showcase video {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: #0a0e14;
+            box-shadow: 0 10px 40px rgba(15, 20, 25, 0.12);
+        }
+        .hero-showcase figcaption {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-style: italic;
+            line-height: 1.5;
+            text-align: center;
+        }
+
         .section {
             max-width: var(--max);
             margin: 0 auto;
@@ -378,6 +404,7 @@
         <div class="topbar__inner">
             <a href="../../index.html">← Ye Wang · Homepage</a>
             <nav class="topbar__nav" aria-label="Section navigation">
+                <a href="#demo">Demo</a>
                 <a href="#overview">Overview</a>
                 <a href="#method">Method</a>
                 <a href="#dataset">Data</a>
@@ -410,6 +437,16 @@
             <a class="btn btn--ghost" href="#" target="_blank" rel="noopener"><span class="btn__icon" aria-hidden="true">🗂️</span>Hugging-Face Dataset</a>
         </div>
     </header>
+
+    <div class="hero-showcase" id="demo">
+        <figure>
+            <video controls playsinline preload="metadata" poster="assets/teaser.jpg" aria-label="OmniStyle2 stylization demo">
+                <source src="assets/eccvgif.mp4" type="video/mp4">
+                Your browser does not support embedded video. <a href="assets/eccvgif.mp4">Download the demo video</a>.
+            </video>
+            <figcaption>Video demo: diverse stylization results across artistic styles with OmniStyle2.</figcaption>
+        </figure>
+    </div>
 
     <main>
         <section class="section" id="overview">
