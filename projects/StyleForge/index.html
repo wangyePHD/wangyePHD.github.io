@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="StyleForge — a large-scale, high-fidelity paired style transfer dataset unifying OmniStyle (breadth) and OmniStyle2 / DeStyle (fidelity). 500K+ triplets, 1000+ style categories.">
+    <title>StyleForge · High-Fidelity Large-Scale Style Transfer Dataset</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0f1419;
+            --muted: #5c6570;
+            --line: #d8dee6;
+            --surface: #f4f6f9;
+            --accent: #1a2f45;
+            --accent-bright: #3b82f6;
+            --max: 62rem;
+            --pad: clamp(1.1rem, 3.2vw, 2rem);
+        }
+        html { scroll-behavior: smooth; }
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Source Serif 4", Georgia, serif;
+            font-size: 1.0625rem;
+            line-height: 1.65;
+            color: var(--ink);
+            background: #fff;
+        }
+        a { color: #3d4f8f; text-underline-offset: 0.2em; }
+        a:hover { color: var(--ink); }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, var(--accent) 0%, #152838 100%);
+            border-bottom: 3px solid var(--accent-bright);
+            box-shadow: 0 4px 20px rgba(0,0,0,.12);
+        }
+        .topbar__inner {
+            max-width: 82rem;
+            margin: 0 auto;
+            padding: 0.65rem var(--pad);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+        .topbar a {
+            color: #e8eef4;
+            text-decoration: none;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .topbar a:hover { color: #fff; }
+        .topbar__nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem 1.25rem;
+        }
+
+        .hero {
+            max-width: 66rem;
+            margin: 0 auto;
+            padding: clamp(2rem, 5vw, 3.25rem) var(--pad) 1.5rem;
+            text-align: center;
+        }
+        .hero__eyebrow {
+            margin: 0 0 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-bright);
+        }
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+        .hero__subtitle {
+            margin: 0.5rem 0 0.95rem;
+            font-size: clamp(1.05rem, 2.25vw, 1.35rem);
+            font-weight: 600;
+            color: #2b3c51;
+            line-height: 1.3;
+        }
+        .hero__authors {
+            margin: 0 0 0.6rem;
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+        .hero__authors a { font-weight: 600; }
+        .hero__affils {
+            margin: 0 0 1.25rem;
+            font-size: 0.92rem;
+            color: #3b4653;
+            line-height: 1.5;
+        }
+        .hero__affils p { margin: 0.05rem 0; }
+        .hero__stats {
+            margin: 1.1rem auto 1.3rem;
+            width: fit-content;
+            max-width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.6rem 0.75rem;
+        }
+        .hero__stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 7.5rem;
+            padding: 0.6rem 1rem;
+            border: 1px solid #c6d5ef;
+            border-radius: 10px;
+            background: #eef3fb;
+        }
+        .hero__stat b {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1f3550;
+            line-height: 1.1;
+        }
+        .hero__stat span {
+            margin-top: 0.15rem;
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #5a6b80;
+        }
+        .hero__actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.65rem;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.42rem;
+            padding: 0.5rem 1.15rem;
+            font-family: inherit;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid var(--accent);
+            background: var(--accent);
+            color: #fff;
+            transition: background .15s ease, border-color .15s ease;
+        }
+        .btn:hover { background: #243d56; border-color: #243d56; color: #fff; }
+        .btn--ghost { background: transparent; color: var(--accent); }
+        .btn--ghost:hover { background: var(--surface); color: var(--accent); }
+        .btn__icon { font-size: 0.95em; line-height: 1; transform: translateY(-0.02em); }
+
+        .hero-showcase {
+            max-width: 72rem;
+            margin: 0 auto;
+            padding: 0 var(--pad) clamp(1.5rem, 4vw, 2.5rem);
+        }
+        .hero-showcase figure { margin: 0; }
+        .hero-showcase img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            box-shadow: 0 10px 40px rgba(15, 20, 25, 0.12);
+            cursor: zoom-in;
+        }
+        .hero-showcase figcaption {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-style: italic;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .section {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 2rem var(--pad) 2.5rem;
+            border-top: 1px solid var(--line);
+        }
+        .section:first-of-type { border-top: none; padding-top: 0.5rem; }
+        .section h2 {
+            margin: 0 0 1rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.02em;
+        }
+        .section h2 .num {
+            display: inline-block;
+            margin-right: 0.55rem;
+            padding: 0.05rem 0.55rem;
+            border-radius: 6px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        .section h3 { margin: 1.5rem 0 0.65rem; font-size: 1.08rem; font-weight: 700; }
+        .section p { margin: 0 0 1rem; }
+        .section ul { margin: 0 0 1rem; padding-left: 1.35rem; color: #2a3038; }
+        .section li { margin: 0.35rem 0; }
+        .section strong { font-weight: 700; }
+
+        .motivation-lines { margin: 0.55rem 0 0.9rem; }
+        .motivation-line { margin: 0.55rem 0; line-height: 1.62; }
+        .motivation-line__idx { font-weight: 700; margin-right: 0.4rem; color: #1e2d40; }
+        .hl-pro {
+            display: inline; padding: 0.04em 0.34em; border-radius: 0.3em;
+            background: #e8eef8; color: #1f3550; border: 1px solid #c7d5eb; font-weight: 600;
+        }
+        .hl-con {
+            display: inline; padding: 0.04em 0.34em; border-radius: 0.3em;
+            background: #ffecee; color: #8c1d2f; border: 1px solid #f4c2ca; font-weight: 600;
+        }
+
+        .figure-block { margin: 1.25rem 0 1.75rem; }
+        .figure-block img {
+            display: block; width: 100%; height: auto; border-radius: 8px;
+            border: 1px solid var(--line); background: var(--surface); cursor: zoom-in;
+        }
+        .figure-block figcaption {
+            margin-top: 0.65rem; font-size: 0.9rem; color: var(--muted);
+            font-style: italic; line-height: 1.5; text-align: center;
+        }
+
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+            margin: 1.25rem 0 1.5rem;
+        }
+        .pillar {
+            padding: 1.1rem 1.2rem;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #fff;
+        }
+        .pillar--breadth { border-top: 4px solid #3b82f6; }
+        .pillar--fidelity { border-top: 4px solid #7c4dcc; }
+        .pillar h3 { margin: 0 0 0.4rem; font-size: 1.12rem; }
+        .pillar .tag {
+            display: inline-block; margin-bottom: 0.5rem; padding: 0.12rem 0.55rem;
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+            border-radius: 999px;
+        }
+        .pillar--breadth .tag { background: #e8eef8; color: #1f3550; border: 1px solid #c6d5ef; }
+        .pillar--fidelity .tag { background: #efe8fb; color: #4a2f7a; border: 1px solid #d4c4f4; }
+        .pillar p { margin: 0 0 0.5rem; font-size: 0.98rem; }
+        .pillar ul { margin: 0; padding-left: 1.2rem; font-size: 0.95rem; }
+        @media (max-width: 760px) { .pillars { grid-template-columns: 1fr; } }
+
+        .table-grid { margin: 1rem 0 1.2rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.95rem 1rem; }
+        .table-card { margin: 0; padding: 0.72rem 0.72rem 0.6rem; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+        .table-card img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); cursor: zoom-in; }
+        .table-card figcaption { margin-top: 0.48rem; font-size: 0.84rem; line-height: 1.45; color: var(--muted); text-align: center; }
+        @media (max-width: 880px) { .table-grid { grid-template-columns: 1fr; } }
+
+        blockquote.pull {
+            margin: 1.5rem 0; padding: 1rem 1.25rem; border-left: 4px solid var(--accent-bright);
+            background: var(--surface); border-radius: 0 8px 8px 0; font-size: 1.08rem; font-style: italic; color: #2a3038;
+        }
+
+        .link-list { list-style: none; padding: 0; margin: 0.5rem 0 1rem; }
+        .link-list li {
+            margin: 0.5rem 0; padding: 0.7rem 0.9rem; border: 1px solid var(--line);
+            border-radius: 8px; background: #fff; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 0.7rem;
+        }
+        .link-list li b { min-width: 9rem; }
+        .link-list li a { word-break: break-all; }
+
+        body.lightbox-open { overflow: hidden; }
+        .lightbox { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; padding: min(5vw, 1.75rem); box-sizing: border-box; }
+        .lightbox[hidden] { display: none !important; }
+        .lightbox__scrim { position: absolute; inset: 0; border: none; margin: 0; padding: 0; background: rgba(8, 12, 18, 0.92); backdrop-filter: blur(8px); cursor: zoom-out; }
+        .lightbox__img { position: relative; z-index: 1; max-width: 100%; max-height: min(90vh, 100%); width: auto; height: auto; object-fit: contain; border-radius: 6px; box-shadow: 0 16px 64px rgba(0, 0, 0, 0.55); }
+        .lightbox__close { position: absolute; top: clamp(0.5rem, 2vw, 1rem); right: clamp(0.5rem, 2vw, 1rem); z-index: 2; width: 2.5rem; height: 2.5rem; border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 8px; background: rgba(0, 0, 0, 0.45); color: #f0f4f8; font-size: 1.5rem; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s ease, border-color 0.15s ease; }
+        .lightbox__close:hover, .lightbox__close:focus-visible { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.55); outline: none; }
+        .lightbox__close:focus-visible { box-shadow: 0 0 0 2px var(--accent-bright); }
+
+        .footer-note { max-width: var(--max); margin: 0 auto; padding: 2rem var(--pad) 3rem; font-size: 0.8125rem; color: var(--muted); text-align: center; }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar__inner">
+            <a href="../../index.html">← Ye Wang · Homepage</a>
+            <nav class="topbar__nav" aria-label="Section navigation">
+                <a href="#teaser">Teaser</a>
+                <a href="#background">Background</a>
+                <a href="#overview">Overview</a>
+                <a href="#breadth">Breadth</a>
+                <a href="#fidelity">Fidelity</a>
+                <a href="#impact">Impact</a>
+                <a href="#opensource">Open Source</a>
+            </nav>
+        </div>
+    </header>
+
+    <header class="hero">
+        <p class="hero__eyebrow">CCF-CAD&amp;CG · Outstanding Open-Source Graphics Project</p>
+        <h1>StyleForge</h1>
+        <p class="hero__subtitle">A High-Fidelity, Large-Scale Paired Style Transfer Dataset</p>
+        <p class="hero__authors">
+            <a href="https://ruim-jlu.github.io/#about">Rui Ma</a>, <a href="https://wangyephd.github.io/">Ye Wang</a>, Yilin Wang, <a href="https://zili-yi.github.io/">Zili Yi</a>, Tieru Wu, Yi Chang
+        </p>
+        <div class="hero__affils" aria-label="Affiliations">
+            <p>Jilin University · Adobe · Nanjing University</p>
+        </div>
+        <div class="hero__stats" aria-label="Dataset statistics">
+            <div class="hero__stat"><b>500K+</b><span>Triplets</span></div>
+            <div class="hero__stat"><b>1000+</b><span>Style Categories</span></div>
+            <div class="hero__stat"><b>300&nbsp;GB</b><span>Data Size</span></div>
+            <div class="hero__stat"><b>824+</b><span>Downloads</span></div>
+        </div>
+        <div class="hero__actions">
+            <a class="btn btn--ghost" href="../OmniStyle/cvpr25_omnistyle.html"><span class="btn__icon" aria-hidden="true">🎨</span>OmniStyle (Breadth)</a>
+            <a class="btn btn--ghost" href="../DeStyle/index.html"><span class="btn__icon" aria-hidden="true">🖼️</span>OmniStyle2 (Fidelity)</a>
+            <a class="btn btn--ghost" href="https://github.com/StyleX-Research/OmniStyle" target="_blank" rel="noopener"><span class="btn__icon" aria-hidden="true">💻</span>GitHub</a>
+            <a class="btn btn--ghost" href="https://huggingface.co/datasets/StyleXX/OmniStyle-150k" target="_blank" rel="noopener"><span class="btn__icon" aria-hidden="true">🗂️</span>Hugging-Face Dataset</a>
+        </div>
+    </header>
+
+    <div class="hero-showcase" id="teaser">
+        <figure>
+            <img src="assets/teaser.png" alt="StyleForge diverse style triplet examples across artistic categories" loading="eager">
+            <figcaption>StyleForge covers 1000+ style categories — from traditional fine arts and abstract art to vector, paper-cutout, ink-wash and anime cel shading — each as authentic content–style–stylized triplets.</figcaption>
+        </figure>
+    </div>
+
+    <main>
+        <section class="section" id="overview">
+            <h2><span class="num">Overview</span>What is StyleForge?</h2>
+            <p><strong>StyleForge</strong> is a large-scale, high-quality paired style transfer dataset that unifies two complementary lines of work into a single resource that is both <strong>broad in style coverage</strong> and <strong>faithful in supervision</strong>:</p>
+            <div class="pillars">
+                <div class="pillar pillar--breadth">
+                    <span class="tag">Breadth · OmniStyle</span>
+                    <h3>Stylization-driven synthesis</h3>
+                    <p>Large-scale style-transfer data synthesized by stylizing content with multiple SOTA models.</p>
+                    <ul>
+                        <li>Content–Style–Stylized triplets</li>
+                        <li>1,000+ style categories</li>
+                        <li>Unified instruction-based evaluation &amp; filtering</li>
+                        <li><em>OmniStyle</em>, CVPR 2025</li>
+                    </ul>
+                </div>
+                <div class="pillar pillar--fidelity">
+                    <span class="tag">Fidelity · OmniStyle2</span>
+                    <h3>Destylization-driven synthesis</h3>
+                    <p>High-fidelity data built by <em>destylizing</em> real artworks, using them as the only ground truth.</p>
+                    <ul>
+                        <li>Destylized–Style–Target triplets</li>
+                        <li>Real artworks as authentic supervision</li>
+                        <li>CoT-reinforced interpretable quality filtering</li>
+                        <li><em>OmniStyle2 / DeStyle</em>, ECCV 2026</li>
+                    </ul>
+                </div>
+            </div>
+            <p>Together they yield <strong>500K+ triplets</strong> spanning <strong>1000+ styles</strong>, providing a scalable and reliable data foundation for controllable, generalizable, high-fidelity style transfer.</p>
+            <blockquote class="pull">StyleForge shifts style transfer toward a supervised learning paradigm — combining style <em>breadth</em> with supervision <em>fidelity</em> at scale.</blockquote>
+        </section>
+
+        <section class="section" id="background">
+            <h2><span class="num">01</span>Background &amp; Motivation</h2>
+            <p><strong>Image style transfer</strong> renders one image (paintings, cartoons, line art, …) in the artistic <strong>style</strong> of another, while preserving the original content and structure. It is widely used in <strong>digital art</strong>, <strong>advertising creativity</strong> and <strong>film production</strong>.</p>
+            <p>The field has evolved from early <strong>CNN-based single-image optimization</strong> (Gatys et al., CVPR 2016) to modern pipelines centered on <strong>diffusion-model fine-tuning</strong> (e.g., SigStyle, AAAI 2025). Yet two key challenges remain:</p>
+            <div class="motivation-lines" aria-label="Key challenges">
+                <p class="motivation-line"><span class="motivation-line__idx">1)</span> <strong>Insufficient style generalization:</strong> existing methods handle only a <span class="hl-con">few simple styles (oil painting, sketch, watercolor)</span> and struggle to generalize to more diverse styles.</p>
+                <p class="motivation-line"><span class="motivation-line__idx">2)</span> <strong>Poor transfer fidelity:</strong> current style-transfer data are <span class="hl-con">low in quality</span>, making high-fidelity style transfer hard to achieve.</p>
+            </div>
+            <p>Therefore, building a <strong>large-scale, high-quality paired dataset</strong> with both <span class="hl-pro">style breadth</span> and <span class="hl-pro">supervision fidelity</span> is key to breaking through current technical bottlenecks — and is exactly what StyleForge delivers.</p>
+        </section>
+
+        <section class="section" id="breadth">
+            <h2><span class="num">02·A</span>Breadth Data — Stylization-driven (OmniStyle)</h2>
+            <p><strong>Goal:</strong> build a large-scale, high-quality style-transfer <strong>triplet dataset</strong> to support controllable and generalizable model training.</p>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/breadth_matrix.png" alt="Content x Style stylization matrix" loading="lazy">
+                    <figcaption>Figure A1. Stylization-driven construction: each content image is transferred across diverse styles to form Content–Style–Stylized triplets.</figcaption>
+                </figure>
+            </div>
+            <h3>Data construction pipeline</h3>
+            <div class="motivation-lines">
+                <p class="motivation-line"><span class="motivation-line__idx">1)</span> <strong>Content generation:</strong> ChatGPT produces 20 content categories (animals, buildings, humans, …); FLUX generates <strong>2,000 high-resolution content images</strong>.</p>
+                <p class="motivation-line"><span class="motivation-line__idx">2)</span> <strong>Style selection:</strong> <strong>1,000 style images</strong> curated from Style30K, covering cartoon, watercolor, Chinese painting and many more.</p>
+                <p class="motivation-line"><span class="motivation-line__idx">3)</span> <strong>Stylized generation:</strong> 6 mainstream methods (StyleID, StyleShot, CSGO, ArtFlow, AesPANet, CAST) produce 6 stylized images per content–style pair — yielding <strong>~1M triplets</strong>.</p>
+            </div>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/breadth_examples.png" alt="OmniStyle-1M instruction-based stylization examples" loading="lazy">
+                    <figcaption>Figure A2. Instruction-based stylization examples from OmniStyle-1M.</figcaption>
+                </figure>
+            </div>
+            <h3>Unified quality evaluation &amp; filtering</h3>
+            <p>A multimodal large model scores each stylized result from three angles:</p>
+            <ul>
+                <li><strong>Content preservation:</strong> CLIP for semantic consistency, DINOv2 for structural consistency.</li>
+                <li><strong>Style consistency:</strong> a contrastive task fine-tunes CLIP to extract style embeddings and measure style similarity.</li>
+                <li><strong>Aesthetic appeal:</strong> InternVL2 extracts 40 visual attributes; an aesthetic scorer trained on AVA + BAID outputs an aesthetic score.</li>
+            </ul>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/aesthetic_eval.png" alt="Aesthetic evaluation model trained with InternVL-G" loading="lazy">
+                    <figcaption>Figure A3. Training an aesthetic evaluation model with InternVL-G for multi-dimensional quality scoring.</figcaption>
+                </figure>
+            </div>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/breadth_stats.png" alt="OmniStyle-1M style and content distribution statistics" loading="lazy">
+                    <figcaption>Figure A4. Statistics of OmniStyle-1M: style category distribution and stylized-image distribution by content category.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="fidelity">
+            <h2><span class="num">02·B</span>Fidelity Data — Destylization-driven (OmniStyle2)</h2>
+            <p><strong>Goal:</strong> treat <strong>real artistic images as the only ground truth</strong>, constructing a high-fidelity style-transfer <strong>triplet dataset</strong> by reversing the stylization process.</p>
+            <blockquote class="pull">Instead of synthesizing stylized images, we start from real artworks and remove style to recover natural content — the destylized image becomes the input, the original artwork becomes the target.</blockquote>
+            <h3>Data construction pipeline</h3>
+            <div class="motivation-lines">
+                <p class="motivation-line"><span class="motivation-line__idx">1)</span> <strong>Real artwork collection (Target):</strong> <strong>100K+</strong> high-quality artistic images covering <strong>500+</strong> artists.</p>
+                <p class="motivation-line"><span class="motivation-line__idx">2)</span> <strong>Multi-stage destylization (Destylized):</strong> global general destylization → category-wise fine destylization → specialized destylization model.</p>
+            </div>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/fidelity_pipeline.png" alt="Multi-stage destylization pipeline" loading="lazy">
+                    <figcaption>Figure B1. Multi-stage destylization pipeline: from real-world artwork collection through Stage 1 (global) → Stage 2 (category-wise) → Stage 3 (specialized model), with DeStyleCoT-Filter at each stage.</figcaption>
+                </figure>
+            </div>
+            <h3>CoT-driven interpretable quality evaluation</h3>
+            <p>A chain-of-thought reinforced multimodal model evaluates destylized results in an interpretable way, along two dimensions:</p>
+            <ul>
+                <li><strong>Content preservation:</strong> region-level object identification + object-wise consistency check.</li>
+                <li><strong>Style removal:</strong> style-attribute identification + attribute-wise difference analysis.</li>
+            </ul>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/destyle_cot_filter.png" alt="DeStyleCoT-Filter structured reasoning" loading="lazy">
+                    <figcaption>Figure B2. DeStyleCoT-Filter: structured, interpretable reasoning for content preservation and style removal produces high-quality supervision signals.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section" id="impact">
+            <h2><span class="num">04</span>Application Value</h2>
+            <p>The <em>OmniStyle</em> and <em>OmniStyle2</em> works built on StyleForge were accepted to <strong>CVPR 2025</strong> and <strong>ECCV 2026</strong>, and highly recognized by reviewers:</p>
+            <ul>
+                <li>Reviewers regard <strong>OmniStyle</strong> as <em>“solid and impactful work.”</em></li>
+                <li>Reviewers regard <strong>OmniStyle2</strong> as <em>“a new paradigm for style transfer.”</em></li>
+            </ul>
+            <p>StyleForge shifts style transfer toward a <strong>supervised learning paradigm</strong>, providing a solid data foundation for controllable, high-quality, generalizable style transfer.</p>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/app_eiffel.png" alt="Diverse high-quality stylization results on the Eiffel Tower" loading="lazy">
+                    <figcaption>Figure C1. Diverse, high-quality stylization results — StyleForge supports strong style-transfer foundation-model training.</figcaption>
+                </figure>
+            </div>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/app_bridge.png" alt="Diverse high-quality stylization results on the Golden Gate Bridge" loading="lazy">
+                    <figcaption>Figure C2. Reference-guided stylization across a wide range of artistic styles.</figcaption>
+                </figure>
+            </div>
+            <h3>Roadmap</h3>
+            <ul>
+                <li><strong>Domestic adaptation:</strong> large-scale style transfer with Jittor (计图) to promote localized models.</li>
+                <li><strong>Data upgrade:</strong> further scale up StyleForge and strengthen the filtering mechanism.</li>
+                <li><strong>Continuous maintenance:</strong> maintain the project pages &amp; code repos, keeping the open-source releases updated.</li>
+                <li><strong>Collaboration:</strong> engage with universities and industry to improve and apply the dataset.</li>
+            </ul>
+        </section>
+
+        <section class="section" id="opensource">
+            <h2><span class="num">03</span>Open Source</h2>
+            <p>StyleForge is fully open-sourced with standardized project pages, a well-structured GitHub repository, and openly downloadable Hugging-Face datasets. It has been downloaded <strong>824+</strong> times since its release on <strong>2025.07.14</strong> (~300&nbsp;GB total).</p>
+            <ul class="link-list">
+                <li><b>Project · Breadth</b><a href="../OmniStyle/cvpr25_omnistyle.html">OmniStyle project page</a></li>
+                <li><b>Project · Fidelity</b><a href="../DeStyle/index.html">OmniStyle2 / DeStyle project page</a></li>
+                <li><b>Code</b><a href="https://github.com/StyleX-Research/OmniStyle" target="_blank" rel="noopener">github.com/StyleX-Research/OmniStyle</a></li>
+                <li><b>Dataset · Breadth</b><a href="https://huggingface.co/datasets/StyleXX/OmniStyle-150k" target="_blank" rel="noopener">huggingface.co/datasets/StyleXX/OmniStyle-150k</a></li>
+                <li><b>Dataset · Fidelity</b><a href="https://huggingface.co/datasets/StyleXX/DeStyle/tree/main" target="_blank" rel="noopener">huggingface.co/datasets/StyleXX/DeStyle</a></li>
+            </ul>
+            <div class="figure-block">
+                <figure>
+                    <img src="assets/hf_dataset.png" alt="Hugging Face dataset repository page" loading="lazy">
+                    <figcaption>Figure D1. Hugging-Face dataset release with detailed docs, code and pretrained models.</figcaption>
+                </figure>
+            </div>
+            <p>The repositories include configuration guides, pretrained-model downloads, usage instructions, and compute-configuration notes. The entire StyleForge data-generation pipeline is <strong>fully automatic and requires no manual intervention</strong>, giving it strong scalability for continual model-capability improvement under the supervised paradigm.</p>
+        </section>
+
+        <section class="section" id="summary">
+            <h2><span class="num">Summary</span>Why StyleForge matters</h2>
+            <ul>
+                <li><strong>Open &amp; standardized:</strong> clean project pages, well-organized GitHub repos, and openly downloadable Hugging-Face datasets.</li>
+                <li><strong>Advancing the field:</strong> shifts style transfer to a supervised paradigm and fuels style-transfer foundation models and generalizable transfer.</li>
+                <li><strong>Widely used:</strong> a high-quality dataset (500K triplets, 300&nbsp;GB) with 824+ cumulative downloads since 2025.07.14.</li>
+                <li><strong>Sustainable:</strong> a fully-automatic generation pipeline enabling continual capability growth under supervised learning.</li>
+            </ul>
+        </section>
+    </main>
+
+    <div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Preview image">
+        <button type="button" class="lightbox__scrim" aria-label="Close preview"></button>
+        <img class="lightbox__img" src="" alt="">
+        <button type="button" class="lightbox__close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+
+    <footer class="footer-note">
+        <p>StyleForge · Unifying OmniStyle (breadth) and OmniStyle2 / DeStyle (fidelity) — a high-fidelity, large-scale style transfer dataset.</p>
+    </footer>
+
+    <script>
+        (function () {
+            var roots = [document.querySelector('main'), document.querySelector('.hero-showcase')];
+            var box = document.getElementById('lightbox');
+            if (!box) return;
+
+            var scrim = box.querySelector('.lightbox__scrim');
+            var lbImg = box.querySelector('.lightbox__img');
+            var closeBtn = box.querySelector('.lightbox__close');
+            var lastFocus = null;
+
+            function close() {
+                box.hidden = true;
+                lbImg.removeAttribute('src');
+                lbImg.alt = '';
+                document.body.classList.remove('lightbox-open');
+                document.removeEventListener('keydown', onKey);
+                if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+            }
+            function onKey(e) { if (e.key === 'Escape') close(); }
+            function open(source) {
+                lastFocus = document.activeElement;
+                lbImg.src = source.currentSrc || source.src;
+                lbImg.alt = source.alt || '';
+                box.hidden = false;
+                document.body.classList.add('lightbox-open');
+                closeBtn.focus();
+                document.addEventListener('keydown', onKey);
+            }
+            roots.forEach(function (root) {
+                if (!root) return;
+                root.addEventListener('click', function (e) {
+                    var t = e.target;
+                    if (!t || t.tagName !== 'IMG') return;
+                    e.preventDefault();
+                    open(t);
+                });
+            });
+            scrim.addEventListener('click', close);
+            closeBtn.addEventListener('click', close);
+        })();
+    </script>
+</body>
+</html>
