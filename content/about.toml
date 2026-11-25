@@ -1,0 +1,22 @@
+type = "about"
+title = "About"
+
+[profile]
+research_interests = [
+  "Post-Training",
+  "T2I Foundation Models",
+  "Image Editing & Style Transfer",
+  "Unified Understanding & Generation"
+]
+
+[[sections]]
+id = "about"
+type = "markdown"
+source = "bio.md"
+title = "About"
+
+[[sections]]
+id = "news"
+type = "list"
+title = "News"
+source = "news.toml"

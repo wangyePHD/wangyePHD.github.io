@@ -1,0 +1,59 @@
+type = "card"
+title = "Internships"
+description = "Industry experience in reverse chronological order."
+
+[[items]]
+title = "PixCake (像素蛋糕)"
+subtitle = "Research Algorithm Intern"
+date = "2026.10 - Present"
+image = "/images/pixcake.png"
+content = "Post-training of text-to-image (T2I) models."
+tags = ["T2I", "Post-training"]
+
+[[items]]
+title = "Xiaohongshu (小红书)"
+subtitle = "AIGC Group · Research Algorithm Intern"
+date = "2026.06 - 2026.10"
+image = "/images/xiaohongshu.png"
+content = "Image editing."
+tags = ["Image Editing"]
+
+[[items]]
+title = "Tencent Youtu (腾讯优图)"
+subtitle = "Shennong Research Center · Qingyun Program Intern (神农研究中心 · 青云计划)"
+date = "2026.03 - 2026.06"
+image = "/images/youtu.png"
+content = "Post-training of the Bagel unified multimodal model."
+tags = ["Unified Multimodal Models", "Post-training", "SFT", "RL Alignment"]
+
+[[items]]
+title = "Alibaba Amap (阿里巴巴 · 高德地图)"
+subtitle = "AMAP Group · Research Algorithm Intern"
+date = "2025.10 - 2026.02"
+image = "/images/amap.jpg"
+content = "Physical-aware image generation."
+tags = ["Diffusion Models", "Physical-Aware Generation", "Controllable Generation"]
+
+[[items]]
+title = "Kunlun Tech (昆仑万维)"
+subtitle = "AI Story · Research Algorithm Intern"
+date = "2024.03 - 2024.06"
+image = "/images/kunlun.png"
+content = "Multi-subject human image generation algorithm R&D."
+tags = ["Diffusion Models", "Multi-Subject Consistency", "Human Image Generation"]
+
+[[items]]
+title = "Baidu Maps (百度地图)"
+subtitle = "Data Mining Intern"
+date = "2021.03 - 2021.06"
+image = "/images/baidu.png"
+content = "Real-time bus ETA estimation and departure interval prediction."
+tags = ["Machine Learning", "Time Series Analysis", "Big Data"]
+
+[[items]]
+title = "JD Digits (京东数科)"
+subtitle = "Data Mining Intern"
+date = "2020.11 - 2021.01"
+image = "/images/jingdong.jpeg"
+content = "User information mining and risk identification."
+tags = ["Data Mining", "User Profiling", "Risk Identification"]

@@ -1,0 +1,56 @@
+[site]
+title = "Ye Wang (王冶)"
+description = "Ye Wang — Ph.D. in Artificial Intelligence, Jilin University. Research on personalized visual content creation, style transfer, and image editing."
+favicon = "/me.jpeg"
+last_updated = "November 2026"
+
+[author]
+name = "Ye Wang"
+title = "Ph.D."
+institution = "School of Artificial Intelligence, Jilin University"
+avatar = "/me.jpeg"
+
+[social]
+email = "yewang22@mails.jlu.edu.cn"
+google_scholar = "https://scholar.google.com/citations?user=F3Xye5cAAAAJ&hl=zh-CN&oi=ao"
+github = "https://github.com/StyleX-Research"
+
+[features]
+enable_likes = true
+enable_one_page_mode = true
+
+[i18n]
+enabled = false
+locales = ["en"]
+default_locale = "en"
+mode = "fixed"
+fixed_locale = "en"
+persist = false
+switcher = false
+
+[i18n.labels]
+en = "English"
+
+[[navigation]]
+title = "About"
+type = "page"
+target = "about"
+href = "/"
+
+[[navigation]]
+title = "Internships"
+type = "page"
+target = "internships"
+href = "/internships"
+
+[[navigation]]
+title = "Publications"
+type = "page"
+target = "publications"
+href = "/publications"
+
+[[navigation]]
+title = "My Space"
+type = "link"
+target = "my-space"
+href = "/my-space.html"

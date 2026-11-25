@@ -1,0 +1,5 @@
+I earned my Ph.D. in the [ICL group](https://ruim-jlu.github.io/team/) at the School of Artificial Intelligence, [Jilin University](https://www.jlu.edu.cn/), advised by Associate Professor [Rui Ma](https://ruim-jlu.github.io/#about). I am also grateful for mentorship from [Yilin Wang](https://yilinwang.org/) (Adobe Research) and [Zili Yi](https://is.nju.edu.cn/yzl_en/main.htm) (Nanjing University). Previously, I received my B.E. from Dalian Maritime University and my M.S. from the School of Computer Science, Jilin University.
+
+I am a core contributor to [StyleX-Research](https://github.com/StyleX-Research), focusing on scalable style transfer, personalized stylization, and open-source resources for style-related computer vision. My research focuses on building models that manipulate and synthesize visual content in a controllable, personalized way.
+
+I founded and co-host [PaperABC](https://space.bilibili.com/1127990326?spm_id_from=333.1007.0.0) on Bilibili, where we explain recent papers; the channel has grown to over 12,000 subscribers.
